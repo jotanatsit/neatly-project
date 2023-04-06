@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import authRouter from "./apps/auth.js";
 
 async function init() {
   const app = express();
@@ -9,6 +10,7 @@ async function init() {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use("/auth", authRouter);
 
   app.get("/", (req, res) => {
     res.send("Hello World!");
