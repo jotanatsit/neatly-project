@@ -2,6 +2,11 @@ import { extendTheme } from '@chakra-ui/react'
 import { Button } from './Button'
 
 export const Theme = extendTheme({
+   styles: {
+      padding: "0px",
+      margin: "0px",
+      boxSizing: "border-box",
+   },
    colors: {
       green: {
          100: "#F1F5F3",
