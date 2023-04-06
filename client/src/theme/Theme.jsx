@@ -1,5 +1,6 @@
 import { extendTheme } from '@chakra-ui/react'
 import { Button } from './Button'
+import { Input } from './Input'
 
 export const Theme = extendTheme({
    styles: {
@@ -108,6 +109,7 @@ export const Theme = extendTheme({
    },
    components: {
       Button,
+      Input,
    },
 })
 

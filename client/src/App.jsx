@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Button, Text, Icon } from '@chakra-ui/react'
+import { Button, Text, Input, InputRightElement, InputGroup } from '@chakra-ui/react'
 import './App.css'
+import { InfoIcon } from '@chakra-ui/icons'
+
 
 
 function App() {
@@ -11,6 +13,11 @@ function App() {
          <Text textStyle="h2">asdf</Text>
          <Button variant="primary">asdf</Button>
          <Button variant="secondary">asdf</Button>
+         <InputGroup>
+            <Input placeholder='test' variant="outline" />
+            <InputRightElement children={<InfoIcon color='red' />} />
+         </InputGroup>
+
       </div>
    )
 }
