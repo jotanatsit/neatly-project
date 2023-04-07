@@ -1,24 +1,23 @@
-import { useState } from 'react'
-import { Button, Text, Input, InputRightElement, InputGroup } from '@chakra-ui/react'
 import './App.css'
-import { InfoIcon } from '@chakra-ui/icons'
+
+
+
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 
 
 function App() {
 
    return (
-      <div className="App">
-         <Text textStyle="h1">asdf</Text>
-         <Text textStyle="h2">asdf</Text>
-         <Button variant="primary">asdf</Button>
-         <Button variant="secondary">asdf</Button>
-         <InputGroup>
-            <Input placeholder='test' variant="outline" />
-            <InputRightElement children={<InfoIcon color='red' />} />
-         </InputGroup>
 
-      </div>
+      <BrowserRouter>
+         <Routes>
+            {/* <Route path="/" element={<HomePage />} /> */}
+            {/* <Route path="/register" element={<RegisterPage />} /> */}
+            {/* <Route path="/login" element={<LoginPage />} /> */}
+         </Routes>
+      </BrowserRouter>
+
    )
 }
 
