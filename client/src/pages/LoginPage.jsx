@@ -46,56 +46,17 @@ function LoginPage() {
   }
 
   return (
-    // <Flex>
-    //   <form>
-    //     <h1>Login</h1>
-    //     <div>
-    //       <label>
-    //         Username or Email
-    //         <input
-    //           id="username"
-    //           name="username"
-    //           type="text"
-    //           placeholder="Enter your Username or Email"
-    //           onChange={(event) => {
-    //             setUsername(event.target.value);
-    //           }}
-    //           value={username}
-    //         />
-    //       </label>
-    //     </div>
-    //     <div>
-    //       <label>
-    //         Password
-    //         <input
-    //           id="password"
-    //           name="password"
-    //           type="password"
-    //           placeholder="Enter your password"
-    //           onChange={(event) => {
-    //             setPassword(event.target.value);
-    //           }}
-    //           value={password}
-    //         />
-    //       </label>
-    //     </div>
-    //     <div>
-    //       <Button variant="primary" height="48px" width="452px" type="submit">
-    //         Login
-    //       </Button>
-    //     </div>
-    // <div>
-    //   <span>Don't have and account yet?</span>
-    //   <a href="https://www.google.com" target="_blank">
-    //     Register
-    //   </a>
-    // </div>
-    //   </form>
-    // </Flex>
-    <Flex direction="column">
-      <Text textStyle="h1" color="black">
-        Log In
-      </Text>
+    <Flex
+      height="924px"
+      // width="732px"
+      flexDirection="column"
+      align="center"
+    >
+      <Flex width="452px" justifyContent="flex-start">
+        <Text textStyle="h1" color="green.800">
+          Log In
+        </Text>
+      </Flex>
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={(values, actions) => {
@@ -107,47 +68,74 @@ function LoginPage() {
       >
         {(props) => (
           <Form>
-            <Field type="email" name="email" validate={validateUserName}>
-              {({ field, form }) => (
-                <FormControl
-                  isInvalid={form.errors.email && form.touched.email}
-                  Height="48px"
-                  width="452px"
-                >
-                  <FormLabel>Username or Email</FormLabel>
-                  <Input
-                    {...field}
-                    placeholder="Enter your username or email"
-                  />
-                  <FormErrorMessage>{form.errors.email}</FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
-            <Field type="password" name="password" validate={validatePassword}>
-              {({ field, form }) => (
-                <FormControl
-                  isInvalid={form.errors.password && form.touched.password}
-                  Height="48px"
-                  width="452px"
-                >
-                  <FormLabel>Password</FormLabel>
-                  <Input {...field} placeholder="Enter your password" />
-                  <FormErrorMessage>{form.errors.password}</FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
-            <Button variant="primary" Height="48px" width="452px">
-              Submit
-            </Button>
+            <Flex flexDirection="column" height="120px" mt="60px">
+              <Field
+                name="email"
+                height="48px"
+                width="452px"
+                validate={validateUserName}
+              >
+                {({ field, form }) => (
+                  <FormControl
+                    isInvalid={form.errors.email && form.touched.email}
+                  >
+                    <FormLabel>
+                      <Text textStyle="b1" color="gray.800">
+                        Username or Email
+                      </Text>
+                    </FormLabel>
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder="Enter your username or email"
+                    />
+                    <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field
+                name="password"
+                height="48px"
+                width="452px"
+                validate={validatePassword}
+              >
+                {({ field, form }) => (
+                  <FormControl
+                    isInvalid={form.errors.password && form.touched.password}
+                  >
+                    <FormLabel mt="40px">
+                      <Text textStyle="b1" color="gray.800">
+                        Password
+                      </Text>
+                    </FormLabel>
+                    <Input
+                      {...field}
+                      type="password"
+                      placeholder="Enter your password"
+                    />
+                    <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Button
+                variant="primary"
+                height="48px"
+                width="452px"
+                type="submit"
+                mt="40px"
+              >
+                Submit
+              </Button>
+              <Flex width="452px" justifyContent="flex-start" mt="16px">
+                <Text>Don't have an account yet?</Text>
+                <a href="https://www.google.com" target="_blank" ml="8px">
+                  <Text ml="8px">Register</Text>
+                </a>
+              </Flex>
+            </Flex>
           </Form>
         )}
       </Formik>
-      <div>
-        <span>Don't have and account yet?</span>
-        <a href="https://www.google.com" target="_blank">
-          Register
-        </a>
-      </div>
     </Flex>
   );
 }
