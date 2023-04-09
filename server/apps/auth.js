@@ -3,7 +3,7 @@ import { pool } from "../utils/db.js";
 import bcrypt from "bcrypt";
 import multer from "multer";
 import { cloudinaryUpload } from "../utils/upload.js";
-// import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const authRouter = Router();
 
@@ -24,9 +24,6 @@ const multerUpload = multer({
 const profilePictureUpload = multerUpload.fields([
   { name: "profile_picture", maxCount: 1 },
 ]);
-
-// 🐨 Todo: Exercise #1
-// ให้สร้าง API เพื่อเอาไว้ Register ตัว User แล้วเก็บข้อมูลไว้ใน Database ตามตารางที่ออกแบบไว้
 
 authRouter.post("/register", profilePictureUpload, async (req, res) => {
   const user = {
@@ -102,9 +99,55 @@ authRouter.post("/register", profilePictureUpload, async (req, res) => {
   });
 });
 
-// 🐨 Todo: Exercise #3
-// ให้สร้าง API เพื่อเอาไว้ Login ตัว User ตามตารางที่ออกแบบไว้
+authRouter.post("/login", async (req, res) => {
+  const userClient = {
+    username: req.body.username,
+  };
 
-authRouter.post("/login", async (req, res) => {});
+  const user = await pool.query(
+    `select *
+          from users
+          inner join users_profile
+          on users.user_id = users_profile.user_id
+          where users.username = $1 or users.email = $2`,
+    [userClient.username, userClient.username]
+  );
+
+  console.log(user.rows[0]);
+
+  if (!user.rows[0]) {
+    return res.status(404).json({
+      message: "user not found",
+    });
+  }
+
+  const isValidPassword = await bcrypt.compare(
+    req.body.password,
+    user.rows[0].password
+  );
+
+  if (!isValidPassword) {
+    return res.status(401).json({
+      message: "password not valid",
+    });
+  }
+
+  const token = jwt.sign(
+    {
+      id: user.rows[0].user_id,
+      username: user.rows[0].username,
+      fullname: user.rows[0].fullname,
+    },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: "900000",
+    }
+  );
+
+  return res.json({
+    message: "login successfully",
+    token,
+  });
+});
 
 export default authRouter;
