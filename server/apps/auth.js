@@ -1,14 +1,34 @@
 import { Router } from "express";
 import { pool } from "../utils/db.js";
 import bcrypt from "bcrypt";
+import multer from "multer";
+import { cloudinaryUpload } from "../utils/upload.js";
 // import jwt from "jsonwebtoken";
 
 const authRouter = Router();
 
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(new Error("Only JPEG and PNG images are allowed"));
+  }
+};
+
+const multerUpload = multer({
+  dest: "uploads/",
+  limits: { fileSize: 10000000 },
+  fileFilter: fileFilter,
+});
+
+const profilePictureUpload = multerUpload.fields([
+  { name: "profile_picture", maxCount: 1 },
+]);
+
 // 🐨 Todo: Exercise #1
 // ให้สร้าง API เพื่อเอาไว้ Register ตัว User แล้วเก็บข้อมูลไว้ใน Database ตามตารางที่ออกแบบไว้
 
-authRouter.post("/register", async (req, res) => {
+authRouter.post("/register", profilePictureUpload, async (req, res) => {
   const user = {
     fullname: req.body.fullname,
     username: req.body.username,
@@ -17,9 +37,6 @@ authRouter.post("/register", async (req, res) => {
     id_number: req.body.id_number,
     birth_date: req.body.birth_date,
     country: req.body.country,
-    // profile_picture: req.body.profile_picture,
-    profile_picture:
-      "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png",
     card_number: req.body.card_number,
     card_owner: req.body.card_owner,
     expire_date: req.body.expire_date,
@@ -29,12 +46,17 @@ authRouter.post("/register", async (req, res) => {
     last_logged_in: new Date(),
   };
 
+  const profilePictureUrl = await cloudinaryUpload(req.files);
+  user["profile_picture"] = profilePictureUrl;
+
+  console.log(user);
+
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
 
   await pool.query(
     `insert into users (username, email, password, created_at, updated_at, last_logged_in)
-          values ($1, $2, $3, $4, $5, $6)`,
+            values ($1, $2, $3, $4, $5, $6)`,
     [
       user.username,
       user.email,
@@ -52,7 +74,7 @@ authRouter.post("/register", async (req, res) => {
 
   await pool.query(
     `insert into users_profile (user_id, fullname, id_number, birth_date, country, profile_picture)
-                values ($1, $2, $3, $4, $5, $6)`,
+                  values ($1, $2, $3, $4, $5, $6)`,
     [
       lastest_user_id.rows[0].user_id,
       user.fullname,
@@ -65,7 +87,7 @@ authRouter.post("/register", async (req, res) => {
 
   await pool.query(
     `insert into users_credit_card (user_id, card_number, card_owner, expire_date, cvc_cvv)
-                values ($1, $2, $3, $4, $5)`,
+                  values ($1, $2, $3, $4, $5)`,
     [
       lastest_user_id.rows[0].user_id,
       user.card_number,
