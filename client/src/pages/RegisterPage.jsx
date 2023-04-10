@@ -329,7 +329,7 @@ function RegisterPage() {
                     <Button
                       onClick={(event) => handleRemoveImage(event)}
                       color="#FFFFFF"
-                      bg="#B61515"
+                      bg="orange.600"
                       borderRadius="full"
                       flexDirection="column"
                       justifyContent="center"
