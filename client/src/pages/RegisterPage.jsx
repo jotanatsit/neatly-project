@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function RegisterPage () {
-
+ 
     const navigate = useNavigate();
 
     const formik = useFormik({
