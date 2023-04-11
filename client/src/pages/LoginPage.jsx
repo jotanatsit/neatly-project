@@ -44,14 +44,7 @@ function LoginPage() {
       <Nav_nonuser />
       <Grid templateColumns="repeat(2, 1fr)">
         <img src="/LoginPage/sidepic.svg"></img>
-        <Flex
-          height="924px"
-          // width="732px"
-          flexDirection="column"
-          align="center"
-          // justifyContent="center"
-          pt="150px"
-        >
+        <Flex height="924px" flexDirection="column" align="center" pt="150px">
           <Flex width="452px" justifyContent="flex-start">
             <Text textStyle="h1" color="green.800">
               Log In
@@ -78,7 +71,7 @@ function LoginPage() {
                         isInvalid={form.errors.email && form.touched.email}
                       >
                         <FormLabel>
-                          <Text textStyle="b1" color="gray.800">
+                          <Text textStyle="b1" color="gray.900">
                             Username or Email
                           </Text>
                         </FormLabel>
@@ -104,7 +97,7 @@ function LoginPage() {
                         }
                       >
                         <FormLabel mt="40px">
-                          <Text textStyle="b1" color="gray.800">
+                          <Text textStyle="b1" color="gray.900">
                             Password
                           </Text>
                         </FormLabel>

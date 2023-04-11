@@ -7,14 +7,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import "swiper/swiper-bundle.min.css";
 import room from "../../data/image_room";
-import RoomsAndSuites from "../Components/RoomsAndSuites";
+import RoomsAndSuits from "../Components/RoomsAndSuits";
 import Testimonial from "../Components/Testimonial";
 import Footer from "../components/Footer";
+import { useAuth } from "../contexts/authentication";
 
 function HomePage() {
+  const auth = useAuth();
   return (
     <Flex direction="column" w="1440px">
-      <Nav_user />
+      {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
       <Flex
         w="1440px"
         height={900}
