@@ -1,4 +1,5 @@
 import { defineStyleConfig } from '@chakra-ui/react'
+import "@fontsource/inter"
 
 export const Input = defineStyleConfig({
    baseStyle: {

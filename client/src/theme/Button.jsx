@@ -1,4 +1,5 @@
-import { defineStyleConfig } from '@chakra-ui/react'
+import { defineStyleConfig } from '@chakra-ui/react';
+import "@fontsource/open-sans";
 
 export const Button = defineStyleConfig({
    baseStyle: {
@@ -33,6 +34,7 @@ export const Button = defineStyleConfig({
       ghost: {
          color: "orange.500",
          _hover: { bg: "none", color: "orange.400" },
+         _focus: { bg: "none", color: "orange.400" },
       },
       disabledPrimary: {
          _hover: "none",
