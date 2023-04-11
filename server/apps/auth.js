@@ -44,16 +44,14 @@ authRouter.post("/register", profilePictureUpload, async (req, res) => {
   };
 
   const profilePictureUrl = await cloudinaryUpload(req.files);
-  user["profile_picture"] = profilePictureUrl;
-
-  console.log(user);
+  user["profile_picture_url"] = profilePictureUrl[0].url;
 
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
 
   await pool.query(
     `insert into users (username, email, password, created_at, updated_at, last_logged_in)
-            values ($1, $2, $3, $4, $5, $6)`,
+      values ($1, $2, $3, $4, $5, $6)`,
     [
       user.username,
       user.email,
@@ -71,20 +69,20 @@ authRouter.post("/register", profilePictureUpload, async (req, res) => {
 
   await pool.query(
     `insert into users_profile (user_id, fullname, id_number, birth_date, country, profile_picture)
-                  values ($1, $2, $3, $4, $5, $6)`,
+      values ($1, $2, $3, $4, $5, $6)`,
     [
       lastest_user_id.rows[0].user_id,
       user.fullname,
       user.id_number,
       user.birth_date,
       user.country,
-      user.profile_picture,
+      user.profile_picture_url,
     ]
   );
 
   await pool.query(
     `insert into users_credit_card (user_id, card_number, card_owner, expire_date, cvc_cvv)
-                  values ($1, $2, $3, $4, $5)`,
+      values ($1, $2, $3, $4, $5)`,
     [
       lastest_user_id.rows[0].user_id,
       user.card_number,
