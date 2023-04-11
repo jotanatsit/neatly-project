@@ -7,6 +7,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
 import 'swiper/swiper-bundle.min.css';
 import room from '../../data/image_room';
+import RoomsAndSuits from '../Components/RoomsAndSuits';
+import Testimonial from "../Components/Testimonial"
+import Footer from '../components/Footer';
 
 function HomePage() {
    return (
@@ -107,8 +110,11 @@ function HomePage() {
                </Flex>
             </Flex>
          </Flex>
-
+         <RoomsAndSuits />
+         <Testimonial />
+         <Footer />
       </>
    )
-};
+}
+
 export default HomePage

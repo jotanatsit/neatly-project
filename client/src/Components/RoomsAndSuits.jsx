@@ -12,9 +12,9 @@ function Room(props) {
 
 function RoomsAndSuits() {
    return (
-      <Flex direction="column" bgColor="bg">
+      <Flex direction="column" bgColor="bg" w="1440px">
          <Flex justify="center" align="center" h="272px">
-            <Text textStyle="h2" color="green.800">Rooms & Suits</Text>
+            <Text textStyle="h2" color="green.800" >Rooms & Suits</Text>
          </Flex>
          <Grid gap="24px" pb="178px">
             <Flex bg="url(./HomePage/superior-garden-view.svg)" w="1120px" h="540px" justifySelf="center" align="end">
