@@ -342,8 +342,8 @@ function RegisterPage() {
                       right={-3.0}
                       top={-2.5}
                       size="xs"
-                      _hover= {{ bg: 'orange.500', color: 'white' }}
-                      _focus= {{ bg: "orange.700", color: 'white' }}
+                      _hover={{ bg: "orange.500", color: "white" }}
+                      _focus={{ bg: "orange.700", color: "white" }}
                     >
                       x
                     </Button>
