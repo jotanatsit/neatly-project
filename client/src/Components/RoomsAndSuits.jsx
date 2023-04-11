@@ -12,7 +12,7 @@ function Room(props) {
 
 function RoomsAndSuits() {
    return (
-      <Flex direction="column" bgColor="bg" w="1440px">
+      <Flex direction="column" bgColor="bg" w="1440px" id="room-type">
          <Flex justify="center" align="center" h="272px">
             <Text textStyle="h2" color="green.800" >Rooms & Suits</Text>
          </Flex>

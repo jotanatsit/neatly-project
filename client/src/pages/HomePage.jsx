@@ -13,7 +13,7 @@ import Footer from '../components/Footer';
 
 function HomePage() {
    return (
-      <>
+      <Flex direction="column" w="1440px">
          <Nav_nonuser />
          <Flex w="1440px" height={900} bg="url(/HomePage/bg-homepage.svg)" bgSize="cover" flexDirection="column">
             <Flex alignItems="center" justifyContent="center" >
@@ -113,7 +113,7 @@ function HomePage() {
          <RoomsAndSuits />
          <Testimonial />
          <Footer />
-      </>
+      </Flex>
    )
 }
 

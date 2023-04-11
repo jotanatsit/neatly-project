@@ -3,7 +3,7 @@ import BookingPage from './pages/BookingPage'
 import RoomDetailPage from './pages/RoomDetailPage'
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage";
+import HomePage from './pages/Homepage';
 import RegisterPage from "./pages/RegisterPage";
 
 function App() {
