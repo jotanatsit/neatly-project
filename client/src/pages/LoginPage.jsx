@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { Field, Form, Formik } from "formik";
 import { useAuth } from "../contexts/authentication";
+import { Link } from "react-router-dom";
 
 function LoginPage() {
   //   const [username, setUsername] = useState("");
@@ -124,11 +125,11 @@ function LoginPage() {
                 </Button>
                 <Flex width="452px" justifyContent="flex-start" mt="16px">
                   <Text>Don't have an account yet?</Text>
-                  <a href="https://www.google.com" target="_blank" ml="8px">
+                  <Link to="/register" ml="8px">
                     <Text ml="8px" color="orange.500">
                       Register
                     </Text>
-                  </a>
+                  </Link>
                 </Flex>
               </Flex>
             </Form>

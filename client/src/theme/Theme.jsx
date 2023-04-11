@@ -1,6 +1,7 @@
 import { extendTheme } from "@chakra-ui/react";
 import { Button } from "./Button";
 import { Input } from "./Input";
+import { Select } from "./SelectCountry";
 
 export const Theme = extendTheme({
   styles: {
