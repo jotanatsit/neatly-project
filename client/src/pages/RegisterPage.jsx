@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Nav_nonuser from "../Components/Nav_nonuser.jsx";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -82,6 +83,8 @@ function RegisterPage() {
   };
 
   return (
+    <>
+    <Nav_nonuser/>
     <form onSubmit={formik.handleSubmit}>
       <Flex
         height={1800}
@@ -469,6 +472,7 @@ function RegisterPage() {
         </Flex>
       </Flex>
     </form>
+    </>
   );
 }
 
