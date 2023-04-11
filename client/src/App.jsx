@@ -1,7 +1,9 @@
-import "./App.css";
+import './App.css'
+import BookingPage from './pages/BookingPage'
+import RoomDetailPage from './pages/RoomDetailPage'
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/Homepage";
+import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 
 function App() {
@@ -10,6 +12,8 @@ function App() {
          <Route path="/" element={<HomePage />} />
          <Route path="/register" element={<RegisterPage />} />
          <Route path="/login" element={<LoginPage />} />
+         <Route path="/roomdetail" element={<RoomDetailPage />} />
+         <Route path="/booking" element={<BookingPage />} />
       </Routes>
    );
 }
