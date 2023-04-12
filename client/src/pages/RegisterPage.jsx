@@ -82,7 +82,7 @@ function RegisterPage() {
   };
 
   return (
-    <>
+    <div>
       <Nav_nonuser />
       <form onSubmit={formik.handleSubmit}>
         <Flex
@@ -471,7 +471,7 @@ function RegisterPage() {
           </Flex>
         </Flex>
       </form>
-    </>
+    </div>
   );
 }
 
