@@ -1,11 +1,12 @@
 import { Flex, Button, Text, Grid, Box } from '@chakra-ui/react'
 import { ArrowForwardIcon } from '@chakra-ui/icons'
+import { Link} from "react-router-dom";
 
 function Room(props) {
    return (
       <Box pl={props.pl} pb={props.pb}>
          <Text textStyle="h3" color="white" textAlign="center">{props.type}</Text>
-         <Button variant="ghost" color="white" w="fit-content" _hover="none" _focus={{ color: "white" }} rightIcon={<ArrowForwardIcon />} >Explore Room</Button>
+         <Link to="/roomdetail"><Button variant="ghost" color="white" w="fit-content" _hover="none" _focus={{ color: "white" }} rightIcon={<ArrowForwardIcon />} >Explore Room</Button></Link>
       </Box>
    )
 }
