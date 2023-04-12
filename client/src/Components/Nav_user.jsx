@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Flex,
-  Spacer,
   Button,
   Text,
   Image,
-  Input,
   Avatar,
   Icon,
   Popover,
@@ -16,13 +14,14 @@ import {
   PopoverArrow,
   List,
   ListItem,
+  ListIcon,
+  OrderedList,
+  UnorderedList,
 } from "@chakra-ui/react";
 import { Link } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom";
 
 const Nav_user = () => {
-  const Menus = ["Profile", "Payment Method", "Booking History", "Log out"];
-
   return (
     <Flex
       bg="white"
@@ -54,7 +53,7 @@ const Nav_user = () => {
         <Box ml={8}>
           <Link to="room-type" smooth={true} duration={1000}>
             <Text textStyle="b2" mr={5} cursor="pointer">
-              Rooms & Suites
+              Rooms & Suits
             </Text>
           </Link>
         </Box>
@@ -77,27 +76,103 @@ const Nav_user = () => {
       <Popover>
         <PopoverTrigger>
           <Avatar
+            cursor="pointer"
             size="md"
             name="Dan Abrahmov"
             src="https://bit.ly/dan-abramov"
           />
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent w="200px" h="172px">
           <PopoverArrow />
           <PopoverBody>
-            <List>
-              {Menus.map((menu, index) => (
-                <ListItem key={index} py={1}>
-                  <Link
-                    to={menu.toLowerCase().replace(/\s/g, "-")}
-                    smooth={true}
-                    duration={1000}
-                  >
-                    {menu}
-                  </Link>
-                </ListItem>
-              ))}
-            </List>
+            <Box>
+              <List>
+                <RouterLink to="">
+                  <ListItem>
+                    <Flex
+                      h="37px"
+                      alignItems="center"
+                      justifyContent="flex-start"
+                    >
+                      <Box>
+                        <Image
+                          src="/HomePage/icon/icon_profile.svg"
+                          boxSize="20px"
+                        ></Image>
+                      </Box>
+                      <Box w="142px" ml="15px">
+                        <Text textStyle="b2" color="gray.700">
+                          Profile
+                        </Text>
+                      </Box>
+                    </Flex>
+                  </ListItem>
+                </RouterLink>
+                <RouterLink to="">
+                  <ListItem>
+                    <Flex
+                      h="37px"
+                      alignItems="center"
+                      justifyContent="flex-start"
+                    >
+                      <Box>
+                        <Image
+                          src="/HomePage/icon/icon_payment.svg"
+                          boxSize="20px"
+                        ></Image>
+                      </Box>
+                      <Box w="142px" ml="15px">
+                        <Text textStyle="b2" color="gray.700">
+                          Payment Method
+                        </Text>
+                      </Box>
+                    </Flex>
+                  </ListItem>
+                </RouterLink>
+                <RouterLink to="">
+                  <ListItem>
+                    <Flex
+                      h="37px"
+                      alignItems="center"
+                      justifyContent="flex-start"
+                    >
+                      <Box>
+                        <Image
+                          src="/HomePage/icon/icon_menu.svg"
+                          boxSize="20px"
+                        ></Image>
+                      </Box>
+                      <Box w="142px" ml="15px">
+                        <Text textStyle="b2" color="gray.700">
+                          Booking History
+                        </Text>
+                      </Box>
+                    </Flex>
+                  </ListItem>
+                </RouterLink>
+                <RouterLink to="">
+                  <ListItem>
+                    <Flex
+                      h="37px"
+                      alignItems="center"
+                      justifyContent="flex-start"
+                    >
+                      <Box>
+                        <Image
+                          src="/HomePage/icon/icon_logout.svg"
+                          boxSize="20px"
+                        ></Image>
+                      </Box>
+                      <Box w="142px" ml="15px">
+                        <Text textStyle="b2" color="gray.700">
+                          Log out
+                        </Text>
+                      </Box>
+                    </Flex>
+                  </ListItem>
+                </RouterLink>
+              </List>
+            </Box>
           </PopoverBody>
         </PopoverContent>
       </Popover>

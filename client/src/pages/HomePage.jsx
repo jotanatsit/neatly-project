@@ -7,14 +7,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import "swiper/swiper-bundle.min.css";
 import room from "../../data/image_room";
-import RoomsAndSuites from "../Components/RoomsAndSuites";
+import RoomsAndSuits from "../Components/RoomsAndSuits";
 import Testimonial from "../Components/Testimonial";
 import Footer from "../components/Footer";
 
 function HomePage() {
   return (
     <Flex direction="column" w="1440px">
-      <Nav_nonuser />
+      <Nav_user />
       <Flex
         w="1440px"
         height={900}
@@ -239,7 +239,7 @@ function HomePage() {
           </Flex>
         </Flex>
       </Flex>
-      <RoomsAndSuites />
+      <RoomsAndSuits />
       <Testimonial />
       <Footer />
     </Flex>
