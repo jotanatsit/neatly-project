@@ -112,6 +112,7 @@ export const Theme = extendTheme({
    components: {
       Button,
       Input,
+      Select,
    },
 })
 
