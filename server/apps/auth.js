@@ -3,6 +3,7 @@ import { pool } from "../utils/db.js";
 import bcrypt from "bcrypt";
 import multer from "multer";
 import { cloudinaryUpload } from "../utils/upload.js";
+import { validateRegister } from "../middleware/validateRegister.js";
 import jwt from "jsonwebtoken";
 
 const authRouter = Router();
@@ -25,77 +26,83 @@ const profilePictureUpload = multerUpload.fields([
   { name: "profile_picture", maxCount: 1 },
 ]);
 
-authRouter.post("/register", profilePictureUpload, async (req, res) => {
-  const user = {
-    fullname: req.body.fullname,
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    id_number: req.body.id_number,
-    birth_date: req.body.birth_date,
-    country: req.body.country,
-    card_number: req.body.card_number,
-    card_owner: req.body.card_owner,
-    expire_date: req.body.expire_date,
-    cvc_cvv: req.body.cvc_cvv,
-    created_at: new Date(),
-    updated_at: new Date(),
-    last_logged_in: new Date(),
-  };
+authRouter.post(
+  "/register",
+  profilePictureUpload,
+  validateRegister,
+  async (req, res) => {
+    const user = {
+      fullname: req.body.fullname,
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      id_number: req.body.id_number,
+      birth_date: req.body.birth_date,
+      country: req.body.country,
+      card_number: req.body.card_number,
+      card_owner: req.body.card_owner,
+      expire_date: req.body.expire_date,
+      cvc_cvv: req.body.cvc_cvv,
+      created_at: new Date(),
+      updated_at: new Date(),
+      last_logged_in: new Date(),
+    };
 
-  const profilePictureUrl = await cloudinaryUpload(req.files);
-  user["profile_picture_url"] = profilePictureUrl[0].url;
+    const profilePictureUrl = await cloudinaryUpload(req.files);
+    user["profile_picture_url"] = profilePictureUrl[0].url;
 
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(user.password, salt);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
 
-  await pool.query(
-    `insert into users (username, email, password, created_at, updated_at, last_logged_in)
-      values ($1, $2, $3, $4, $5, $6)`,
-    [
-      user.username,
-      user.email,
-      user.password,
-      user.created_at,
-      user.updated_at,
-      user.last_logged_in,
-    ]
-  );
+    try {
+      await pool.query(
+        `insert into users (username, email, password, created_at, updated_at, last_logged_in)
+          values ($1, $2, $3, $4, $5, $6)`,
+        [
+          user.username,
+          user.email,
+          user.password,
+          user.created_at,
+          user.updated_at,
+          user.last_logged_in,
+        ]
+      );
+      let lastest_user_id = await pool.query(
+        `select user_id from users order by user_id desc limit $1`,
+        [1]
+      );
+      await pool.query(
+        `insert into users_profile (user_id, fullname, id_number, birth_date, country, profile_picture)
+          values ($1, $2, $3, $4, $5, $6)`,
+        [
+          lastest_user_id.rows[0].user_id,
+          user.fullname,
+          user.id_number,
+          user.birth_date,
+          user.country,
+          user.profile_picture_url,
+        ]
+      );
+      await pool.query(
+        `insert into users_credit_card (user_id, card_number, card_owner, expire_date, cvc_cvv)
+          values ($1, $2, $3, $4, $5)`,
+        [
+          lastest_user_id.rows[0].user_id,
+          user.card_number,
+          user.card_owner,
+          user.expire_date,
+          user.cvc_cvv,
+        ]
+      );
+    } catch (error) {
+      return res.json({ error: error.message });
+    }
 
-  let lastest_user_id = await pool.query(
-    `select user_id from users order by user_id desc limit $1`,
-    [1]
-  );
-
-  await pool.query(
-    `insert into users_profile (user_id, fullname, id_number, birth_date, country, profile_picture)
-      values ($1, $2, $3, $4, $5, $6)`,
-    [
-      lastest_user_id.rows[0].user_id,
-      user.fullname,
-      user.id_number,
-      user.birth_date,
-      user.country,
-      user.profile_picture_url,
-    ]
-  );
-
-  await pool.query(
-    `insert into users_credit_card (user_id, card_number, card_owner, expire_date, cvc_cvv)
-      values ($1, $2, $3, $4, $5)`,
-    [
-      lastest_user_id.rows[0].user_id,
-      user.card_number,
-      user.card_owner,
-      user.expire_date,
-      user.cvc_cvv,
-    ]
-  );
-
-  return res.json({
-    message: "User has been created successfully",
-  });
-});
+    return res.status(200).json({
+      message: "User has been created successfully",
+    });
+  }
+);
 
 authRouter.post("/login", async (req, res) => {
   const userClient = {
