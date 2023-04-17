@@ -74,6 +74,28 @@ function RegisterPage() {
     },
   });
 
+  const handleIdNumberChange = (event) => {
+    let value = event.target.value;
+    value = value.replace(/[^0-9]/g, "");
+
+    if (value.length > 0 && value.length <= 1) {
+      value = value.replace(/^(\d{1})/, "$1-");
+    } else if (value.length > 1 && value.length <= 5) {
+      value = value.replace(/^(\d{1})(\d{0,4})/, "$1-$2");
+    } else if (value.length > 5 && value.length <= 10) {
+      value = value.replace(/^(\d{1})(\d{4})(\d{0,5})/, "$1-$2-$3");
+    } else if (value.length > 10 && value.length <= 12) {
+      value = value.replace(/^(\d{1})(\d{4})(\d{5})(\d{0,2})/, "$1-$2-$3-$4");
+    } else if (value.length > 12) {
+      value = value.replace(
+        /^(\d{1})(\d{4})(\d{5})(\d{2})(\d{0,1})/,
+        "$1-$2-$3-$4-$5"
+      );
+    }
+
+    formik.setFieldValue("id_number", value);
+  };
+
   const handleRemoveImage = (event) => {
     event.preventDefault();
     formik.setFieldValue("profile_picture", null);
@@ -235,13 +257,16 @@ function RegisterPage() {
                   <Input
                     id="id_number"
                     name="id_number"
-                    type="id_number"
-                    onChange={formik.handleChange}
+                    type="tel"
+                    onChange={handleIdNumberChange}
                     value={formik.values.id_number}
                     placeholder="Enter your ID Number"
                     width={320}
                     bg="#FFFFFF"
                     borderColor="gray.400"
+                    maxLength={17}
+                    minLength={17}
+                    pattern="[0-9]{1}-[0-9]{4}-[0-9]{5}-[0-9]{2}-[0-9]{1}"
                   />
                   <label htmlFor="country">
                     <Text
@@ -378,8 +403,13 @@ function RegisterPage() {
                   <Input
                     id="card_number"
                     name="card_number"
-                    type="card_number"
-                    onChange={formik.handleChange}
+                    type="text"
+                    onChange={(e) => {
+                      let { value } = e.target;
+                      value = value.replace(/\D/g, "").slice(0, 16);
+                      const cardNumber = value.match(/.{1,4}/g)?.join(" ");
+                      formik.setFieldValue("card_number", cardNumber || "");
+                    }}
                     value={formik.values.card_number}
                     placeholder="Enter your card number"
                     width={320}
@@ -400,13 +430,25 @@ function RegisterPage() {
                   <Input
                     id="expire_date"
                     name="expire_date"
-                    type="expire_date"
-                    onChange={formik.handleChange}
+                    type="text"
+                    onChange={(e) => {
+                      let { value } = e.target;
+                      value = value.replace(/\D/g, "").slice(0, 4);
+                      if (value.length > 2) {
+                        value = value.slice(0, 2) + "/" + value.slice(2);
+                      }
+                      if (value.length === 2) {
+                        value = value + "/";
+                      }
+                      formik.setFieldValue("expire_date", value);
+                    }}
                     value={formik.values.expire_date}
                     placeholder="MM/YY"
                     width={320}
                     bg="#FFFFFF"
                     borderColor="gray.400"
+                    maxLength={5}
+                    pattern="\d{2}/\d{2}"
                   />
                 </Flex>
                 <Flex flexDirection="column" marginLeft={12}>
@@ -445,8 +487,12 @@ function RegisterPage() {
                   <Input
                     id="cvc_cvv"
                     name="cvc_cvv"
-                    type="cvc_cvv"
-                    onChange={formik.handleChange}
+                    type="password"
+                    onChange={(e) => {
+                      let { value } = e.target;
+                      value = value.replace(/\D/g, "").slice(0, 3);
+                      formik.setFieldValue("cvc_cvv", value);
+                    }}
                     value={formik.values.cvc_cvv}
                     placeholder="CVC/CVV"
                     width={320}
