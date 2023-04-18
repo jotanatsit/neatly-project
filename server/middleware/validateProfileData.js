@@ -19,7 +19,7 @@ export const profilePictureUpload = multerUpload.fields([
   { name: "profile_picture", maxCount: 1 },
 ]);
 
-export function validateRegister(req, res, next) {
+export function validateProfileData(req, res, next) {
   const user = {
     fullname: req.body.fullname,
     username: req.body.username,
