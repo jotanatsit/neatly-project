@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import authRouter from "./apps/auth.js";
+import profileRouter from "./apps/profile.js";
 import dotenv from "dotenv";
 import cloudinary from "cloudinary";
 import roomRouter from "./apps/rooms.js";
@@ -23,6 +24,7 @@ async function init() {
   app.use(express.urlencoded({ extended: true }));
   app.use("/auth", authRouter);
   app.use("/rooms", roomRouter);
+  app.use("/profile", profileRouter);
 
   app.get("/", (req, res) => {
     res.send("Hello World!");

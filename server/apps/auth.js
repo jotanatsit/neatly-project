@@ -4,8 +4,8 @@ import bcrypt from "bcrypt";
 import { cloudinaryUpload } from "../utils/upload.js";
 import {
   profilePictureUpload,
-  validateRegister,
-} from "../middleware/validateRegister.js";
+  validateProfileData,
+} from "../middleware/validateProfileData.js";
 import jwt from "jsonwebtoken";
 
 const authRouter = Router();
@@ -13,7 +13,7 @@ const authRouter = Router();
 authRouter.post(
   "/register",
   profilePictureUpload,
-  validateRegister,
+  validateProfileData,
   async (req, res) => {
     const user = {
       fullname: req.body.fullname,
@@ -36,7 +36,7 @@ authRouter.post(
     if (profilePictureUrl.message) {
       return res.json(profilePictureUrl);
     }
-    user["profile_picture_url"] = profilePictureUrl[0]?.url;
+    user["profile_picture"] = profilePictureUrl[0]?.url;
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
@@ -70,7 +70,7 @@ authRouter.post(
           user.id_number,
           user.birth_date,
           user.country,
-          user.profile_picture_url,
+          user.profile_picture,
         ]
       );
       await pool.query(
