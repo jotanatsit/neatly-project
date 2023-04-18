@@ -88,7 +88,7 @@ const Nav_user = () => {
           <PopoverBody>
             <Box>
               <List>
-                <RouterLink to="">
+                <RouterLink to="/profile">
                   <ListItem>
                     <Flex
                       h="37px"
@@ -109,7 +109,7 @@ const Nav_user = () => {
                     </Flex>
                   </ListItem>
                 </RouterLink>
-                <RouterLink to="">
+                <RouterLink to="/payment-method">
                   <ListItem>
                     <Flex
                       h="37px"
