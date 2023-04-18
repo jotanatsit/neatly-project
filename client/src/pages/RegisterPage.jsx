@@ -68,7 +68,7 @@ function RegisterPage() {
         );
         console.error(response.data);
         alert(response.data.message);
-        // navigate("/login");
+        navigate("/login");
       } catch (error) {
         console.error(error);
         alert(error.message);
