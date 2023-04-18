@@ -11,44 +11,55 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { Link as RouterLink } from "react-router-dom";
-import room from "../../data/image_room";
+import { format } from "date-fns";
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+
+
 
 const Booking_box = () => {
+  const navigate = useNavigate();
   //room
-  const [rooms, setRooms] = useState(0);
-  const [guests, setGuests] = useState(0);
+  const [options, setOptions] = useState({
+    rooms: 0,
+    guests: 0,
+  });
 
   //Date
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [date, setDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
 
   const handleRoomsIncrement = () => {
-    setRooms(rooms + 1);
+    setOptions({ ...options, rooms: options.rooms + 1 });
   };
 
   const handleRoomsDecrement = () => {
-    if (rooms > 0) {
-      setRooms(rooms - 1);
+    if (options.rooms > 0) {
+      setOptions({ ...options, rooms: options.rooms - 1 });
     }
   };
 
   const handleGuestsIncrement = () => {
-    setGuests(guests + 1);
+    setOptions({ ...options, guests: options.guests + 1 });
   };
 
   const handleGuestsDecrement = () => {
-    if (guests > 0) {
-      setGuests(guests - 1);
+    if (options.guests > 0) {
+      setOptions({ ...options, guests: options.guests - 1 });
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log({ rooms, guests });
+    navigate("/booking",{state: {date,options}})
   };
 
   return (
@@ -62,6 +73,7 @@ const Booking_box = () => {
         alignItems="center"
         justifyContent="space-around"
         borderRadius={10}
+        position="relative"
       >
         <Flex
           w="1000px"
@@ -70,43 +82,59 @@ const Booking_box = () => {
           justifyContent="space-between"
           alignItems="end"
         >
-          <Flex flexDirection="column">
-            <Text textStyle="b1">
-              <label>Check In</label>
-            </Text>
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              selectsStart
-              startDate={startDate}
-              endDate={endDate}
-              range
-              dateFormat="dd/MM/yyyy"
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "5px",
-                height: "30px",
-                width:"500px"
-              }}
-            />
-          </Flex>
-          <Text mb={4}>-</Text>
-          <Flex flexDirection="column">
-            <Text textStyle="b1">
-              <label>Check Out</label>
-            </Text>
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              minDate={startDate}
-              range
-              dateFormat="dd/MM/yyyy"
-            />
-          </Flex>
+          <Menu>
+            <Flex flexDirection="column">
+              <Text textStyle="b1">
+                <label>Check In</label>
+              </Text>
+              <MenuButton
+                as={Button}
+                iconSpacing="10"
+                cursor="pointer"
+                _hover={{ bg: "none" }}
+                _focus={{ bg: "none" }}
+                color="gray.600"
+                bg="white"
+                border="1px solid"
+                borderColor="gray.400"
+                style={{ width: "250px" }}
+              >
+                <Text textStyle="b1">
+                  {format(date[0].startDate, "MM/dd/yyyy")}
+                </Text>
+              </MenuButton>
+            </Flex>
+            <Flex flexDirection="column">
+              <Text textStyle="b1">
+                <label>Check Out</label>
+              </Text>
+              <MenuButton
+                as={Button}
+                iconSpacing="10"
+                cursor="pointer"
+                _hover={{ bg: "none" }}
+                _focus={{ bg: "none" }}
+                color="gray.600"
+                bg="white"
+                border="1px solid"
+                borderColor="gray.400"
+                style={{ width: "250px" }}
+              >
+                <Text textStyle="b1">
+                  {format(date[0].endDate, "MM/dd/yyyy")}
+                </Text>
+              </MenuButton>
+            </Flex>
+            <MenuList border="1px solid" position="absolute" right="-240px">
+              <DateRange
+                editableDateInputs={true}
+                onChange={(item) => setDate([item.selection])}
+                moveRangeOnFirstSelection={false}
+                ranges={date}
+                style={{ width: "500px" }}
+              />
+            </MenuList>
+          </Menu>
 
           <Menu>
             <Flex flexDirection="column">
@@ -127,7 +155,7 @@ const Booking_box = () => {
                 style={{ width: "250px" }}
               >
                 <Text textStyle="b1">
-                  {rooms} room, {guests} guests
+                  {options.rooms} room, {options.guests} guests
                 </Text>
               </MenuButton>
             </Flex>
@@ -145,7 +173,7 @@ const Booking_box = () => {
                     onClick={handleRoomsDecrement}
                     cursor="pointer"
                   />
-                  <Box>{rooms}</Box>
+                  <Box>{options.rooms}</Box>
                   <Image
                     src="/HomePage/icon/icon_increment.svg"
                     onClick={handleRoomsIncrement}
@@ -166,7 +194,7 @@ const Booking_box = () => {
                     onClick={handleGuestsDecrement}
                     cursor="pointer"
                   />
-                  <Box>{guests}</Box>
+                  <Box>{options.guests}</Box>
                   <Image
                     src="/HomePage/icon/icon_increment.svg"
                     onClick={handleGuestsIncrement}
