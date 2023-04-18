@@ -1,5 +1,25 @@
+import multer from "multer";
+
+// validate type and size of profile picture
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(new Error("Only JPEG and PNG images are allowed"));
+  }
+};
+
+const multerUpload = multer({
+  dest: "uploads/",
+  limits: { fileSize: 10000000 },
+  fileFilter: fileFilter,
+});
+
+export const profilePictureUpload = multerUpload.fields([
+  { name: "profile_picture", maxCount: 1 },
+]);
+
 export function validateRegister(req, res, next) {
-  // Get the values from the request body
   const user = {
     fullname: req.body.fullname,
     username: req.body.username,
@@ -14,6 +34,7 @@ export function validateRegister(req, res, next) {
     cvc_cvv: req.body.cvc_cvv,
   };
 
+  // validate that all fields have been filled in.
   for (const [key, value] of Object.entries(user)) {
     if (value === "") {
       return res.json({ message: `Please fill in ${key}.` });
@@ -35,7 +56,7 @@ export function validateRegister(req, res, next) {
 
   if (!isMoreThan18YearsAgo) {
     return res.json({
-      message: "You must be at least 18 years old to register",
+      message: "You must be at least 18 years old to register.",
     });
   }
 

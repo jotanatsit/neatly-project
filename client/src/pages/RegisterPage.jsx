@@ -66,10 +66,12 @@ function RegisterPage() {
             },
           }
         );
-        console.log(response.data);
-        navigate("/login");
+        console.error(response.data);
+        alert(response.data.message);
+        // navigate("/login");
       } catch (error) {
         console.error(error);
+        alert(error.message);
       }
     },
   });

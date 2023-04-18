@@ -1,30 +1,14 @@
 import { Router } from "express";
 import { pool } from "../utils/db.js";
 import bcrypt from "bcrypt";
-import multer from "multer";
 import { cloudinaryUpload } from "../utils/upload.js";
-import { validateRegister } from "../middleware/validateRegister.js";
+import {
+  profilePictureUpload,
+  validateRegister,
+} from "../middleware/validateRegister.js";
 import jwt from "jsonwebtoken";
 
 const authRouter = Router();
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-    cb(null, true);
-  } else {
-    cb(new Error("Only JPEG and PNG images are allowed"));
-  }
-};
-
-const multerUpload = multer({
-  dest: "uploads/",
-  limits: { fileSize: 10000000 },
-  fileFilter: fileFilter,
-});
-
-const profilePictureUpload = multerUpload.fields([
-  { name: "profile_picture", maxCount: 1 },
-]);
 
 authRouter.post(
   "/register",
@@ -49,10 +33,16 @@ authRouter.post(
     };
 
     const profilePictureUrl = await cloudinaryUpload(req.files);
-    user["profile_picture_url"] = profilePictureUrl[0].url;
+    if (profilePictureUrl.message) {
+      return res.json(profilePictureUrl);
+    }
+    user["profile_picture_url"] = profilePictureUrl[0]?.url;
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
+
+    user.id_number = user.id_number.split("-").join("");
+    user.card_number = user.card_number.split(" ").join("");
 
     try {
       await pool.query(
@@ -95,7 +85,24 @@ authRouter.post(
         ]
       );
     } catch (error) {
-      return res.json({ error: error.message });
+      if (
+        error.message ===
+        `duplicate key value violates unique constraint "users_username_key"`
+      ) {
+        return res.json({ message: "Username has already been taken" });
+      } else if (
+        error.message ===
+        `duplicate key value violates unique constraint "users_email_key"`
+      ) {
+        return res.json({ message: "Email has already been taken" });
+      } else if (
+        error.message ===
+        `duplicate key value violates unique constraint "users_profile_id_number_key"`
+      ) {
+        return res.json({ message: "ID Number has already been taken" });
+      } else {
+        return res.json({ message: error.message });
+      }
     }
 
     return res.status(200).json({
