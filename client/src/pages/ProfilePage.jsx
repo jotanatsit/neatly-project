@@ -2,13 +2,30 @@ import { Button, Text, Input, Select, Flex } from "@chakra-ui/react";
 import OptionCountry from "../Components/SelectCountry.jsx";
 import Nav_user from "../Components/Nav_user.jsx";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/authentication";
 
 function ProfilePage() {
   const navigate = useNavigate();
   const [checkPicture, setCheckPicture] = useState(null);
   const [fileInputKey, setFileInputKey] = useState("");
+  const [userData, setUserData] = useState({});
+  const { userToken } = useAuth();
+
+  async function getUserData() {
+    console.log(userToken);
+    // try {
+    //   const response = await axios.get(`http://localhost:4000/${userToken.id}`);
+    //   setUserData(response.data);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  }
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -32,7 +49,7 @@ function ProfilePage() {
 
       try {
         const response = await axios.put(
-          "http://localhost:4000/:id",
+          `http://localhost:4000/${userToken.id}`,
           formData,
           {
             headers: {
