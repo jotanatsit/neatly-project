@@ -13,8 +13,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import "swiper/swiper-bundle.min.css";
 import Footer from "../components/Footer";
-import { useAuth } from "../contexts/authentication";
 import ExploreRoomButton from "../Components/ExploreRoomButton";
+import { useAuth } from "../contexts/authentication";
 
 const RoomDetailPage = () => {
   const auth = useAuth();
