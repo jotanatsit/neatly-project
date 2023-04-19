@@ -13,30 +13,27 @@ function PaymentMethodPage() {
       expire_date: "",
       cvc_cvv: "",
     },
-    // onSubmit: async (values) => {
-    //   const { card_number, card_owner, expire_date, cvc_cvv } = values;
+    onSubmit: async (values) => {
+      const { card_number, card_owner, expire_date, cvc_cvv } = values;
 
-    //   const formData = new FormData();
-    //   formData.append("card_number", card_number);
-    //   formData.append("card_owner", card_owner);
-    //   formData.append("expire_date", expire_date);
-    //   formData.append("cvc_cvv", cvc_cvv);
+      const formData = new FormData();
+      formData.append("card_number", card_number);
+      formData.append("card_owner", card_owner);
+      formData.append("expire_date", expire_date);
+      formData.append("cvc_cvv", cvc_cvv);
 
-    //   try {
-    //     const response = await axios.put(
-    //       "http://localhost:4000/auth/register",
-    //       formData
-    //     );
-    //     console.error(response.data);
-    //     alert(response.data.message);
-    //     // navigate("/payment-method");
-    //   } catch (error) {
-    //     console.error(error);
-    //     alert(error.message);
-    //   }
-    // },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 4));
+      try {
+        const response = await axios.put(
+          "http://localhost:4000/:id/payment-method",
+          formData
+        );
+        console.error(response.data);
+        alert(response.data.message);
+        // navigate("/payment-method");
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
     },
   });
 
