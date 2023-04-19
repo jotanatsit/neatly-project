@@ -5,27 +5,37 @@ import { useFormik } from "formik";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
+import axios from "axios";
 
 function ProfilePage() {
   const navigate = useNavigate();
   const [checkPicture, setCheckPicture] = useState(null);
   const [fileInputKey, setFileInputKey] = useState("");
   const [userData, setUserData] = useState({});
-  const { userToken } = useAuth();
+  const userId = useAuth();
 
   async function getUserData() {
-    console.log(userToken);
-    // try {
-    //   const response = await axios.get(`http://localhost:4000/${userToken.id}`);
-    //   setUserData(response.data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    console.log(typeof userId.userData);
+    console.log(userId.userData);
+
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/profile/${userId.userData}`
+      );
+      console.log(response.data.data);
+      setUserData(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
-    getUserData();
+    getUserData(), console.log(userData);
   }, []);
+
+  function updateButton() {
+    console.log(userData);
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -49,7 +59,7 @@ function ProfilePage() {
 
       try {
         const response = await axios.put(
-          `http://localhost:4000/${userToken.id}`,
+          `http://localhost:4000/${userId.userData}`,
           formData,
           {
             headers: {
@@ -59,13 +69,25 @@ function ProfilePage() {
         );
         console.error(response.data);
         alert(response.data.message);
-        // navigate("/profile");
+        navigate("/profile");
       } catch (error) {
         console.error(error);
         alert(error.message);
       }
     },
   });
+
+  useEffect(() => {
+    formik.setValues({
+      ...formik.values,
+      fullname: userData.fullname || "",
+      email: userData.email || "",
+      id_number: userData.id_number || "",
+      birth_date: userData.birth_date || "",
+      country: userData.country || "",
+      profile_picture: userData.profile_picture || null,
+    });
+  }, [userData]);
 
   const handleIdNumberChange = (event) => {
     let value = event.target.value;
@@ -128,6 +150,7 @@ function ProfilePage() {
                 type="submit"
                 variant="primary"
                 fontWeight="600px"
+                onClick={updateButton}
               >
                 Update Profile
               </Button>
