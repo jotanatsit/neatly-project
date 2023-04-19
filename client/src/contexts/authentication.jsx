@@ -12,6 +12,7 @@ function AuthProvider(props) {
     error: null,
     user: null,
   });
+  const [userToken, setUserToken] = useState({});
 
   const [errorMessage, setErrorMessage] = useState({
     error: null,
@@ -20,17 +21,14 @@ function AuthProvider(props) {
   const navigate = useNavigate();
 
   const login = async (data) => {
-    try {
-      const result = await axios.post("http://localhost:4000/auth/login", data);
-      const token = result.data.token;
-      localStorage.setItem("token", token);
-      const userDataFromToken = jwtDecode(token);
-      // localStorage.setItem("username", JSON.stringify(userDataFromToken));
-      setState({ ...state, user: userDataFromToken });
-      navigate("/");
-    } catch (error) {
-      console.log(error.response.data.message);
-    }
+    const result = await axios.post("http://localhost:4000/auth/login", data);
+    const token = result.data.token;
+    localStorage.setItem("token", token);
+    const userDataFromToken = jwtDecode(token);
+    // localStorage.setItem("username", JSON.stringify(userDataFromToken));
+    setState({ ...state, user: userDataFromToken });
+    setUserToken(userDataFromToken);
+    navigate("/");
   };
 
   const logout = () => {
@@ -55,7 +53,9 @@ function AuthProvider(props) {
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 
   return (
-    <AuthContext.Provider value={{ state, login, logout, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ state, userToken, login, logout, isAuthenticated }}
+    >
       {props.children}
     </AuthContext.Provider>
   );
