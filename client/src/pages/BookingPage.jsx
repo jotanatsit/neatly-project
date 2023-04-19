@@ -21,10 +21,12 @@ import { useAuth } from "../contexts/authentication";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
 import rooms from "../../data/search_room";
+import SearchRooms from "../Components/SearchRooms";
 
 const BookingPage = () => {
   const auth = useAuth();
 
+  //ใช้ useLocation ในการเข้าถึงข้อมูล url booking เมื่อ log ก็เห็นข้อมูลใน console แล้วนำมาใส่ใน useState Date กับ Room and Guest
   const location = useLocation();
   console.log(location);
 
@@ -218,107 +220,9 @@ const BookingPage = () => {
         alignItems="center"
         bg="#EDECEC"
       >
-        {rooms.map((item) => {
-          return (
-            <Flex
-              width={1120}
-              borderBottom="1px solid gray"
-              height={400}
-              mt={2}
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="space-between"
-              key={item.eid}
-            >
-              <Image src={item.photo} w={453} h={320}></Image>
-              <Flex w={619} h={320} flexDirection="column" alignItems="end">
-                <Flex
-                  w={602}
-                  h={186}
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  mt="5"
-                >
-                  <Flex
-                    flexDirection="column"
-                    w={314}
-                    h={178}
-                    justifyContent="space-between"
-                  >
-                    <Flex flexDirection="column">
-                      <Text textStyle="h4" color="black">
-                        {item.name}
-                      </Text>
-                      <Flex flexDirection="row" mt="10px">
-                        <Text
-                          fontSize="16px"
-                          borderRight="1px solid"
-                          paddingRight="5px"
-                        >
-                          2 Guests
-                        </Text>
-                        <Text
-                          fontSize="16px"
-                          borderRight="1px solid"
-                          paddingRight="5px"
-                        >
-                          1 Double bed
-                        </Text>
-                        <Text
-                          fontSize="16px"
-                          borderRight="1px solid"
-                          paddingRight="5px"
-                        >
-                          32 sqm
-                        </Text>
-                      </Flex>
-                    </Flex>
-                    <Flex>
-                      <Text>
-                        Rooms (36sqm) with full garden views, 1 single bed,
-                        bathroom with bathtub & shower.
-                      </Text>
-                    </Flex>
-                  </Flex>
-
-                  <Flex w="260px" h="186px" flexDirection="column">
-                    <Flex
-                      flexDirection="column"
-                      w="260px"
-                      h="58px"
-                      textAlign="end"
-                    >
-                      <Text as="del">THB 3,100.00</Text>
-                      <Text textStyle="h5" color="black">
-                        THB 2,500.00
-                      </Text>
-                    </Flex>
-                    <Flex
-                      flexDirection="column"
-                      w="260px"
-                      h="58px"
-                      textAlign="end"
-                      mt="5"
-                    >
-                      <Text>Per Night</Text>
-                      <Text>(Including Taxes & Fees)</Text>
-                    </Flex>
-                  </Flex>
-                </Flex>
-                <Flex mt="10">
-                  <Link to="/roomdetail">
-                    <Button bg="none" color="orange.600" p="16px 32px">
-                      Room Detail
-                    </Button>
-                  </Link>
-                  <Button variant="primary" p="16px 32px">
-                    Book Now
-                  </Button>
-                </Flex>
-              </Flex>
-            </Flex>
-          );
-        })}
+        {rooms.map(item =>(
+          <SearchRooms item={item} key={item.eid}/>
+        ))}
       </Flex>
       <Footer />
     </Flex>

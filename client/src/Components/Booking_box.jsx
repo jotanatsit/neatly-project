@@ -57,6 +57,7 @@ const Booking_box = () => {
     }
   };
 
+  //กดเสร็จไปหน้า booking พร้อมข้อมูล
   const handleSubmit = (event) => {
     event.preventDefault();
     navigate("/booking",{state: {date,options}})

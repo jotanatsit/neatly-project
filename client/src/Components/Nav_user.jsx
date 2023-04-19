@@ -47,7 +47,6 @@ const Nav_user = () => {
         <Box ml={8}>
           <Link to="service" smooth={true} duration={1000}>
             <Text textStyle="b2" mr={5} cursor="pointer">
-              {" "}
               Service & Facilities
             </Text>
           </Link>
