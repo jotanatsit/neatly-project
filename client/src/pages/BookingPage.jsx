@@ -10,18 +10,21 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import Nav_nonuser from "../Components/Nav_nonuser";
+import Nav_user from "../Components/Nav_user";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
+import { useAuth } from "../contexts/authentication";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
 import rooms from "../../data/search_room";
 
 const BookingPage = () => {
-  
+  const auth = useAuth();
+
   const location = useLocation();
   console.log(location);
 
@@ -57,7 +60,7 @@ const BookingPage = () => {
 
   return (
     <Flex flexDirection="column" w="1440px">
-      <Nav_nonuser />
+      {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
       <form onSubmit={handleSubmit}>
         <Flex
           bg="white"

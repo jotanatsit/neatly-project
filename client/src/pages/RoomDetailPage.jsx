@@ -19,6 +19,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import Nav_nonuser from "../Components/Nav_nonuser";
+import Nav_user from "../Components/Nav_user";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
   Navigation,
@@ -30,11 +31,13 @@ import {
 import "swiper/swiper-bundle.min.css";
 import room from "../../data/image_room";
 import Footer from "../components/Footer";
+import { useAuth } from "../contexts/authentication";
 
 const RoomDetailPage = () => {
+  const auth = useAuth();
   return (
     <Flex flexDirection="column" w="1440px">
-      <Nav_nonuser />
+      {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
       <Flex w="1440px" h="1596px" flexDirection="column" alignItems="center">
         <Flex
           w="1440px"

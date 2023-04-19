@@ -20,8 +20,10 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom";
+import { useAuth } from "../contexts/authentication";
 
 const Nav_user = () => {
+  const { logout } = useAuth();
   return (
     <Flex
       bg="white"
@@ -164,9 +166,16 @@ const Nav_user = () => {
                         ></Image>
                       </Box>
                       <Box w="142px" ml="15px">
-                        <Text textStyle="b2" color="gray.700">
-                          Log out
-                        </Text>
+                        <Button
+                          variant="link"
+                          onClick={() => {
+                            logout();
+                          }}
+                        >
+                          <Text textStyle="b2" color="gray.700">
+                            Log out
+                          </Text>
+                        </Button>
                       </Box>
                     </Flex>
                   </ListItem>

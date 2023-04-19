@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./HomePage";
 import RegisterPage from "./RegisterPage";
 import LoginPage from "./LoginPage";
-import RoomDeatailPage from "./RoomDetailPage";
+import RoomDetailPage from "./RoomDetailPage";
 import BookingPage from "./BookingPage";
 
 function UnauthenticatedApp() {
@@ -12,7 +12,7 @@ function UnauthenticatedApp() {
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/roomdetail" element={<RoomDeatailPage />} />
+        <Route path="/roomdetail" element={<RoomDetailPage />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="*" element={<LoginPage />} />
       </Routes>

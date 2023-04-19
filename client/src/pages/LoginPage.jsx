@@ -9,15 +9,13 @@ import {
   extendTheme,
   Grid,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect } from "react";
 import { Field, Form, Formik } from "formik";
 import { useAuth } from "../contexts/authentication";
 import { Link } from "react-router-dom";
 import Nav_nonuser from "../Components/Nav_nonuser.jsx";
 
 function LoginPage() {
-  //   const [username, setUsername] = useState("");
-  //   const [password, setPassword] = useState("");
   const { login } = useAuth();
 
   function validateUserName(value) {
@@ -25,9 +23,6 @@ function LoginPage() {
     if (!value) {
       errorMessage = "Username or Email is required";
     }
-    // else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-    //   errorMessage = "Invalid email address";
-    // }
     return errorMessage;
   }
 
