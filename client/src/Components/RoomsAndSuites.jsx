@@ -1,28 +1,5 @@
-import { Flex, Button, Text, Grid, Box } from "@chakra-ui/react";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { Link } from "react-router-dom";
-
-function Room(props) {
-  return (
-    <Box pl={props.pl} pb={props.pb}>
-      <Text textStyle="h3" color="white" textAlign="center">
-        {props.type}
-      </Text>
-      <Link to="/roomdetail">
-        <Button
-          variant="ghost"
-          color="white"
-          w="fit-content"
-          _hover="none"
-          _focus={{ color: "white" }}
-          rightIcon={<ArrowForwardIcon />}
-        >
-          Explore Room
-        </Button>
-      </Link>
-    </Box>
-  );
-}
+import { Flex, Text, Grid } from "@chakra-ui/react";
+import ExploreRoomButton from "../Components/ExploreRoomButton";
 
 function RoomsAndSuites() {
   return (
@@ -40,11 +17,11 @@ function RoomsAndSuites() {
           justifySelf="center"
           align="end"
         >
-          <Room type="Superior Garden View" pl="60px" pb="80px" />
+          <ExploreRoomButton type="Superior Garden View" pl="60px" pb="80px" />
         </Flex>
         <Flex gap="24px" justifySelf="center">
           <Flex bg="url(./HomePage/deluxe.svg)" w="643px" h="400px" align="end">
-            <Room type="Deluxe" pl="60px" pb="80px" />
+            <ExploreRoomButton type="Deluxe" pl="60px" pb="80px" />
           </Flex>
           <Flex
             bg="url(./HomePage/superior.svg)"
@@ -52,7 +29,7 @@ function RoomsAndSuites() {
             h="400px"
             align="end"
           >
-            <Room type="Superior" pl="60px" pb="80px" />
+            <ExploreRoomButton type="Superior" pl="60px" pb="80px" />
           </Flex>
         </Flex>
         <Flex gap="24px" justifySelf="center">
@@ -62,7 +39,7 @@ function RoomsAndSuites() {
             h="700px"
             align="end"
           >
-            <Room type="Premier Sea View" pl="60px" pb="80px" />
+            <ExploreRoomButton type="Premier Sea View" pl="60px" pb="80px" />
           </Flex>
           <Flex direction="column" gap="24px">
             <Flex
@@ -71,7 +48,7 @@ function RoomsAndSuites() {
               h="338px"
               align="end"
             >
-              <Room type="Superior" pl="80px" pb="80px" />
+              <ExploreRoomButton type="Supreme" pl="80px" pb="80px" />
             </Flex>
             <Flex
               bg="url(./HomePage/suite.svg)"
@@ -79,7 +56,7 @@ function RoomsAndSuites() {
               h="338px"
               align="end"
             >
-              <Room type="Superior" pl="80px" pb="80px" />
+              <ExploreRoomButton type="Suite" pl="80px" pb="80px" />
             </Flex>
           </Flex>
         </Flex>
