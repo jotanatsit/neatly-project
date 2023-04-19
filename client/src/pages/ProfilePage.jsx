@@ -19,43 +19,34 @@ function ProfilePage() {
       country: "",
       profile_picture: null,
     },
-    // onSubmit: async (values) => {
-    //   const {
-    //     fullname,
-    //     email,
-    //     id_number,
-    //     birth_date,
-    //     country,
-    //   } = values;
+    onSubmit: async (values) => {
+      const { fullname, email, id_number, birth_date, country } = values;
 
-    //   const formData = new FormData();
-    //   formData.append("fullname", fullname);
-    //   formData.append("email", email);
-    //   formData.append("id_number", id_number);
-    //   formData.append("birth_date", birth_date);
-    //   formData.append("country", country);
-    //   formData.append("profile_picture", values.profile_picture);
+      const formData = new FormData();
+      formData.append("fullname", fullname);
+      formData.append("email", email);
+      formData.append("id_number", id_number);
+      formData.append("birth_date", birth_date);
+      formData.append("country", country);
+      formData.append("profile_picture", values.profile_picture);
 
-    //   try {
-    //     const response = await axios.put(
-    //       "http://localhost:4000/auth/register",
-    //       formData,
-    //       {
-    //         headers: {
-    //           "Content-Type": "multipart/form-data",
-    //         },
-    //       }
-    //     );
-    //     console.error(response.data);
-    //     alert(response.data.message);
-    //     // navigate("/profile");
-    //   } catch (error) {
-    //     console.error(error);
-    //     alert(error.message);
-    //   }
-    // },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 6));
+      try {
+        const response = await axios.put(
+          "http://localhost:4000/:id",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.error(response.data);
+        alert(response.data.message);
+        // navigate("/profile");
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
     },
   });
 
