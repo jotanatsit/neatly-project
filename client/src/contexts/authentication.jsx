@@ -12,7 +12,6 @@ function AuthProvider(props) {
     error: null,
     user: null,
   });
-  const [userToken, setUserToken] = useState({});
 
   const [errorMessage, setErrorMessage] = useState({
     error: null,
@@ -25,10 +24,9 @@ function AuthProvider(props) {
     const token = result.data.token;
     localStorage.setItem("token", token);
     const userDataFromToken = jwtDecode(token);
-    // localStorage.setItem("username", JSON.stringify(userDataFromToken));
+    localStorage.setItem("username", JSON.stringify(userDataFromToken));
     setState({ ...state, user: userDataFromToken });
-    setUserToken(userDataFromToken);
-    navigate("/");
+    navigate("/profile");
   };
 
   const logout = () => {
@@ -50,11 +48,15 @@ function AuthProvider(props) {
   //     autoLogout();
   //   });
 
+  // access value of userId from storage
+  const userData = Number(
+    localStorage.getItem("username").split(",")[0].split(":")[1]
+  );
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 
   return (
     <AuthContext.Provider
-      value={{ state, userToken, login, logout, isAuthenticated }}
+      value={{ state, login, logout, userData, isAuthenticated }}
     >
       {props.children}
     </AuthContext.Provider>
