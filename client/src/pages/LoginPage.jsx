@@ -8,6 +8,7 @@ import {
   FormErrorMessage,
   extendTheme,
   Grid,
+  Box,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { Field, Form, Formik } from "formik";
@@ -35,7 +36,7 @@ function LoginPage() {
   }
 
   return (
-    <div>
+    <Box w="1440px" m="auto">
       <Nav_nonuser />
       <Grid templateColumns="repeat(2, 1fr)">
         <img src="/LoginPage/sidepic.svg"></img>
@@ -130,7 +131,7 @@ function LoginPage() {
           </Formik>
         </Flex>
       </Grid>
-    </div>
+    </Box>
   );
 }
 

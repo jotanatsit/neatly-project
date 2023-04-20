@@ -3,6 +3,7 @@ import cors from "cors";
 import authRouter from "./apps/auth.js";
 import dotenv from "dotenv";
 import cloudinary from "cloudinary";
+import roomRouter from "./apps/rooms.js";
 
 async function init() {
   dotenv.config();
@@ -21,6 +22,7 @@ async function init() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use("/auth", authRouter);
+  app.use("/rooms", roomRouter);
 
   app.get("/", (req, res) => {
     res.send("Hello World!");
