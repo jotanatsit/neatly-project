@@ -79,8 +79,6 @@ function ProfilePage() {
       });
       formik.setFieldValue("profile_picture", file);
       setCheckPicture(file);
-      console.log(blob);
-      console.log(file);
     } catch (error) {
       console.log("Error fetching image:", error);
     }

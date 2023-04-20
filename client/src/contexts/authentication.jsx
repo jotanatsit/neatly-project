@@ -26,7 +26,7 @@ function AuthProvider(props) {
     const userDataFromToken = jwtDecode(token);
     localStorage.setItem("username", JSON.stringify(userDataFromToken));
     setState({ ...state, user: userDataFromToken });
-    navigate("/profile");
+    navigate("/");
   };
 
   const logout = () => {
