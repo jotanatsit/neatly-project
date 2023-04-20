@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 
 const authRouter = Router();
 
+// create user data to database
 authRouter.post(
   "/register",
   profilePictureUpload,
@@ -32,6 +33,7 @@ authRouter.post(
       last_logged_in: new Date(),
     };
 
+    // upload profile picture file to cloudinary
     const profilePictureUrl = await cloudinaryUpload(req.files);
     if (profilePictureUrl.message) {
       return res.json(profilePictureUrl);
@@ -57,10 +59,13 @@ authRouter.post(
           user.last_logged_in,
         ]
       );
+
+      // get user_id from lastest register
       let lastest_user_id = await pool.query(
         `select user_id from users order by user_id desc limit $1`,
         [1]
       );
+
       await pool.query(
         `insert into users_profile (user_id, fullname, id_number, birth_date, country, profile_picture)
           values ($1, $2, $3, $4, $5, $6)`,
@@ -73,6 +78,7 @@ authRouter.post(
           user.profile_picture,
         ]
       );
+
       await pool.query(
         `insert into users_credit_card (user_id, card_number, card_owner, expire_date, cvc_cvv)
           values ($1, $2, $3, $4, $5)`,
@@ -85,6 +91,7 @@ authRouter.post(
         ]
       );
     } catch (error) {
+      // alert message for fail register
       if (
         error.message ===
         `duplicate key value violates unique constraint "users_username_key"`
@@ -124,8 +131,6 @@ authRouter.post("/login", async (req, res) => {
           where users.username = $1 or users.email = $2`,
     [userClient.username, userClient.username]
   );
-
-  console.log(user.rows[0]);
 
   if (!user.rows[0]) {
     return res.status(404).json({

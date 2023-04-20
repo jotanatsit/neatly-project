@@ -8,6 +8,7 @@ import {
 
 const profileRouter = Router();
 
+// get user profile data from database
 profileRouter.get("/:id", async (req, res) => {
   const userId = req.params.id;
 
@@ -27,6 +28,7 @@ profileRouter.get("/:id", async (req, res) => {
   });
 });
 
+// update user profile data to database
 profileRouter.put(
   "/:id",
   profilePictureUpload,
@@ -39,13 +41,13 @@ profileRouter.put(
       updated_at: new Date(),
     };
 
-    // const profilePictureUrl = await cloudinaryUpload(req.files);
-    // if (profilePictureUrl.message) {
-    //   return res.json(profilePictureUrl);
-    // }
-    // updatedProfile["profile_picture"] = profilePictureUrl[0]?.url;
+    const profilePictureUrl = await cloudinaryUpload(req.files);
+    if (profilePictureUrl.message) {
+      return res.json(profilePictureUrl);
+    }
+    updatedProfile["profile_picture"] = profilePictureUrl[0]?.url;
 
-    updatedProfile.id_number = updatedProfile.id_number.split("-").join("");
+    updatedProfile.id_number = updatedProfile.id_number?.split("-")?.join("");
 
     await pool.query(
       "update users_profile set fullname=$1, id_number=$2, birth_date=$3, country=$4, profile_picture=$5 where user_id=$6",
@@ -70,6 +72,7 @@ profileRouter.put(
   }
 );
 
+// get payment method data from database
 profileRouter.get("/:id/payment-method", async (req, res) => {
   const userId = req.params.id;
 
@@ -83,37 +86,43 @@ profileRouter.get("/:id/payment-method", async (req, res) => {
   });
 });
 
-profileRouter.put("/:id/payment-method", async (req, res) => {
-  const userId = req.params.id;
+// update payment method data to database
+profileRouter.put(
+  "/:id/payment-method",
+  profilePictureUpload,
+  validateProfileData,
+  async (req, res) => {
+    const userId = req.params.id;
 
-  const updatedCreditCard = {
-    ...req.body,
-    updated_at: new Date(),
-  };
+    const updatedCreditCard = {
+      ...req.body,
+      updated_at: new Date(),
+    };
 
-  updatedCreditCard.card_number = updatedCreditCard.card_number
-    .split(" ")
-    .join("");
+    updatedCreditCard.card_number = updatedCreditCard.card_number
+      ?.split(" ")
+      ?.join("");
 
-  await pool.query(
-    "update users_credit_card set card_number=$1, card_owner=$2, expire_date=$3, cvc_cvv=$4 where user_id=$5",
-    [
-      updatedCreditCard.card_number,
-      updatedCreditCard.card_owner,
-      updatedCreditCard.expire_date,
-      updatedCreditCard.cvc_cvv,
+    await pool.query(
+      "update users_credit_card set card_number=$1, card_owner=$2, expire_date=$3, cvc_cvv=$4 where user_id=$5",
+      [
+        updatedCreditCard.card_number,
+        updatedCreditCard.card_owner,
+        updatedCreditCard.expire_date,
+        updatedCreditCard.cvc_cvv,
+        userId,
+      ]
+    );
+
+    await pool.query("update users set updated_at=$1 where user_id=$2", [
+      updatedCreditCard.updated_at,
       userId,
-    ]
-  );
+    ]);
 
-  await pool.query("update users set updated_at=$1 where user_id=$2", [
-    updatedCreditCard.updated_at,
-    userId,
-  ]);
-
-  return res.json({
-    message: "Credit card has been successfully updated",
-  });
-});
+    return res.json({
+      message: "Credit card has been successfully updated",
+    });
+  }
+);
 
 export default profileRouter;

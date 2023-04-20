@@ -12,6 +12,7 @@ function RegisterPage() {
   const [checkPicture, setCheckPicture] = useState(null);
   const [fileInputKey, setFileInputKey] = useState("");
 
+  // form submit by formik
   const formik = useFormik({
     initialValues: {
       fullname: "",
@@ -56,6 +57,7 @@ function RegisterPage() {
       formData.append("cvc_cvv", cvc_cvv);
       formData.append("profile_picture", values.profile_picture);
 
+      // send request post value to server
       try {
         const response = await axios.post(
           "http://localhost:4000/auth/register",
@@ -66,16 +68,17 @@ function RegisterPage() {
             },
           }
         );
-        console.error(response.data);
+        console.log(response.data);
         alert(response.data.message);
         navigate("/login");
       } catch (error) {
-        console.error(error);
+        console.log(error);
         alert(error.message);
       }
     },
   });
 
+  // function set format Id Number 13 digit with X-XXXX-XXXXX-XX-X
   const handleIdNumberChange = (event) => {
     let value = event.target.value;
     value = value.replace(/[^0-9]/g, "");
@@ -98,6 +101,7 @@ function RegisterPage() {
     formik.setFieldValue("id_number", value);
   };
 
+  // function remove picture profile for changing to new picture
   const handleRemoveImage = (event) => {
     event.preventDefault();
     formik.setFieldValue("profile_picture", null);
@@ -219,6 +223,7 @@ function RegisterPage() {
                     width={320}
                     bg="#FFFFFF"
                     borderColor="gray.400"
+                    // normally show color gray.500, if have event color show gray.800
                     color={formik.values.birth_date ? "gray.800" : "gray.500"}
                   />
                 </Flex>
@@ -298,6 +303,7 @@ function RegisterPage() {
                       boxShadow: "none",
                     }}
                     colorScheme="gray.800"
+                    // normally show color gray.500, if have event color show gray.800
                     color={formik.values.country ? "gray.800" : "gray.500"}
                   >
                     <OptionCountry />
@@ -340,6 +346,7 @@ function RegisterPage() {
                     }}
                   />
 
+                  {/* ถ้าไม่มี picture ก็จะโชว์ช่อง input : ถ้ามี picture ก็จะโชว์ picture พร้อม delete buton  */}
                   {checkPicture === null ? (
                     <label htmlFor="file-upload">
                       <Text color="orange.500" fontSize={30} textAlign="center">
@@ -406,6 +413,7 @@ function RegisterPage() {
                     id="card_number"
                     name="card_number"
                     type="text"
+                    // change format card number 16 digit with space XXXX XXXX XXXX XXXX
                     onChange={(e) => {
                       let { value } = e.target;
                       value = value.replace(/\D/g, "").slice(0, 16);
@@ -433,6 +441,7 @@ function RegisterPage() {
                     id="expire_date"
                     name="expire_date"
                     type="text"
+                    // change format expire date 4 digit with "/" to XX/XX
                     onChange={(e) => {
                       let { value } = e.target;
                       value = value.replace(/\D/g, "").slice(0, 4);
@@ -490,6 +499,7 @@ function RegisterPage() {
                     id="cvc_cvv"
                     name="cvc_cvv"
                     type="password"
+                    // change format CVC/CVV only 3 digit
                     onChange={(e) => {
                       let { value } = e.target;
                       value = value.replace(/\D/g, "").slice(0, 3);

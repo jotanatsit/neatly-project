@@ -1,6 +1,6 @@
 import multer from "multer";
 
-// validate type and size of profile picture
+// get data from formData() and validate type and size of profile picture
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
@@ -19,6 +19,7 @@ export const profilePictureUpload = multerUpload.fields([
   { name: "profile_picture", maxCount: 1 },
 ]);
 
+// validate profile data
 export function validateProfileData(req, res, next) {
   const user = {
     fullname: req.body.fullname,
@@ -34,7 +35,7 @@ export function validateProfileData(req, res, next) {
     cvc_cvv: req.body.cvc_cvv,
   };
 
-  // validate that all fields have been filled in.
+  // validate that all fields have been filled in without profile picture.
   for (const [key, value] of Object.entries(user)) {
     if (value === "") {
       return res.json({ message: `Please fill in ${key}.` });
@@ -42,22 +43,24 @@ export function validateProfileData(req, res, next) {
   }
 
   // validate birth_date is more than 18 years old.
-  const now = new Date();
+  if (user.birth_date) {
+    const now = new Date();
 
-  const eighteenYearsAgo = new Date(
-    now.getFullYear() - 18,
-    now.getMonth(),
-    now.getDate()
-  );
+    const eighteenYearsAgo = new Date(
+      now.getFullYear() - 18,
+      now.getMonth(),
+      now.getDate()
+    );
 
-  const birthDate = new Date(user.birth_date);
+    const birthDate = new Date(user.birth_date);
 
-  const isMoreThan18YearsAgo = birthDate < eighteenYearsAgo;
+    const isMoreThan18YearsAgo = birthDate < eighteenYearsAgo;
 
-  if (!isMoreThan18YearsAgo) {
-    return res.json({
-      message: "You must be at least 18 years old to register.",
-    });
+    if (!isMoreThan18YearsAgo) {
+      return res.json({
+        message: "You must be at least 18 years old to register.",
+      });
+    }
   }
 
   next();

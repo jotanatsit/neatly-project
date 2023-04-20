@@ -15,27 +15,19 @@ function ProfilePage() {
   const userId = useAuth();
 
   async function getUserData() {
-    console.log(typeof userId.userData);
-    console.log(userId.userData);
-
     try {
       const response = await axios.get(
-        `http://localhost:4000/profile/${userId.userData}`
+        `http://localhost:4000/profile/${userId.UserIdFromLocalStorage}`
       );
-      console.log(response.data.data);
       setUserData(response.data.data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 
   useEffect(() => {
-    getUserData(), console.log(userData);
+    getUserData();
   }, []);
-
-  function updateButton() {
-    console.log(userData);
-  }
 
   const formik = useFormik({
     initialValues: {
@@ -59,7 +51,7 @@ function ProfilePage() {
 
       try {
         const response = await axios.put(
-          `http://localhost:4000/${userId.userData}`,
+          `http://localhost:4000/profile/${userId.UserIdFromLocalStorage}`,
           formData,
           {
             headers: {
@@ -67,28 +59,50 @@ function ProfilePage() {
             },
           }
         );
-        console.error(response.data);
+        console.log(response.data);
         alert(response.data.message);
         navigate("/profile");
       } catch (error) {
-        console.error(error);
+        console.log(error);
         alert(error.message);
       }
     },
   });
+
+  // ใช้ url ที่มี type เป็น string จาก database ไป fatch รูปลงมา เพื่อเอา data ที่มี type เป็น object ไปใช้ต่อ
+  async function fetchImageAndCreateObjectUrl(imageUrl) {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const file = new File([blob], "profile_picture.png", {
+        type: "image/png",
+      });
+      formik.setFieldValue("profile_picture", file);
+      setCheckPicture(file);
+      console.log(blob);
+      console.log(file);
+    } catch (error) {
+      console.log("Error fetching image:", error);
+    }
+  }
 
   useEffect(() => {
     formik.setValues({
       ...formik.values,
       fullname: userData.fullname || "",
       email: userData.email || "",
-      id_number: userData.id_number || "",
+      id_number:
+        userData.id_number?.replace(
+          /^(\d{1})(\d{4})(\d{5})(\d{2})(\d{0,1})/,
+          "$1-$2-$3-$4-$5"
+        ) || "",
       birth_date: userData.birth_date || "",
       country: userData.country || "",
-      profile_picture: userData.profile_picture || null,
     });
+    fetchImageAndCreateObjectUrl(userData.profile_picture);
   }, [userData]);
 
+  // function set format Id Number 13 digit with X-XXXX-XXXXX-XX-X
   const handleIdNumberChange = (event) => {
     let value = event.target.value;
     value = value.replace(/[^0-9]/g, "");
@@ -150,7 +164,6 @@ function ProfilePage() {
                 type="submit"
                 variant="primary"
                 fontWeight="600px"
-                onClick={updateButton}
               >
                 Update Profile
               </Button>
@@ -321,10 +334,13 @@ function ProfilePage() {
                       <Flex position="relative">
                         <img
                           src={URL.createObjectURL(checkPicture)}
-                          alt={checkPicture.name}
+                          alt={checkPicture?.name}
                         />
                         <Button
-                          onClick={(event) => handleRemoveImage(event)}
+                          onClick={(event) => {
+                            handleRemoveImage(event);
+                            console.log(checkPicture);
+                          }}
                           color="#FFFFFF"
                           bg="orange.600"
                           borderRadius="full"

@@ -2,6 +2,7 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs/promises";
 
 const cloudinaryUpload = async (files) => {
+  // validate profile picture have been filled in.
   if (!files.profile_picture) {
     return { message: "Please fill in profile picture" };
   } else {

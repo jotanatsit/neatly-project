@@ -49,14 +49,14 @@ function AuthProvider(props) {
   //   });
 
   // access value of userId from storage
-  const userData = Number(
-    localStorage.getItem("username").split(",")[0].split(":")[1]
+  const UserIdFromLocalStorage = Number(
+    localStorage.getItem("username")?.split(",")[0]?.split(":")[1]
   );
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 
   return (
     <AuthContext.Provider
-      value={{ state, login, logout, userData, isAuthenticated }}
+      value={{ state, login, logout, UserIdFromLocalStorage, isAuthenticated }}
     >
       {props.children}
     </AuthContext.Provider>

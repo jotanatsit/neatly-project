@@ -1,11 +1,31 @@
 import { Button, Text, Input, Flex } from "@chakra-ui/react";
-import { useFormik } from "formik";
 import Nav_user from "../Components/Nav_user.jsx";
-import axios from "axios";
+import { useFormik } from "formik";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/authentication";
+import axios from "axios";
 
 function PaymentMethodPage() {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState({});
+  const userId = useAuth();
+
+  async function getUserData() {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/profile/${userId.UserIdFromLocalStorage}/payment-method`
+      );
+      setUserData(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       card_number: "",
@@ -24,18 +44,33 @@ function PaymentMethodPage() {
 
       try {
         const response = await axios.put(
-          "http://localhost:4000/:id/payment-method",
+          `http://localhost:4000/profile/${userId.UserIdFromLocalStorage}/payment-method`,
           formData
         );
-        console.error(response.data);
+        console.log(response.data);
         alert(response.data.message);
-        // navigate("/payment-method");
+        navigate("/payment-method");
       } catch (error) {
-        console.error(error);
+        console.log(error);
         alert(error.message);
       }
     },
   });
+
+  useEffect(() => {
+    formik.setValues({
+      ...formik.values,
+      card_number:
+        userData.card_number
+          ?.replace(/\D/g, "")
+          ?.slice(0, 16)
+          ?.match(/.{1,4}/g)
+          ?.join(" ") || "", // change format card number 16 digit with space XXXX XXXX XXXX XXXX
+      card_owner: userData.card_owner || "",
+      expire_date: userData.expire_date || "",
+      cvc_cvv: userData.cvc_cvv || "",
+    });
+  }, [userData]);
 
   return (
     <div>
@@ -88,6 +123,7 @@ function PaymentMethodPage() {
                   id="card_number"
                   name="card_number"
                   type="text"
+                  // change format card number 16 digit with space XXXX XXXX XXXX XXXX
                   onChange={(e) => {
                     let { value } = e.target;
                     value = value.replace(/\D/g, "").slice(0, 16);
@@ -115,6 +151,7 @@ function PaymentMethodPage() {
                   id="expire_date"
                   name="expire_date"
                   type="text"
+                  // change format expire date 4 digit with "/" to XX/XX
                   onChange={(e) => {
                     let { value } = e.target;
                     value = value.replace(/\D/g, "").slice(0, 4);
@@ -172,6 +209,7 @@ function PaymentMethodPage() {
                   id="cvc_cvv"
                   name="cvc_cvv"
                   type="password"
+                  // change format CVC/CVV only 3 digit
                   onChange={(e) => {
                     let { value } = e.target;
                     value = value.replace(/\D/g, "").slice(0, 3);
