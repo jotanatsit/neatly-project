@@ -13,20 +13,21 @@ function AuthProvider(props) {
     user: null,
   });
 
-  const [errorMessage, setErrorMessage] = useState({
-    error: null,
-  });
-
   const navigate = useNavigate();
 
   const login = async (data) => {
-    const result = await axios.post("http://localhost:4000/auth/login", data);
-    const token = result.data.token;
-    localStorage.setItem("token", token);
-    const userDataFromToken = jwtDecode(token);
-    localStorage.setItem("username", JSON.stringify(userDataFromToken));
-    setState({ ...state, user: userDataFromToken });
-    navigate("/");
+    try {
+      const result = await axios.post("http://localhost:4000/auth/login", data);
+      const token = result.data.token;
+      localStorage.setItem("token", token);
+      const userDataFromToken = jwtDecode(token);
+      localStorage.setItem("username", JSON.stringify(userDataFromToken));
+      setState({ ...state, error: null, user: userDataFromToken });
+      navigate("/");
+    } catch (error) {
+      // console.log(error.response.data.message);
+      setState({ ...state, error: error.response.data.message });
+    }
   };
 
   const logout = () => {

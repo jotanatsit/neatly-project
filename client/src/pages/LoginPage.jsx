@@ -9,30 +9,45 @@ import {
   extendTheme,
   Grid,
   Box,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { Field, Form, Formik } from "formik";
 import { useAuth } from "../contexts/authentication";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import Nav_nonuser from "../Components/Nav_nonuser.jsx";
+import { useFormik } from "formik";
 
 function LoginPage() {
-  const { login } = useAuth();
+  const { login, state } = useAuth();
 
-  function validateUserName(value) {
-    let errorMessage;
-    if (!value) {
-      errorMessage = "Username or Email is required";
-    }
-    return errorMessage;
+  const onSubmit = (values, actions) => {
+    login({ username: values.email, password: values.password });
+    actions.setSubmitting(false);
+  };
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: { email: "", password: "" },
+    onSubmit,
+  });
+
+  let isEmailError = false;
+  let isPasswordError = false;
+
+  if (state.error === "user not found") {
+    isEmailError = true;
   }
 
-  function validatePassword(value) {
-    let error;
-    if (!value) {
-      error = "Password is required";
-    }
-    return error;
+  if (state.error === "password not valid") {
+    isPasswordError = true;
   }
 
   return (
@@ -46,89 +61,73 @@ function LoginPage() {
               Log In
             </Text>
           </Flex>
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            onSubmit={(values, actions) => {
-              login({ username: values.email, password: values.password });
-              actions.setSubmitting(false);
-            }}
-          >
-            {(props) => (
-              <Form>
-                <Flex flexDirection="column" height="120px" mt="60px">
-                  <Field
-                    name="email"
-                    height="48px"
-                    width="452px"
-                    validate={validateUserName}
-                  >
-                    {({ field, form }) => (
-                      <FormControl
-                        isInvalid={form.errors.email && form.touched.email}
-                      >
-                        <FormLabel>
-                          <Text textStyle="b1" color="gray.900">
-                            Username or Email
-                          </Text>
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          type="text"
-                          placeholder="Enter your username or email"
-                        />
-                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field
-                    name="password"
-                    height="48px"
-                    width="452px"
-                    validate={validatePassword}
-                  >
-                    {({ field, form }) => (
-                      <FormControl
-                        isInvalid={
-                          form.errors.password && form.touched.password
-                        }
-                      >
-                        <FormLabel mt="40px">
-                          <Text textStyle="b1" color="gray.900">
-                            Password
-                          </Text>
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          type="password"
-                          placeholder="Enter your password"
-                        />
-                        <FormErrorMessage>
-                          {form.errors.password}
-                        </FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Button
-                    variant="primary"
-                    height="48px"
-                    width="452px"
-                    type="submit"
-                    mt="40px"
-                  >
-                    Submit
-                  </Button>
-                  <Flex width="452px" justifyContent="flex-start" mt="16px">
-                    <Text>Don't have an account yet?</Text>
-                    <Link to="/register" ml="8px">
-                      <Text ml="8px" color="orange.500">
-                        Register
-                      </Text>
-                    </Link>
-                  </Flex>
-                </Flex>
-              </Form>
-            )}
-          </Formik>
+          <form onSubmit={handleSubmit}>
+            <Flex flexDirection="column" height="320px" width="452px" mt="60px">
+              <FormControl isInvalid={isEmailError}>
+                <FormLabel htmlFor="email">
+                  <Text textStyle="b1" color="gray.900">
+                    Username or Email
+                  </Text>
+                </FormLabel>
+                <Input
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  id="email"
+                  type="text"
+                  placeholder="Enter your username or email"
+                />
+                {!isEmailError ? (
+                  <FormHelperText></FormHelperText>
+                ) : (
+                  <FormErrorMessage>
+                    <Text color="red">User not found</Text>
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+              <FormControl isInvalid={isPasswordError}>
+                <FormLabel htmlFor="password">
+                  <Text textStyle="b1" color="gray.900">
+                    Password
+                  </Text>
+                </FormLabel>
+                <Input
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                />
+                {!isPasswordError ? (
+                  <FormHelperText></FormHelperText>
+                ) : (
+                  <FormErrorMessage>
+                    <Text color="red">
+                      The password that you've entered is incorrect.
+                    </Text>
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+              <Button
+                variant="primary"
+                height="48px"
+                width="452px"
+                type="submit"
+                mt="40px"
+              >
+                Log In
+              </Button>
+              <Flex width="452px" justifyContent="flex-start" mt="16px">
+                <Text>Don't have an account yet?</Text>
+                <Link to="/register" ml="8px">
+                  <Text ml="8px" color="orange.500">
+                    Register
+                  </Text>
+                </Link>
+              </Flex>
+            </Flex>
+          </form>
         </Flex>
       </Grid>
     </Box>

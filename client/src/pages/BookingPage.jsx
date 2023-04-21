@@ -220,8 +220,8 @@ const BookingPage = () => {
         alignItems="center"
         bg="#EDECEC"
       >
-        {rooms.map(item =>(
-          <SearchRooms item={item} key={item.eid}/>
+        {rooms.map((item) => (
+          <SearchRooms item={item} key={item.eid} />
         ))}
       </Flex>
       <Footer />

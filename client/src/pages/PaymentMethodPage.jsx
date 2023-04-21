@@ -1,4 +1,4 @@
-import { Button, Text, Input, Flex } from "@chakra-ui/react";
+import { Button, Text, Input, Flex, Box } from "@chakra-ui/react";
 import Nav_user from "../Components/Nav_user.jsx";
 import { useFormik } from "formik";
 import { useState, useEffect } from "react";
@@ -73,9 +73,8 @@ function PaymentMethodPage() {
   }, [userData]);
 
   return (
-    <div>
+    <Box w="1440px" m="auto">
       <Nav_user />
-
       <Flex
         bg="#F7F7FB"
         bgSize="cover"
@@ -226,7 +225,7 @@ function PaymentMethodPage() {
           </form>
         </Flex>
       </Flex>
-    </div>
+    </Box>
   );
 }
 

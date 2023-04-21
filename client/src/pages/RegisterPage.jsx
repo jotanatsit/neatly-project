@@ -1,4 +1,12 @@
-import { Button, Text, Input, Select, Flex, Spacer } from "@chakra-ui/react";
+import {
+  Button,
+  Text,
+  Input,
+  Select,
+  Flex,
+  Spacer,
+  Box,
+} from "@chakra-ui/react";
 import { useFormik } from "formik";
 import OptionCountry from "../Components/SelectCountry.jsx";
 import { Link } from "react-router-dom";
@@ -110,7 +118,7 @@ function RegisterPage() {
   };
 
   return (
-    <div>
+    <Box w="1440px" m="auto">
       <Nav_nonuser />
       <form onSubmit={formik.handleSubmit}>
         <Flex
@@ -529,7 +537,7 @@ function RegisterPage() {
           </Flex>
         </Flex>
       </form>
-    </div>
+    </Box>
   );
 }
 

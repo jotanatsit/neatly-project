@@ -1,4 +1,4 @@
-import { Button, Text, Input, Select, Flex } from "@chakra-ui/react";
+import { Button, Text, Input, Select, Flex, Box } from "@chakra-ui/react";
 import OptionCountry from "../Components/SelectCountry.jsx";
 import Nav_user from "../Components/Nav_user.jsx";
 import { useFormik } from "formik";
@@ -131,7 +131,7 @@ function ProfilePage() {
   };
 
   return (
-    <div>
+    <Box w="1440px" m="auto">
       <Nav_user />
       <form onSubmit={formik.handleSubmit}>
         <Flex
@@ -367,7 +367,7 @@ function ProfilePage() {
           </Flex>
         </Flex>
       </form>
-    </div>
+    </Box>
   );
 }
 
