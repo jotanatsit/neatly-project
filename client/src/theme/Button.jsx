@@ -48,11 +48,11 @@ export const Button = defineStyleConfig({
       _focus: { bg: "none", color: "orange.400" },
     },
     disabledPrimary: {
-      _hover: "none",
+      _hover: {},
       _disabled: { bg: "gray.300", color: "gray.600" },
     },
     disabledSecondary: {
-      _hover: "none",
+      _hover: {},
       _disabled: {
         bg: "gray.300",
         color: "gray.400",
@@ -62,7 +62,7 @@ export const Button = defineStyleConfig({
     },
     disabledGhost: {
       padding: "4px 8px",
-      _hover: "none",
+      _hover: {},
       _disabled: { color: "gray.500" },
     },
   },

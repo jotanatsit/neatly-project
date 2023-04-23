@@ -1,28 +1,32 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Flex, Button, Text } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { Link } from "react-router-dom";
 
 const ExploreRoomButton = (props) => {
-  const [roomType, setRoomType] = useState("");
-  const handleExploreRoom = (event) => {};
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/roomdetail/${props.roomId}`);
+  };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [navigate]);
   return (
     <Flex direction="column" pl={props.pl} pb={props.pb} gap="8px">
       <Text textStyle="h3" color="white">
         {props.type}
       </Text>
-      <Link to="/roomdetail">
-        <Button
-          variant="ghost"
-          color="white"
-          w="fit-content"
-          _hover="none"
-          _focus={{ color: "white", bg: "none" }}
-          rightIcon={<ArrowForwardIcon />}
-        >
-          Explore Room
-        </Button>
-      </Link>
+      <Button
+        variant="ghost"
+        color="white"
+        w="fit-content"
+        _hover={{}}
+        _focus={{ color: "white", bg: "none" }}
+        rightIcon={<ArrowForwardIcon />}
+        onClick={handleClick}
+      >
+        Explore Room
+      </Button>
     </Flex>
   );
 };
