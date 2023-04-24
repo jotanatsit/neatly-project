@@ -12,15 +12,15 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Badge,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import "swiper/swiper-bundle.min.css";
-import { Link } from "react-router-dom";
-import room from "../../data/image_room";
 
-function SearchRooms({ item }) {
+function SearchRooms(props) {
+  const room = props.room;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpen2,
@@ -30,28 +30,37 @@ function SearchRooms({ item }) {
 
   return (
     <Flex
-      width={1120}
-      borderBottom="1px solid gray"
-      height={400}
-      mt={2}
+      width="1120px"
+      height="362px"
       flexDirection="row"
-      alignItems="center"
+      alignrooms="center"
       justifyContent="space-between"
+      borderBottom="1px solid"
+      borderColor="gray.400"
+      pb="41px"
+      mt={10}
     >
       <Box w="453px" position="relative">
         <Image
-          src={item.photo[0]}
+          src={room.room_picture[0]}
           w={453}
           h={320}
           objectFit="cover"
         ></Image>
-        <Image src="/BookingPage/icon_see image.svg" position="absolute" bottom={0} zIndex={1} onClick={onOpen} cursor="pointer"/>
+        <Image
+          src="/BookingPage/icon_see image.svg"
+          position="absolute"
+          bottom={0}
+          zIndex={1}
+          onClick={onOpen}
+          cursor="pointer"
+        />
       </Box>
 
-      <Flex w={619} h={320} flexDirection="column" alignItems="end">
+      <Flex w={619} h={320} flexDirection="column" alignrooms="end">
         <Flex
           w={602}
-          h={186}
+          h={500}
           flexDirection="row"
           justifyContent="space-between"
           mt="5"
@@ -64,47 +73,53 @@ function SearchRooms({ item }) {
           >
             <Flex flexDirection="column">
               <Text textStyle="h4" color="black">
-                {item.name}
+                {room.room_type}
               </Text>
               <Flex flexDirection="row" mt="10px">
-                <Text
-                  fontSize="16px"
-                  borderRight="1px solid"
-                  paddingRight="5px"
-                >
-                  2 Guests
-                </Text>
-                <Text
-                  fontSize="16px"
-                  borderRight="1px solid"
-                  paddingRight="5px"
-                >
-                  1 Double bed
-                </Text>
-                <Text
-                  fontSize="16px"
-                  borderRight="1px solid"
-                  paddingRight="5px"
-                >
-                  32 sqm
-                </Text>
+                <Box pr={2}>
+                  <Text textStyle="b1" color="gray.700" paddingRight="5px">
+                    {room.amount_person} Guests
+                  </Text>
+                </Box>
+                <Box borderX="1px solid" borderColor="gray.500" px={2}>
+                  <Text textStyle="b1" color="gray.700" paddingRight="5px">
+                    {room.bed_type}
+                  </Text>
+                </Box>
+                <Box pl={2}>
+                  <Text textStyle="b1" color="gray.700" paddingRight="5px">
+                    {room.room_size} sqm
+                  </Text>
+                </Box>
               </Flex>
             </Flex>
-            <Flex>
-              <Text>
-                Rooms (36sqm) with full garden views, 1 single bed, bathroom
-                with bathtub & shower.
+            <Flex mt={7}>
+              <Text textStyle="b1" color="gray.700">
+                {room.description}
               </Text>
             </Flex>
           </Flex>
 
-          <Flex w="260px" h="186px" flexDirection="column">
+          <Flex w="260px" h="186px" flexDirection="column" mt={2}>
             <Flex flexDirection="column" w="260px" h="58px" textAlign="end">
-              <Text as="del">THB 3,100.00</Text>
-              <Text textStyle="h5" color="black">
-                THB 2,500.00
-              </Text>
+              {room.promotion_price === null ? (
+                <>
+                  <Text textStyle="h5" color="black">
+                    THB {room.price}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text as="del" textStyle="b1" color="gray.700">
+                    THB {room.price}
+                  </Text>
+                  <Text textStyle="h5" color="black">
+                    THB {room.promotion_price}
+                  </Text>
+                </>
+              )}
             </Flex>
+
             <Flex
               flexDirection="column"
               w="260px"
@@ -112,25 +127,44 @@ function SearchRooms({ item }) {
               textAlign="end"
               mt="5"
             >
-              <Text>Per Night</Text>
-              <Text>(Including Taxes & Fees)</Text>
+              <Text textStyle="b1" color="gray.700">
+                Per Night
+              </Text>
+              <Text textStyle="b1" color="gray.700">
+                (Including Taxes & Fees)
+              </Text>
+            </Flex>
+            <Flex justifyContent="flex-end" mt={20} mb={3} mr={7}>
+              <Badge variant="solid" colorScheme="green">
+                available
+              </Badge>
+            </Flex>
+            <Flex justifyContent="flex-end">
+              <Button
+                onClick={onOpen2}
+                bg="none"
+                color="orange.600"
+                p="16px 32px"
+              >
+                Room Detail
+              </Button>
+              {1 === 1 ? (
+                <Button variant="primary" p="16px 32px">
+                  Book Now
+                </Button>
+              ) : (
+                <Button variant="primary" p="16px 32px" isDisabled>
+                  Book Now
+                </Button>
+              )}
             </Flex>
           </Flex>
-        </Flex>
-        <Flex mt="10">
-          <Button onClick={onOpen2} bg="none" color="orange.600" p="16px 32px">
-            Room Detail
-          </Button>
-
-          <Button variant="primary" p="16px 32px">
-            Book Now
-          </Button>
         </Flex>
       </Flex>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent h="700px" maxW="1440px" style={{ left: "-240px" }}>
+        <ModalContent h="700px" maxW="1440px" style={{ left: "-6px" }}>
           <ModalHeader bg="black" pt={8}>
             <ModalCloseButton color="white" />
           </ModalHeader>
@@ -154,11 +188,11 @@ function SearchRooms({ item }) {
                   clickable: true,
                 }}
               >
-                {item.photo.map((item, index) => {
+                {room.room_picture.map((room, index) => {
                   return (
                     <SwiperSlide key={index}>
                       <Image
-                        src={item}
+                        src={room}
                         boxSize="100%"
                         objectFit="cover"
                         borderRadius="10px"
@@ -192,7 +226,7 @@ function SearchRooms({ item }) {
 
       <Modal isOpen={isOpen2} onClose={onClose2}>
         <ModalOverlay />
-        <ModalContent h="840px" maxW="800px" style={{ left: "-235px" }}>
+        <ModalContent h="840px" maxW="800px" style={{ left: "-6px" }}>
           <ModalHeader p={0}>
             <Flex w="800px" h="400px" justifyContent="center" mt={5}>
               <Box w="600px" borderRadius="10px" overflow="hidden">
@@ -213,11 +247,11 @@ function SearchRooms({ item }) {
                     dynamicBullets: true,
                   }}
                 >
-                  {item.photo.map((item, index) => {
+                  {room.room_picture.map((room, index) => {
                     return (
                       <SwiperSlide key={index}>
                         <Image
-                          src={item}
+                          src={room}
                           w="640px"
                           h="400px"
                           objectFit="cover"
@@ -251,23 +285,37 @@ function SearchRooms({ item }) {
           <ModalCloseButton />
           <ModalBody p={0}>
             <Flex w="800px" flexDirection="column" alignItems="center">
-              <Box mt={10} w="640px">
+              <Box
+                mt={10}
+                w="640px"
+                borderBottom="1px solid"
+                borderColor="gray.200"
+                pb={5}
+              >
                 <Box display="flex">
-                  {item.type.map((item, index) => {
-                    return (
-                      <Box display="flex" flexDirection="row" key={index}>
-                        <Text textStyle="b1">{item[0]} |</Text>
-                        <Text textStyle="b1">{item[1]}</Text>
-                        <Text textStyle="b1">{item[2]}</Text>
-                      </Box>
-                    );
-                  })}
+                  <Box display="flex" flexDirection="row">
+                    <Box pr={2}>
+                      <Text textStyle="b1" color="gray.700" paddingRight="5px">
+                        {room.amount_person} Person
+                      </Text>
+                    </Box>
+                    <Box borderX="1px solid" borderColor="gray.500" px={2}>
+                      <Text textStyle="b1" color="gray.700" paddingRight="5px">
+                        {room.bed_type}
+                      </Text>
+                    </Box>
+                    <Box pl={2}>
+                      <Text textStyle="b1" color="gray.700" paddingRight="5px">
+                        {room.room_size} sqm
+                      </Text>
+                    </Box>
+                  </Box>
                 </Box>
-                <Text mt={3} textStyle="b1">
-                  {item.detail}
+                <Text mt={3} textStyle="b1" color="gray.700">
+                  {room.description}
                 </Text>
               </Box>
-              <Flex w="640px" flexDirection="column" mt={10}>
+              <Flex w="640px" flexDirection="column" mt={5}>
                 <Text textStyle="b1" color="black">
                   Room Amenities
                 </Text>

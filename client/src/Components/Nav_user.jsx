@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Flex,
@@ -21,9 +21,11 @@ import {
 import { Link } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
+import axios from "axios";
 
 const Nav_user = () => {
   const { logout } = useAuth();
+  
   return (
     <Flex
       bg="white"

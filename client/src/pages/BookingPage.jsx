@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Flex,
@@ -20,8 +20,8 @@ import Footer from "../components/Footer";
 import { useAuth } from "../contexts/authentication";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
-import rooms from "../../data/search_room";
 import SearchRooms from "../Components/SearchRooms";
+import axios from "axios";
 
 const BookingPage = () => {
   const auth = useAuth();
@@ -30,38 +30,55 @@ const BookingPage = () => {
   const location = useLocation();
   console.log(location);
 
-  //Room and Guest
-  const [options, setOptions] = useState(location.state.options);
-
-  //Date
+  
+  const [rooms,setRooms] =useState(location.state.rooms)
+  const [guests,setGuests] =useState(location.state.guests)
   const [date, setDate] = useState(location.state.date);
+  const [roomData, setRoomData] = useState([]);
+  const [jo,setJo]=useState(location.state.guests)
+
+  async function getRoomData() {
+    try {
+      const response = await axios.get(`http://localhost:4000/rooms`);
+      console.log(response.data.data);
+      setRoomData(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getRoomData();
+  }, []);
 
   const handleRoomsIncrement = () => {
-    setOptions({ ...options, rooms: options.rooms + 1 });
+    setRooms(rooms + 1);
+
   };
 
   const handleRoomsDecrement = () => {
-    if (options.rooms > 0) {
-      setOptions({ ...options, rooms: options.rooms - 1 });
+    if (rooms > 0) {
+      setRooms(rooms - 1);
     }
   };
 
   const handleGuestsIncrement = () => {
-    setOptions({ ...options, guests: options.guests + 1 });
+    setGuests(guests + 1);
   };
 
   const handleGuestsDecrement = () => {
-    if (options.guests > 0) {
-      setOptions({ ...options, guests: options.guests - 1 });
+    if (guests > 0) {
+      setGuests(guests - 1);
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setJo(guests)
   };
 
   return (
-    <Flex flexDirection="column" w="1440px">
+    <Flex flexDirection="column" w="1440px" m="auto">
       {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
       <form onSubmit={handleSubmit}>
         <Flex
@@ -70,9 +87,9 @@ const BookingPage = () => {
           width="1440px"
           alignItems="center"
           justifyContent="space-around"
-          borderRadius={10}
-          border="1px solid"
-          borderColor="gray.400"
+          borderBottomRadius={10}
+          borderTop="1px solid"
+          borderColor="gray.200"
           boxShadow="2xl"
           position="relative"
         >
@@ -156,7 +173,7 @@ const BookingPage = () => {
                   style={{ width: "250px" }}
                 >
                   <Text textStyle="b1">
-                    {options.rooms} room, {options.guests} guests
+                    {rooms} room, {guests} guests
                   </Text>
                 </MenuButton>
               </Flex>
@@ -174,7 +191,7 @@ const BookingPage = () => {
                       onClick={handleRoomsDecrement}
                       cursor="pointer"
                     />
-                    <Box>{options.rooms}</Box>
+                    <Box>{rooms}</Box>
                     <Image
                       src="/HomePage/icon/icon_increment.svg"
                       onClick={handleRoomsIncrement}
@@ -195,7 +212,7 @@ const BookingPage = () => {
                       onClick={handleGuestsDecrement}
                       cursor="pointer"
                     />
-                    <Box>{options.guests}</Box>
+                    <Box>{guests}</Box>
                     <Image
                       src="/HomePage/icon/icon_increment.svg"
                       onClick={handleGuestsIncrement}
@@ -218,11 +235,16 @@ const BookingPage = () => {
         height="1895px"
         flexDirection="column"
         alignItems="center"
-        bg="#EDECEC"
+        bg="white"
+        overflow="scroll"
       >
-        {rooms.map((item) => (
-          <SearchRooms item={item} key={item.eid} />
-        ))}
+        {roomData.map((item) => {
+          if (jo === 0) {
+            return <SearchRooms room={item} key={item.room_id} />;
+          }else if(jo === item.amount_person){
+            return <SearchRooms room={item} key={item.room_id} />;
+          }
+        })}
       </Flex>
       <Footer />
     </Flex>

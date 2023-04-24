@@ -23,10 +23,9 @@ import "react-date-range/dist/theme/default.css";
 const Booking_box = () => {
   const navigate = useNavigate();
   //room
-  const [options, setOptions] = useState({
-    rooms: 0,
-    guests: 0,
-  });
+
+  const [rooms,setRooms] =useState(0)
+  const [guests,setGuests] =useState(0)
 
   //Date
   const [date, setDate] = useState([
@@ -38,29 +37,30 @@ const Booking_box = () => {
   ]);
 
   const handleRoomsIncrement = () => {
-    setOptions({ ...options, rooms: options.rooms + 1 });
+    setRooms(rooms + 1 );
   };
 
   const handleRoomsDecrement = () => {
-    if (options.rooms > 0) {
-      setOptions({ ...options, rooms: options.rooms - 1 });
+    if (rooms > 0) {
+      setRooms(rooms - 1 );
     }
   };
 
   const handleGuestsIncrement = () => {
-    setOptions({ ...options, guests: options.guests + 1 });
+    setGuests(guests + 1 );
   };
 
   const handleGuestsDecrement = () => {
-    if (options.guests > 0) {
-      setOptions({ ...options, guests: options.guests - 1 });
+    if (guests > 0) {
+      setGuests(guests - 1 );
     }
   };
 
   //กดเสร็จไปหน้า booking พร้อมข้อมูล
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/booking",{state: {date,options}})
+    
+    navigate("/booking",{state: {date,rooms,guests}})
   };
 
   return (
@@ -156,7 +156,7 @@ const Booking_box = () => {
                 style={{ width: "250px" }}
               >
                 <Text textStyle="b1">
-                  {options.rooms} room, {options.guests} guests
+                  {rooms} room, {guests} guests
                 </Text>
               </MenuButton>
             </Flex>
@@ -174,7 +174,7 @@ const Booking_box = () => {
                     onClick={handleRoomsDecrement}
                     cursor="pointer"
                   />
-                  <Box>{options.rooms}</Box>
+                  <Box>{rooms}</Box>
                   <Image
                     src="/HomePage/icon/icon_increment.svg"
                     onClick={handleRoomsIncrement}
@@ -195,7 +195,7 @@ const Booking_box = () => {
                     onClick={handleGuestsDecrement}
                     cursor="pointer"
                   />
-                  <Box>{options.guests}</Box>
+                  <Box>{guests}</Box>
                   <Image
                     src="/HomePage/icon/icon_increment.svg"
                     onClick={handleGuestsIncrement}

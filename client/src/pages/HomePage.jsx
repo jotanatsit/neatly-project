@@ -16,7 +16,7 @@ function HomePage() {
   const auth = useAuth();
 
   return (
-    <Flex direction="column" w="1440px">
+    <Flex direction="column" w="1440px" m="auto">
       {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
       <Flex
         w="1440px"
