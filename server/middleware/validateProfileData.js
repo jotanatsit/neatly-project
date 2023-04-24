@@ -5,9 +5,17 @@ const fileFilter = (req, file, cb) => {
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
   } else {
-    cb(new Error("Only JPEG and PNG images are allowed"));
+    cb(new Error("Only JPEG and PNG images are allowed"), false);
   }
 };
+
+// const fileFilter = function (req, file, callback) {
+//   // Only allow image files with these extensions
+//   if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+//     return callback(new Error("Only JPEG and PNG images are allowed!"), false);
+//   }
+//   callback(null, true);
+// };
 
 const multerUpload = multer({
   dest: "uploads/",
@@ -19,8 +27,18 @@ export const profilePictureUpload = multerUpload.fields([
   { name: "profile_picture", maxCount: 1 },
 ]);
 
+// catch error from validate type and size of profile picture
+export const handleError = (err, req, res, next) => {
+  if (err) {
+    console.log(err.message);
+    return res.status(400).json({ message: err.message });
+  }
+  next();
+};
+
 // validate profile data
 export function validateProfileData(req, res, next) {
+  console.log("B");
   const user = {
     fullname: req.body.fullname,
     username: req.body.username,

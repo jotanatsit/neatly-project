@@ -3,10 +3,18 @@ import { pool } from "../utils/db.js";
 import { cloudinaryUpload } from "../utils/upload.js";
 import {
   profilePictureUpload,
+  // handleError,
   validateProfileData,
 } from "../middleware/validateProfileData.js";
 
 const profileRouter = Router();
+
+// profileRouter.use((req, res, next) => {
+//   res.setHeader("Cache-Control", "no-cache, no-store");
+//   next();
+// });
+
+// profileRouter.disable("etag");
 
 // get user profile data from database
 profileRouter.get("/:id", async (req, res) => {
@@ -32,8 +40,10 @@ profileRouter.get("/:id", async (req, res) => {
 profileRouter.put(
   "/:id",
   profilePictureUpload,
+  // handleError,
   validateProfileData,
   async (req, res) => {
+    console.log("C");
     const userId = req.params.id;
 
     const updatedProfile = {
@@ -49,22 +59,37 @@ profileRouter.put(
 
     updatedProfile.id_number = updatedProfile.id_number?.split("-")?.join("");
 
-    await pool.query(
-      "update users_profile set fullname=$1, id_number=$2, birth_date=$3, country=$4, profile_picture=$5 where user_id=$6",
-      [
-        updatedProfile.fullname,
-        updatedProfile.id_number,
-        updatedProfile.birth_date,
-        updatedProfile.country,
-        updatedProfile.profile_picture,
-        userId,
-      ]
-    );
-
-    await pool.query(
-      "update users set email=$1, updated_at=$2 where user_id=$3",
-      [updatedProfile.email, updatedProfile.updated_at, userId]
-    );
+    try {
+      await pool.query(
+        "update users_profile set fullname=$1, id_number=$2, birth_date=$3, country=$4, profile_picture=$5 where user_id=$6",
+        [
+          updatedProfile.fullname,
+          updatedProfile.id_number,
+          updatedProfile.birth_date,
+          updatedProfile.country,
+          updatedProfile.profile_picture,
+          userId,
+        ]
+      );
+      await pool.query(
+        "update users set email=$1, updated_at=$2 where user_id=$3",
+        [updatedProfile.email, updatedProfile.updated_at, userId]
+      );
+    } catch (error) {
+      if (
+        error.message ===
+        `duplicate key value violates unique constraint "users_email_key"`
+      ) {
+        return res.json({ message: "Email has already been taken" });
+      } else if (
+        error.message ===
+        `duplicate key value violates unique constraint "users_profile_id_number_key"`
+      ) {
+        return res.json({ message: "ID Number has already been taken" });
+      } else {
+        return res.json({ message: error.message });
+      }
+    }
 
     return res.json({
       message: "Profile has been successfully updated",
