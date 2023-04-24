@@ -35,7 +35,7 @@ const BookingPage = () => {
   const [guests,setGuests] =useState(location.state.guests)
   const [date, setDate] = useState(location.state.date);
   const [roomData, setRoomData] = useState([]);
-  const [jo,setJo]=useState(location.state.guests)
+  const [searchRoom,setSearchRoom]=useState(location.state.guests)
 
   async function getRoomData() {
     try {
@@ -49,7 +49,7 @@ const BookingPage = () => {
 
   useEffect(() => {
     getRoomData();
-  }, []);
+  }, [searchRoom]);
 
   const handleRoomsIncrement = () => {
     setRooms(rooms + 1);
@@ -74,7 +74,7 @@ const BookingPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setJo(guests)
+    setSearchRoom(guests)
   };
 
   return (
@@ -239,9 +239,9 @@ const BookingPage = () => {
         overflow="scroll"
       >
         {roomData.map((item) => {
-          if (jo === 0) {
+          if (searchRoom === 0) {
             return <SearchRooms room={item} key={item.room_id} />;
-          }else if(jo === item.amount_person){
+          }else if(searchRoom === item.amount_person){
             return <SearchRooms room={item} key={item.room_id} />;
           }
         })}
