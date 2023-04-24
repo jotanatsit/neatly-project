@@ -39,7 +39,14 @@ function ProfilePage() {
       profile_picture: null,
     },
     onSubmit: async (values) => {
-      const { fullname, email, id_number, birth_date, country } = values;
+      const {
+        fullname,
+        email,
+        id_number,
+        birth_date,
+        country,
+        profile_picture,
+      } = values;
 
       const formData = new FormData();
       formData.append("fullname", fullname);
@@ -47,7 +54,7 @@ function ProfilePage() {
       formData.append("id_number", id_number);
       formData.append("birth_date", birth_date);
       formData.append("country", country);
-      formData.append("profile_picture", values.profile_picture);
+      formData.append("profile_picture", profile_picture);
 
       try {
         const response = await axios.put(
@@ -301,7 +308,7 @@ function ProfilePage() {
                       name="image"
                       type="file"
                       style={{ display: "none" }}
-                      accept="image/*"
+                      accept="image/png , image/jpeg"
                       onChange={(event) => {
                         formik.setFieldValue(
                           "profile_picture",
@@ -335,10 +342,7 @@ function ProfilePage() {
                           alt={checkPicture?.name}
                         />
                         <Button
-                          onClick={(event) => {
-                            handleRemoveImage(event);
-                            console.log(checkPicture);
-                          }}
+                          onClick={(event) => handleRemoveImage(event)}
                           color="#FFFFFF"
                           bg="orange.600"
                           borderRadius="full"
