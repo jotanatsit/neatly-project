@@ -5,6 +5,7 @@ import RoomDetailPage from "./RoomDetailPage";
 import ProfilePage from "./ProfilePage";
 import PaymentMethodPage from "./PaymentMethodPage";
 import BookingSummary from "./BookingSummaryPage";
+import HistoryPage from "./HistoryPage";
 
 function AuthenticatedApp() {
   return (
@@ -16,6 +17,7 @@ function AuthenticatedApp() {
         <Route path="/roomdetail/:roomTypeId" element={<RoomDetailPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/payment-method" element={<PaymentMethodPage />} />
+        <Route path="/history" element={<HistoryPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </div>
