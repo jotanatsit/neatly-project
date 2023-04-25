@@ -1,11 +1,13 @@
-import { Flex, Image, Box, Text } from "@chakra-ui/react";
+import { Flex, Image, Box, Text, Button } from "@chakra-ui/react";
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
 import { BsFacebook, BsTwitter } from "react-icons/bs";
 import { RiInstagramFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 import "@fontsource/ibm-plex-sans-thai";
 
 function Footer() {
+  const navigate = useNavigate();
   return (
     <Flex
       direction="column"
@@ -17,11 +19,19 @@ function Footer() {
     >
       <Flex pt="66px" justify="space-between" w="1200px" h="fit-content">
         <Flex direction="column" justify="space-between" h="150px" w="383px">
-          <Image
-            src="/HomePage/neatly-green-100.svg"
-            w="180px"
-            h="fit-content"
-          />
+          <Box
+            as="button"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            <Image
+              src="/HomePage/neatly-green-100.svg"
+              w="180px"
+              h="fit-content"
+            />
+          </Box>
+
           <Box>
             <Text textStyle="h5" color="white">
               Neatly Hotel
