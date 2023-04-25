@@ -9,7 +9,7 @@ import "swiper/swiper-bundle.min.css";
 import room from "../../data/image_room";
 import RoomsAndSuites from "../Components/RoomsAndSuites";
 import Testimonial from "../Components/Testimonial";
-import Footer from "../components/Footer";
+import Footer from "../Components/Footer";
 import { useAuth } from "../contexts/authentication";
 
 function HomePage() {

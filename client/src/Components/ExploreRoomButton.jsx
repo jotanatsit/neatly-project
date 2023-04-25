@@ -6,7 +6,7 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 const ExploreRoomButton = (props) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/roomdetail/${props.roomId}`);
+    navigate(`/roomdetail/${props.roomTypeId}`);
   };
   useEffect(() => {
     window.scrollTo(0, 0);

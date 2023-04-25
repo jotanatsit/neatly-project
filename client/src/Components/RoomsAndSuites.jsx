@@ -17,11 +17,21 @@ function RoomsAndSuites() {
           justifySelf="center"
           align="end"
         >
-          <ExploreRoomButton type="Superior Garden View" pl="60px" pb="80px" />
+          <ExploreRoomButton
+            type="Superior Garden View"
+            pl="60px"
+            pb="80px"
+            roomTypeId={5}
+          />
         </Flex>
         <Flex gap="24px" justifySelf="center">
           <Flex bg="url(./HomePage/deluxe.svg)" w="643px" h="400px" align="end">
-            <ExploreRoomButton type="Deluxe" pl="60px" pb="80px" />
+            <ExploreRoomButton
+              type="Deluxe"
+              pl="60px"
+              pb="80px"
+              roomTypeId={1}
+            />
           </Flex>
           <Flex
             bg="url(./HomePage/superior.svg)"
@@ -29,7 +39,12 @@ function RoomsAndSuites() {
             h="400px"
             align="end"
           >
-            <ExploreRoomButton type="Superior" pl="60px" pb="80px" />
+            <ExploreRoomButton
+              type="Superior"
+              pl="60px"
+              pb="80px"
+              roomTypeId={2}
+            />
           </Flex>
         </Flex>
         <Flex gap="24px" justifySelf="center">
@@ -39,7 +54,12 @@ function RoomsAndSuites() {
             h="700px"
             align="end"
           >
-            <ExploreRoomButton type="Premier Sea View" pl="60px" pb="80px" />
+            <ExploreRoomButton
+              type="Premier Sea View"
+              pl="60px"
+              pb="80px"
+              roomTypeId={6}
+            />
           </Flex>
           <Flex direction="column" gap="24px">
             <Flex
@@ -48,7 +68,12 @@ function RoomsAndSuites() {
               h="338px"
               align="end"
             >
-              <ExploreRoomButton type="Supreme" pl="80px" pb="80px" />
+              <ExploreRoomButton
+                type="Supreme"
+                pl="80px"
+                pb="80px"
+                roomTypeId={3}
+              />
             </Flex>
             <Flex
               bg="url(./HomePage/suite.svg)"
@@ -56,7 +81,12 @@ function RoomsAndSuites() {
               h="338px"
               align="end"
             >
-              <ExploreRoomButton type="Suite" pl="80px" pb="80px" />
+              <ExploreRoomButton
+                type="Suite"
+                pl="80px"
+                pb="80px"
+                roomTypeId={4}
+              />
             </Flex>
           </Flex>
         </Flex>

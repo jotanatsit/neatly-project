@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   Button,
   Flex,
@@ -6,26 +7,98 @@ import {
   Image,
   UnorderedList,
   ListItem,
+  Box,
 } from "@chakra-ui/react";
 import Nav_nonuser from "../Components/Nav_nonuser";
 import Nav_user from "../Components/Nav_user";
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import { Navigation, Pagination } from "swiper";
-import "swiper/swiper-bundle.min.css";
-import Footer from "../components/Footer";
+import Footer from "../Components/Footer";
 import { useAuth } from "../contexts/authentication";
 import ExploreRoomButton from "../Components/ExploreRoomButton";
+import { useParams } from "react-router-dom";
+
+const roomType = [
+  {
+    roomTypeId: 1,
+    roomTypeName: "Deluxe",
+    roomTypePicture: "/RoomdetailPage/Deluxe_room.svg",
+  },
+  {
+    roomTypeId: 2,
+    roomTypeName: "Superior",
+    roomTypePicture: "/RoomdetailPage/Superior_room.svg",
+  },
+  {
+    roomTypeId: 3,
+    roomTypeName: "Supreme",
+    roomTypePicture: "/HomePage/supreme.svg",
+  },
+  {
+    roomTypeId: 4,
+    roomTypeName: "Suite",
+    roomTypePicture: "/HomePage/suite.svg",
+  },
+  {
+    roomTypeId: 5,
+    roomTypeName: "Superior Garden View",
+    roomTypePicture: "/HomePage/superior-garden-view.svg",
+  },
+  {
+    roomTypeId: 6,
+    roomTypeName: "Premier Sea View",
+    roomTypePicture: "/HomePage/premier-sea-view.svg",
+  },
+];
 
 const RoomDetailPage = () => {
   const auth = useAuth();
+  const params = useParams();
+  const [room, setRoom] = useState({});
+
+  const getRoomById = async () => {
+    try {
+      const result = await axios.get(
+        `http://localhost:4000/rooms/room-type/${params.roomTypeId}`
+      );
+      setRoom(result.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const othersRoom = [];
+  let id = Number(params.roomTypeId);
+
+  if (id === 1) {
+    othersRoom.push(roomType[1], roomType[2]);
+  } else if (id === 2) {
+    othersRoom.push(roomType[2], roomType[3]);
+  } else if (id === 3) {
+    othersRoom.push(roomType[3], roomType[4]);
+  } else if (id === 4) {
+    othersRoom.push(roomType[4], roomType[5]);
+  } else if (id === 5) {
+    othersRoom.push(roomType[5], roomType[0]);
+  } else if (id === 6) {
+    othersRoom.push(roomType[0], roomType[1]);
+  }
+  console.log(othersRoom);
+
+  useEffect(() => {
+    getRoomById();
+  }, [params.roomTypeId]);
+
   return (
-    <Flex flexDirection="column" w="1440px" bgColor="bg">
+    <Flex flexDirection="column" w="1440px" bgColor="bg" m="auto">
       {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
       <Flex mt="80px" justify="center">
         <Swiper
           slidesPerView={1.5}
+          spaceBetween={24}
           centeredSlides={true}
-          initialSlide={1}
           rewind={true}
           navigation={{
             nextEl: ".button-next",
@@ -37,25 +110,24 @@ const RoomDetailPage = () => {
           }}
           modules={[Pagination, Navigation]}
         >
-          <SwiperSlide>
-            <Image src="RoomdetailPage/room_slider1.svg" />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Image src="RoomdetailPage/room_slider2.svg" />
-          </SwiperSlide>
-          <SwiperSlide>
-            <Image src="RoomdetailPage/room_slider3.svg" />
-          </SwiperSlide>
-
-          <Flex w="1120px" justify="center">
+          {room.room_picture?.map((imageUrl, index) => {
+            return (
+              <SwiperSlide key={index}>
+                <Flex justify="center">
+                  <Image src={imageUrl} />
+                </Flex>
+              </SwiperSlide>
+            );
+          })}
+          <Flex>
             <Image
-              mr="150px"
+              mr="100px"
               boxSize="56px"
               src="/RoomdetailPage/arrow_right.svg"
               className="button-next swiper-button-next"
             />
             <Image
-              ml="120px"
+              ml="100px"
               boxSize="56px"
               src="/RoomdetailPage/arrow_left.svg"
               className="button-prev swiper-button-prev"
@@ -74,7 +146,7 @@ const RoomDetailPage = () => {
         >
           <Flex flexDirection="column" h="291px" justifyContent="space-between">
             <Text textStyle="h2" color="green.800">
-              Superior Garden View
+              {room.room_type_name}
             </Text>
             <Flex
               flexDirection="row"
@@ -82,10 +154,9 @@ const RoomDetailPage = () => {
               justifyContent="space-between"
               mt="60px"
             >
-              <Flex flexDirection="column" gap="60px">
+              <Flex flexDirection="column" justify="space-between">
                 <Text textStyle="b1" color="gray.700">
-                  Rooms (36sqm) with full garden views, 1 single bed,
-                  <br /> bathroom with bathtub & shower.
+                  {room.description}
                 </Text>
                 <Flex
                   flexDirection="row"
@@ -99,7 +170,7 @@ const RoomDetailPage = () => {
                     borderColor="gray.500"
                     pr="16px"
                   >
-                    <Text color="gray.800">2</Text>
+                    <Text color="gray.800">{room.amount_person}</Text>
                     <Text>Guests</Text>
                   </Flex>
                   <Flex
@@ -108,24 +179,31 @@ const RoomDetailPage = () => {
                     borderColor="gray.500"
                     pr="16px"
                   >
-                    <Text color="gray.800">1</Text>
-                    <Text>Double bed</Text>
+                    <Text>{room.bed_type}</Text>
                   </Flex>
                   <Flex gap="6px">
-                    <Text color="gray.800">32</Text>
+                    <Text color="gray.800">{room.room_size}</Text>
                     <Text>sqm</Text>
                   </Flex>
                 </Flex>
               </Flex>
 
-              <Flex flexDirection="column" gap="40px">
+              <Flex flexDirection="column" h="146px" justify="space-between">
                 <Flex flexDirection="column" w="260px" h="58px" textAlign="end">
-                  <Text textStyle="b1" as="del" color="gray.700">
-                    THB 3,100.00
-                  </Text>
-                  <Text textStyle="h5" color="gray.900">
-                    THB 2,500.00
-                  </Text>
+                  {room.promotion_price === null ? (
+                    <Text textStyle="h5" color="gray.900">
+                      THB {room.price}
+                    </Text>
+                  ) : (
+                    <Box>
+                      <Text textStyle="b1" as="del" color="gray.700">
+                        THB {room.price}
+                      </Text>
+                      <Text textStyle="h5" color="gray.900">
+                        THB {room.promotion_price}
+                      </Text>
+                    </Box>
+                  )}
                 </Flex>
 
                 <Button variant="primary" w="fit-content" alignSelf="end">
@@ -143,49 +221,15 @@ const RoomDetailPage = () => {
             <Text textStyle="h5" color="black" mt="40px">
               Room Amenities
             </Text>
-            <Flex gap="24px">
+            <Flex>
               <UnorderedList mt="24px" w="300px">
-                <ListItem color="gray.700" textStyle="b1">
-                  Safe in Room
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  Air Conditioning
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  High speed internet connection
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  Hairdryer
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  Shower
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  Bathroom amenities
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  Lamp
-                </ListItem>
-              </UnorderedList>
-              <UnorderedList mt="24px" w="300px">
-                <ListItem color="gray.700" textStyle="b1">
-                  Minibar
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  Telephone
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  Ironing board
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  A floor only accessible via a guest room key
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  Alarm clock
-                </ListItem>
-                <ListItem color="gray.700" textStyle="b1">
-                  Bathrobe
-                </ListItem>
+                {room.room_amenity?.map((amenity, index) => {
+                  return (
+                    <ListItem key={index} color="gray.700" textStyle="b1">
+                      {amenity.split("_").join(" ")}
+                    </ListItem>
+                  );
+                })}
               </UnorderedList>
             </Flex>
           </Flex>
@@ -202,22 +246,23 @@ const RoomDetailPage = () => {
             Other Rooms
           </Text>
           <Flex flexDirection="row" justifyContent="space-between">
-            <Flex
-              bg="url(/RoomdetailPage/Deluxe_room.svg)"
-              w="548px"
-              h="340px"
-              align="end"
-            >
-              <ExploreRoomButton type="Deluxe" pl="60px" pb="49px" />
-            </Flex>
-            <Flex
-              bg="url(/RoomdetailPage/Superior_room.svg)"
-              w="548px"
-              h="340px"
-              align="end"
-            >
-              <ExploreRoomButton type="Superior" pl="60px" pb="49px" />
-            </Flex>
+            {othersRoom.map((other) => {
+              return (
+                <Flex
+                  bg={`url(${other.roomTypePicture})`}
+                  w="548px"
+                  h="340px"
+                  align="end"
+                >
+                  <ExploreRoomButton
+                    type={other.roomTypeName}
+                    pl="60px"
+                    pb="49px"
+                    roomTypeId={other.roomTypeId}
+                  />
+                </Flex>
+              );
+            })}
           </Flex>
         </Flex>
       </Flex>
