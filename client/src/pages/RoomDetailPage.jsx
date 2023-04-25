@@ -179,7 +179,10 @@ const RoomDetailPage = () => {
                     borderColor="gray.500"
                     pr="16px"
                   >
-                    <Text>{room.bed_type}</Text>
+                    <Text>
+                      {room.bed_type?.charAt(0).toUpperCase() +
+                        room.bed_type?.slice(1)}
+                    </Text>
                   </Flex>
                   <Flex gap="6px">
                     <Text color="gray.800">{room.room_size}</Text>
