@@ -228,10 +228,18 @@ function RegisterPage() {
                     onChange={formik.handleChange}
                     value={formik.values.birth_date}
                     placeholder="Select your date of birth"
+                    // calendar แสดงปีปัจจุบัน 18 ปี
+                    max={
+                      new Date().getFullYear() -
+                      18 +
+                      "-" +
+                      ("0" + (new Date().getMonth() + 1)).slice(-2) +
+                      "-" +
+                      ("0" + new Date().getDate()).slice(-2)
+                    }
                     width={320}
                     bg="#FFFFFF"
                     borderColor="gray.400"
-                    // normally show color gray.500, if have event color show gray.800
                     color={formik.values.birth_date ? "gray.800" : "gray.500"}
                   />
                 </Flex>
