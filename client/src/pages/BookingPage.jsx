@@ -30,16 +30,15 @@ const BookingPage = () => {
   const location = useLocation();
   console.log(location);
 
-  
-  const [rooms,setRooms] =useState(location.state.rooms)
-  const [guests,setGuests] =useState(location.state.guests)
+  const [rooms, setRooms] = useState(location.state.rooms);
+  const [guests, setGuests] = useState(location.state.guests);
   const [date, setDate] = useState(location.state.date);
   const [roomData, setRoomData] = useState([]);
-  const [searchRoom,setSearchRoom]=useState(location.state.guests)
+  const [searchRoom, setSearchRoom] = useState(location.state.guests);
 
   async function getRoomData() {
     try {
-      const response = await axios.get(`http://localhost:4000/rooms`);
+      const response = await axios.get(`http://localhost:4000/search`);
       console.log(response.data.data);
       setRoomData(response.data.data);
     } catch (error) {
@@ -53,7 +52,6 @@ const BookingPage = () => {
 
   const handleRoomsIncrement = () => {
     setRooms(rooms + 1);
-
   };
 
   const handleRoomsDecrement = () => {
@@ -74,7 +72,7 @@ const BookingPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setSearchRoom(guests)
+    setSearchRoom(guests);
   };
 
   return (
@@ -239,7 +237,7 @@ const BookingPage = () => {
         {roomData.map((item) => {
           if (searchRoom === 0) {
             return <SearchRooms room={item} key={item.room_id} />;
-          }else if(searchRoom === item.amount_person){
+          } else if (searchRoom === item.amount_person) {
             return <SearchRooms room={item} key={item.room_id} />;
           }
         })}

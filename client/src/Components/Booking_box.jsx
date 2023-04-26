@@ -18,14 +18,12 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
-
-
 const Booking_box = () => {
   const navigate = useNavigate();
   //room
 
-  const [rooms,setRooms] =useState(0)
-  const [guests,setGuests] =useState(0)
+  const [rooms, setRooms] = useState(0);
+  const [guests, setGuests] = useState(0);
 
   //Date
   const [date, setDate] = useState([
@@ -37,31 +35,33 @@ const Booking_box = () => {
   ]);
 
   const handleRoomsIncrement = () => {
-    setRooms(rooms + 1 );
+    setRooms(rooms + 1);
   };
 
   const handleRoomsDecrement = () => {
     if (rooms > 0) {
-      setRooms(rooms - 1 );
+      setRooms(rooms - 1);
     }
   };
 
   const handleGuestsIncrement = () => {
-    setGuests(guests + 1 );
+    setGuests(guests + 1);
   };
 
   const handleGuestsDecrement = () => {
     if (guests > 0) {
-      setGuests(guests - 1 );
+      setGuests(guests - 1);
     }
   };
 
   //กดเสร็จไปหน้า booking พร้อมข้อมูล
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    navigate("/booking",{state: {date,rooms,guests}})
+
+    navigate("/booking", { state: { date, rooms, guests } });
   };
+
+  const currentDate = new Date();
 
   return (
     <form onSubmit={handleSubmit}>
