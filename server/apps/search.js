@@ -4,14 +4,9 @@ import { pool } from "../utils/db.js";
 const searchRouter = Router();
 
 searchRouter.get("/", async (req, res) => {
-  const check_in_date = "2023-05-15";
-  const check_out_date = "2023-05-16";
-  const amount_rooms = 3;
-  const amount_guests = 2;
-  // const check_in_date = req.query.check_in_date;
-  // const check_out_date = req.query.check_out_date;
-  // const amount_rooms = req.query.amount_rooms;
-  // const amount_guests = req.query.amount_guests;
+  const check_in_date = req.query.check_in_date;
+  const check_out_date = req.query.check_out_date;
+  const amount_guests = req.query.amount_guests;
 
   try {
     // get booking data // assume: amount_guests = 2
@@ -35,7 +30,6 @@ searchRouter.get("/", async (req, res) => {
         );
       })
       .map((row) => row.room_id);
-    console.log(unavailableRooms); //
 
     const table2 = await pool.query(
       `select rooms.room_id, rooms.room_type_id ,rooms_type.amount_person
@@ -48,34 +42,24 @@ searchRouter.get("/", async (req, res) => {
 
     // All rooms in the same rooms_type - array - [ 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20 ]
     const allRooms = table2.rows.map((room) => room.room_id);
-    console.log(allRooms); //
 
     // Available rooms at check_date - array - [ 6, 7, 8, 9, 11, 12, 17, 18, 19, 20 ]
     const availableRoom = allRooms.filter(
       (room) => !unavailableRooms.includes(room)
     );
-    console.log(availableRoom); //
 
     // Turn available room_id to room_type_id - array - [ 2, 2, 2, 3, 3, 3, 5, 5, 6, 6 ]
     const availableRoomType = table2.rows
       .filter((room) => availableRoom.includes(room.room_id))
       .map((room) => room.room_type_id);
-    console.log(availableRoomType); //
 
     // Count rooms reference room_type_id - array - [ [ 2, 3 ], [ 3, 3 ], [ 5, 2 ], [ 6, 2 ] ]
-    const countAvailableRoomType = Object.entries(
+    const roomsTypeForBooking = Object.entries(
       availableRoomType.reduce((acc, val) => {
         acc[val] = (acc[val] || 0) + 1;
         return acc;
       }, {})
     ).map(([key, value]) => [parseInt(key), value]);
-    console.log(countAvailableRoomType); //
-
-    // Available rooms_type for booking - array - [ 2, 3 ] // assume: amount_rooms = 3
-    const roomsTypeForBooking = countAvailableRoomType
-      .filter((roomType) => roomType[1] >= amount_rooms)
-      .map((roomType) => roomType[0]);
-    console.log(roomsTypeForBooking); //
 
     // Available rooms_type data for booking - array
     const roomsTypeData = [];
@@ -91,8 +75,13 @@ searchRouter.get("/", async (req, res) => {
           rt.room_type_id
         ORDER BY 
           rt.room_type_id ASC;`,
-        [roomsTypeForBooking[i]]
+        [roomsTypeForBooking[i][0]]
       );
+
+      results.rows[i] = {
+        ...results.rows[i],
+        available_room: roomsTypeForBooking[i][1],
+      };
 
       roomsTypeData.push(results.rows);
     }
