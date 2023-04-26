@@ -4,7 +4,7 @@ import BookingPage from "./BookingPage";
 import RoomDetailPage from "./RoomDetailPage";
 import ProfilePage from "./ProfilePage";
 import PaymentMethodPage from "./PaymentMethodPage";
-import BookingSummary from "./BookingSummaryPage";
+// import BookingSummary from "./BookingSummaryPage";
 import HistoryPage from "./HistoryPage";
 import CancelPage from "./CancelPage";
 
