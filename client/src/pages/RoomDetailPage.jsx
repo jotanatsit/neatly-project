@@ -85,7 +85,6 @@ const RoomDetailPage = () => {
   } else if (id === 6) {
     othersRoom.push(roomType[0], roomType[1]);
   }
-  console.log(othersRoom);
 
   useEffect(() => {
     getRoomById();
@@ -99,6 +98,7 @@ const RoomDetailPage = () => {
           slidesPerView={1.5}
           spaceBetween={24}
           centeredSlides={true}
+          initialSlide={0}
           rewind={true}
           navigation={{
             nextEl: ".button-next",
@@ -229,7 +229,8 @@ const RoomDetailPage = () => {
                 {room.room_amenity?.map((amenity, index) => {
                   return (
                     <ListItem key={index} color="gray.700" textStyle="b1">
-                      {amenity.split("_").join(" ")}
+                      {amenity.split("_").join(" ").charAt(0).toUpperCase() +
+                        amenity.split("_").join(" ").slice(1)}
                     </ListItem>
                   );
                 })}
@@ -249,9 +250,10 @@ const RoomDetailPage = () => {
             Other Rooms
           </Text>
           <Flex flexDirection="row" justifyContent="space-between">
-            {othersRoom.map((other) => {
+            {othersRoom.map((other, index) => {
               return (
                 <Flex
+                  key={index}
                   bg={`url(${other.roomTypePicture})`}
                   w="548px"
                   h="340px"

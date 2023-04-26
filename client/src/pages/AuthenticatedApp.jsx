@@ -14,7 +14,7 @@ function AuthenticatedApp() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/booking" element={<BookingPage />} />
-        {/* <Route path="/booking-summary" element={<BookingSummary />} /> */}
+        <Route path="/booking-summary" element={<BookingSummary />} />
         <Route path="/roomdetail/:roomTypeId" element={<RoomDetailPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/payment-method" element={<PaymentMethodPage />} />
