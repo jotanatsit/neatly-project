@@ -161,6 +161,15 @@ authRouter.post("/login", async (req, res) => {
     }
   );
 
+  // update user's last_logged_in
+  const last_logged_in = new Date();
+  const user_id = user.rows[0].user_id;
+
+  await pool.query("update users set last_logged_in=$1 where user_id=$2", [
+    last_logged_in,
+    user_id,
+  ]);
+
   return res.json({
     message: "login successfully",
     token,
