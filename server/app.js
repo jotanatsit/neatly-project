@@ -5,6 +5,8 @@ import profileRouter from "./apps/profile.js";
 import dotenv from "dotenv";
 import cloudinary from "cloudinary";
 import roomRouter from "./apps/rooms.js";
+import bookingRouter from "./apps/booking.js";
+import searchRouter from "./apps/search.js";
 
 async function init() {
   dotenv.config();
@@ -25,6 +27,8 @@ async function init() {
   app.use("/auth", authRouter);
   app.use("/rooms", roomRouter);
   app.use("/profile", profileRouter);
+  app.use("/search", searchRouter);
+  app.use("/booking", bookingRouter);
 
   app.get("/", (req, res) => {
     res.send("Hello World!");
