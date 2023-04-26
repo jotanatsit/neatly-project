@@ -49,17 +49,6 @@ bookingRouter.post("/", async (req, res) => {
       [room_type_id]
     );
 
-    // const unavailableRooms = []; // ห้องที่ booking ไม่ได้
-
-    // for (let i = 0; i < table1.rows.length; i++) {
-    //   if (booking.check_in_date < table1.rows[i].check_out_date) {
-    //     if (booking.check_out_date > table1.rows[i].check_in_date) {
-    //       unavailableRooms.push(table1.rows[i].room_id);
-    //     }
-    //   }
-    // }
-    // console.log(unavailableRooms);
-
     // Unavailable rooms for booking
     const unavailableRooms = table1.rows
       .filter((row) => {
