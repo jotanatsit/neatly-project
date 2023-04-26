@@ -88,8 +88,6 @@ const BookingPage = () => {
           alignItems="center"
           justifyContent="space-around"
           borderBottomRadius={10}
-          borderTop="1px solid"
-          borderColor="gray.200"
           boxShadow="2xl"
           position="relative"
         >
@@ -235,7 +233,7 @@ const BookingPage = () => {
         height="1895px"
         flexDirection="column"
         alignItems="center"
-        bg="white"
+        bg="bg"
         overflow="scroll"
       >
         {roomData.map((item) => {

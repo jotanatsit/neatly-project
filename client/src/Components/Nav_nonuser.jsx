@@ -12,6 +12,8 @@ function Nav_nonuser() {
       h="100px"
       px={150}
       alignItems="center"
+      borderBottom="2px solid"
+      borderColor="gray.300"
     >
       <RouterLink to="/">
         <Image src="/HomePage/logo.svg" w="167px" h="45px" mr={10} />

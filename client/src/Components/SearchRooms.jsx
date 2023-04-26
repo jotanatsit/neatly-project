@@ -73,7 +73,7 @@ function SearchRooms(props) {
           >
             <Flex flexDirection="column">
               <Text textStyle="h4" color="black">
-                {room.room_type}
+                {room.room_type_name}
               </Text>
               <Flex flexDirection="row" mt="10px">
                 <Box pr={2}>

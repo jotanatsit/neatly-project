@@ -6,6 +6,7 @@ import ProfilePage from "./ProfilePage";
 import PaymentMethodPage from "./PaymentMethodPage";
 import BookingSummary from "./BookingSummaryPage";
 import HistoryPage from "./HistoryPage";
+import CancelPage from "./CancelPage";
 
 function AuthenticatedApp() {
   return (
@@ -18,6 +19,7 @@ function AuthenticatedApp() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/payment-method" element={<PaymentMethodPage />} />
         <Route path="/history" element={<HistoryPage />} />
+        <Route path="/cancel" element={<CancelPage />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </div>

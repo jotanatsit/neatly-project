@@ -14,9 +14,14 @@ import {
   PopoverArrow,
   List,
   ListItem,
-  ListIcon,
-  OrderedList,
-  UnorderedList,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
 } from "@chakra-ui/react";
 import { Link } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom";
@@ -25,7 +30,26 @@ import axios from "axios";
 
 const Nav_user = () => {
   const { logout } = useAuth();
-  
+  const userId = useAuth();
+  const [userData, setUserData] = useState({});
+
+  async function getUserData() {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/profile/${userId.UserIdFromLocalStorage}`
+      );
+      setUserData(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  console.log([userData]);
+
   return (
     <Flex
       bg="white"
@@ -34,6 +58,8 @@ const Nav_user = () => {
       h="100px"
       px={150}
       alignItems="center"
+      borderBottom="2px solid"
+      borderColor="gray.300"
     >
       <RouterLink to="/">
         <Image src="/HomePage/logo.svg" w="167px" h="45px" mr={10} />
@@ -78,14 +104,14 @@ const Nav_user = () => {
       </Flex>
       <Popover>
         <PopoverTrigger>
-          <Avatar
-            cursor="pointer"
-            size="md"
-            name="Dan Abrahmov"
-            src="https://bit.ly/dan-abramov"
-          />
+        <Image
+              cursor="pointer"
+              boxSize="50px"
+              borderRadius={30}
+              src={userData.profile_picture}
+            />
         </PopoverTrigger>
-        <PopoverContent w="200px" h="172px">
+        <PopoverContent w="200px" h="172px" >
           <PopoverArrow />
           <PopoverBody>
             <Box>
@@ -132,7 +158,7 @@ const Nav_user = () => {
                     </Flex>
                   </ListItem>
                 </RouterLink>
-                <RouterLink to="">
+                <RouterLink to="/history">
                   <ListItem>
                     <Flex
                       h="37px"
@@ -186,6 +212,8 @@ const Nav_user = () => {
           </PopoverBody>
         </PopoverContent>
       </Popover>
+
+      
     </Flex>
   );
 };
