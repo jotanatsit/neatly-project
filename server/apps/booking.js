@@ -38,12 +38,12 @@ bookingRouter.post("/", async (req, res) => {
   try {
     // get booking data
     const table1 = await pool.query(
-      `select test_booking.room_id, test_booking_details.check_in_date, test_booking_details.check_out_date, rooms.room_type_id
-          from test_booking_details
-          inner join test_booking
-          ON test_booking_details.booking_detail_id = test_booking.booking_detail_id
+      `select booking.room_id, booking_details.check_in_date, booking_details.check_out_date, rooms.room_type_id
+          from booking_details
+          inner join booking
+          ON booking_details.booking_detail_id = booking.booking_detail_id
           inner join rooms
-          ON test_booking.room_id = rooms.room_id
+          ON booking.room_id = rooms.room_id
           where rooms.room_type_id=$1`,
       [room_type_id]
     );
@@ -76,7 +76,7 @@ bookingRouter.post("/", async (req, res) => {
 
     // create booking_details data
     await pool.query(
-      `insert into test_booking_details (check_in_date, check_out_date, amount_guests, amount_rooms, total_price_per_room, 
+      `insert into booking_details (check_in_date, check_out_date, amount_guests, amount_rooms, total_price_per_room, 
         payment_type, user_credit_card_id, booking_status, booking_date, cancellation_date)
           values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
@@ -95,14 +95,14 @@ bookingRouter.post("/", async (req, res) => {
 
     // get payment_id from lastest booking
     const lastest_booking_detail = await pool.query(
-      `select booking_detail_id from test_booking_details order by booking_detail_id desc limit $1`,
+      `select booking_detail_id from booking_details order by booking_detail_id desc limit $1`,
       [1]
     );
 
     // create booking data
     for (let i = 0; i < booking_details.amount_rooms; i++) {
       await pool.query(
-        `insert into test_booking (user_id, room_id, booking_detail_id)
+        `insert into booking (user_id, room_id, booking_detail_id)
               values ($1, $2, $3)`,
         [
           user_id,
@@ -114,7 +114,7 @@ bookingRouter.post("/", async (req, res) => {
 
     // create booking_requests data
     await pool.query(
-      `insert into test_booking_requests (booking_detail_id, early_check_in, late_check_out, non_smoking_room,
+      `insert into booking_requests (booking_detail_id, early_check_in, late_check_out, non_smoking_room,
           a_room_on_the_high_floor, a_quiet_room, baby_cot, airport_transfer, extra_bed, extra_pillows,
           phone_chargers_and_adapters, breakfast, additional_request)
          values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
@@ -157,9 +157,9 @@ bookingRouter.get("/:userId", async (req, res) => {
       FROM rooms_type rt
       LEFT JOIN rooms r ON r.room_type_id = rt.room_type_id
       LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
-      LEFT JOIN test_booking b ON b.room_id = r.room_id
-      LEFT JOIN test_booking_details bd ON bd.booking_detail_id = b.booking_detail_id
-      LEFT JOIN test_booking_requests br ON br.booking_detail_id = bd.booking_detail_id
+      LEFT JOIN booking b ON b.room_id = r.room_id
+      LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
+      LEFT JOIN booking_requests br ON br.booking_detail_id = bd.booking_detail_id
       WHERE b.user_id = $1
       GROUP BY 
         b.booking_id,
@@ -251,9 +251,9 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
       FROM rooms_type rt
       LEFT JOIN rooms r ON r.room_type_id = rt.room_type_id
       LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
-      LEFT JOIN test_booking b ON b.room_id = r.room_id
-      LEFT JOIN test_booking_details bd ON bd.booking_detail_id = b.booking_detail_id
-      LEFT JOIN test_booking_requests br ON br.booking_detail_id = bd.booking_detail_id
+      LEFT JOIN booking b ON b.room_id = r.room_id
+      LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
+      LEFT JOIN booking_requests br ON br.booking_detail_id = bd.booking_detail_id
       WHERE b.user_id = $1 AND br.booking_detail_id = $2
       GROUP BY 
         b.booking_id,

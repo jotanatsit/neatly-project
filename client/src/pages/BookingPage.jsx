@@ -8,6 +8,7 @@ import {
   Menu,
   MenuButton,
   MenuList,
+  ListItem,
 } from "@chakra-ui/react";
 import Nav_nonuser from "../Components/Nav_nonuser";
 import Nav_user from "../Components/Nav_user";
@@ -255,7 +256,7 @@ const BookingPage = () => {
       >
         {roomData.map((item) => {
           console.log(item);
-          return <SearchRooms room={item[0]} />;
+          return <SearchRooms room={ListItem} />;
         })}
       </Flex>
       <Footer />
