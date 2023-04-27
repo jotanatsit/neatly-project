@@ -33,22 +33,37 @@ const BookingPage = () => {
   const [rooms, setRooms] = useState(location.state.rooms);
   const [guests, setGuests] = useState(location.state.guests);
   const [date, setDate] = useState(location.state.date);
+  const [checkInDate, setCheckInDate] = useState(date[0].startDate);
+  const [checkOutDate, setCheckOutDate] = useState(date[0].endDate);
   const [roomData, setRoomData] = useState([]);
-  const [searchRoom, setSearchRoom] = useState(location.state.guests);
+  // const [searchRoom, setSearchRoom] = useState(location.state.guests);
 
   async function getRoomData() {
     try {
-      const response = await axios.get(`http://localhost:4000/search`);
-      console.log(response.data.data);
+      console.log(checkInDate);
+      console.log(checkOutDate);
+      console.log(guests);
+      const response = await axios.get(
+        `http://localhost:4000/search?check_in_date=${checkInDate}&check_out_date=${checkOutDate}&amount_guests=${guests}`
+      );
+      {
+        console.log(response.data.data);
+      }
       setRoomData(response.data.data);
     } catch (error) {
       console.log(error);
     }
   }
 
+  console.log(roomData);
+
+  // useEffect(() => {
+  //   getRoomData();
+  // }, [searchRoom]);
+
   useEffect(() => {
     getRoomData();
-  }, [searchRoom]);
+  }, []);
 
   const handleRoomsIncrement = () => {
     setRooms(rooms + 1);
@@ -72,7 +87,7 @@ const BookingPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setSearchRoom(guests);
+    getRoomData();
   };
 
   return (
@@ -114,7 +129,7 @@ const BookingPage = () => {
                   style={{ width: "250px" }}
                 >
                   <Text textStyle="b1">
-                    {format(date[0].startDate, "MM/dd/yyyy")}
+                    {format(checkInDate, "MM/dd/yyyy")}
                   </Text>
                 </MenuButton>
               </Flex>
@@ -135,14 +150,18 @@ const BookingPage = () => {
                   style={{ width: "250px" }}
                 >
                   <Text textStyle="b1">
-                    {format(date[0].endDate, "MM/dd/yyyy")}
+                    {format(checkOutDate, "MM/dd/yyyy")}
                   </Text>
                 </MenuButton>
               </Flex>
               <MenuList border="1px solid" position="absolute" right="-240px">
                 <DateRange
                   editableDateInputs={true}
-                  onChange={(item) => setDate([item.selection])}
+                  onChange={(item) => {
+                    setDate([item.selection]);
+                    setCheckInDate(item.selection.startDate);
+                    setCheckOutDate(item.selection.endDate);
+                  }}
                   moveRangeOnFirstSelection={false}
                   ranges={date}
                   style={{ width: "500px" }}
@@ -235,11 +254,8 @@ const BookingPage = () => {
         overflow="scroll"
       >
         {roomData.map((item) => {
-          if (searchRoom === 0) {
-            return <SearchRooms room={item} key={item.room_id} />;
-          } else if (searchRoom === item.amount_person) {
-            return <SearchRooms room={item} key={item.room_id} />;
-          }
+          console.log(item);
+          return <SearchRooms room={item[0]} />;
         })}
       </Flex>
       <Footer />

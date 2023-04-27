@@ -320,23 +320,24 @@ function SearchRooms(props) {
                   Room Amenities
                 </Text>
                 <Flex w="640px" mt={3} ml={5}>
-                  <Box w="50%">
+                  <Box w="47%">
                     <ul>
                       <li>Safe in Room</li>
                       <li>Air Conditioning</li>
                       <li>High speed internet connection</li>
-                      <li>Hairdryer Shower</li>
+                      <li>Hairdryer</li>
+                      <li>Shower</li>
                       <li>Bathroom amenities</li>
                       <li>Lamp</li>
                     </ul>
                   </Box>
-                  <Box w="50%">
-                    <li>Safe in Room</li>
-                    <li>Air Conditioning</li>
-                    <li>High speed internet connection</li>
-                    <li>Hairdryer Shower</li>
-                    <li>Bathroom amenities</li>
-                    <li>Lamp</li>
+                  <Box w="53%">
+                    <li>Minibar</li>
+                    <li>Telephone</li>
+                    <li>Ironing board</li>
+                    <li>A floor only accessible via a guest room key</li>
+                    <li>Alarm clock</li>
+                    <li>Bathrobe</li>
                   </Box>
                 </Flex>
               </Flex>
