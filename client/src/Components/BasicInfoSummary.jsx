@@ -35,14 +35,15 @@ function BasicInfoSummary() {
   useEffect(() => {
     formik.setValues({
       ...formik.values,
-      fullname: userData.fullname,
-      email: userData.email,
-      id_number: userData.id_number?.replace(
-        /^(\d{1})(\d{4})(\d{5})(\d{2})(\d{0,1})/,
-        "$1-$2-$3-$4-$5"
-      ),
-      birth_date: userData.birth_date,
-      country: userData.country,
+      fullname: userData.fullname || "",
+      email: userData.email || "",
+      id_number:
+        userData.id_number?.replace(
+          /^(\d{1})(\d{4})(\d{5})(\d{2})(\d{0,1})/,
+          "$1-$2-$3-$4-$5"
+        ) || "",
+      birth_date: userData.birth_date || "",
+      country: userData.country || "",
     });
   }, [userData]);
 
