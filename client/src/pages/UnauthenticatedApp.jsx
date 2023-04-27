@@ -4,6 +4,7 @@ import RegisterPage from "./RegisterPage";
 import LoginPage from "./LoginPage";
 import RoomDetailPage from "./RoomDetailPage";
 import BookingPage from "./BookingPage";
+import Card from "../Components/Card";
 
 function UnauthenticatedApp() {
   return (
@@ -15,6 +16,7 @@ function UnauthenticatedApp() {
         <Route path="/roomdetail/:roomTypeId" element={<RoomDetailPage />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="*" element={<LoginPage />} />
+        <Route path="/card" element={<Card />} />
       </Routes>
     </div>
   );
