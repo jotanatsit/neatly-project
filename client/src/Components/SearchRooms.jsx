@@ -18,15 +18,55 @@ import { useDisclosure } from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import "swiper/swiper-bundle.min.css";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/authentication";
+import { useNavigate } from "react-router-dom";
 
 function SearchRooms(props) {
+  const auth = useAuth();
+  const rooms = props.rooms;
   const room = props.room;
+  const startDate = props.checkInDate;
+  const endDate = props.checkOutDate;
+
+  const navigate = useNavigate();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpen2,
     onOpen: onOpen2,
     onClose: onClose2,
   } = useDisclosure();
+
+  // function ที่ส่ง state จากหน้า booking ไป หน้า booking summary
+  function handleBooking() {
+    const netPrice =
+      room.promotion_price === null ? room.price : room.promotion_price;
+
+    if (auth.isAuthenticated) {
+      const bookingData = {
+        roomTypeId: room.room_type_id,
+        roomType: room.room_type_name,
+        checkInDate: startDate,
+        checkOutDate: endDate,
+        amountRoom: rooms,
+        amountGuest: room.amount_person,
+        totalPrice: netPrice * rooms,
+      };
+
+      // Navigate to /booking-summary and pass bookingData as state
+      navigate("/booking-summary", { state: { bookingData: bookingData } });
+    } else {
+      // Navigate to login page
+      navigate("*");
+    }
+  }
+
+  console.log(rooms);
+  console.log(room.price);
+  console.log(room.checkInDate);
+  console.log(room.checkOutDate);
+  console.log(room.amount_person);
 
   return (
     <Flex
@@ -134,10 +174,10 @@ function SearchRooms(props) {
                 (Including Taxes & Fees)
               </Text>
             </Flex>
-            <Flex justifyContent="flex-end" mt={20} mb={3} mr={7}>
-              <Badge variant="solid" colorScheme="green">
-                available
-              </Badge>
+            <Flex justifyContent="flex-end" mt={20} mb={3} mr={1}>
+              <Text variant="solid" color="green" fontSize={15}>
+                Available {room.available_room} rooms
+              </Text>
             </Flex>
             <Flex justifyContent="flex-end">
               <Button
@@ -148,11 +188,13 @@ function SearchRooms(props) {
               >
                 Room Detail
               </Button>
-              {1 === 1 ? (
-                <Button variant="primary" p="16px 32px">
+
+              {rooms <= room.available_room ? (
+                <Button variant="primary" p="16px 32px" onClick={handleBooking}>
                   Book Now
                 </Button>
               ) : (
+                // If search room > available room , button is diable
                 <Button variant="primary" p="16px 32px" isDisabled>
                   Book Now
                 </Button>
@@ -320,7 +362,7 @@ function SearchRooms(props) {
                   Room Amenities
                 </Text>
                 <Flex w="640px" mt={3} ml={5}>
-                  <Box w="47%">
+                  <Box w="50%">
                     <ul>
                       <li>Safe in Room</li>
                       <li>Air Conditioning</li>
@@ -331,7 +373,7 @@ function SearchRooms(props) {
                       <li>Lamp</li>
                     </ul>
                   </Box>
-                  <Box w="53%">
+                  <Box w="50%">
                     <li>Minibar</li>
                     <li>Telephone</li>
                     <li>Ironing board</li>

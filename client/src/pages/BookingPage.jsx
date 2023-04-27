@@ -37,7 +37,6 @@ const BookingPage = () => {
   const [checkInDate, setCheckInDate] = useState(date[0].startDate);
   const [checkOutDate, setCheckOutDate] = useState(date[0].endDate);
   const [roomData, setRoomData] = useState([]);
-  // const [searchRoom, setSearchRoom] = useState(location.state.guests);
 
   async function getRoomData() {
     try {
@@ -55,12 +54,6 @@ const BookingPage = () => {
       console.log(error);
     }
   }
-
-  console.log(roomData);
-
-  // useEffect(() => {
-  //   getRoomData();
-  // }, [searchRoom]);
 
   useEffect(() => {
     getRoomData();
@@ -255,8 +248,14 @@ const BookingPage = () => {
         overflow="scroll"
       >
         {roomData.map((item) => {
-          console.log(item);
-          return <SearchRooms room={ListItem} />;
+          return (
+            <SearchRooms
+              room={item}
+              rooms={rooms}
+              checkInDate={checkInDate}
+              checkOutDate={checkOutDate}
+            />
+          );
         })}
       </Flex>
       <Footer />

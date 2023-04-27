@@ -5,8 +5,15 @@ import PackageSummary from "../Components/PackageSummary.jsx";
 import BasicInfoSummary from "../Components/BasicInfoSummary.jsx";
 import SpecialRequest from "../Components/SpecialRequest";
 import PaymentMethod from "../Components/PaymentMethod";
+import { useLocation } from "react-router-dom";
 
 function BookingSummary() {
+  const location = useLocation();
+  const bookingData = location.state.bookingData;
+
+  console.log(bookingData);
+  // bookingData เป็น object ที่มี key-value เป็น state ที่ส่งมาจากหน้า search booking หลังกดปุ่ม Book now
+
   return (
     <Flex direction="column" w="1440px" bgColor="bg" m="auto">
       <Nav_user />
