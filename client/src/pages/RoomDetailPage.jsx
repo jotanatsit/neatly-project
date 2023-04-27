@@ -16,7 +16,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Navigation, Pagination } from "swiper";
-import Footer from "../Components/Footer";
+import Footer from "../components/Footer";
 import { useAuth } from "../contexts/authentication";
 import ExploreRoomButton from "../Components/ExploreRoomButton";
 import { useParams } from "react-router-dom";

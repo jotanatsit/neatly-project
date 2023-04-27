@@ -14,14 +14,6 @@ import {
   PopoverArrow,
   List,
   ListItem,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
 } from "@chakra-ui/react";
 import { Link } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom";
@@ -104,14 +96,21 @@ const Nav_user = () => {
       </Flex>
       <Popover>
         <PopoverTrigger>
-        <Image
-              cursor="pointer"
-              boxSize="50px"
-              borderRadius={30}
-              src={userData.profile_picture}
-            />
+          <Image
+            cursor="pointer"
+            boxSize="50px"
+            borderRadius={50}
+            src={userData.profile_picture}
+          />
         </PopoverTrigger>
-        <PopoverContent w="200px" h="172px" >
+        <PopoverContent
+          w="200px"
+          h="172px"
+          _focus={{
+            outlineStyle: "none",
+            boxShadow: "none",
+          }}
+        >
           <PopoverArrow />
           <PopoverBody>
             <Box>
@@ -212,8 +211,6 @@ const Nav_user = () => {
           </PopoverBody>
         </PopoverContent>
       </Popover>
-
-      
     </Flex>
   );
 };

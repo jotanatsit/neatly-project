@@ -8,6 +8,7 @@ import BookingSummary from "./BookingSummaryPage";
 import HistoryPage from "./HistoryPage";
 import CancelPage from "./CancelPage";
 import { BookingProvider } from "../contexts/booking.jsx";
+import ChangeDatePage from "./ChangeDatePage";
 
 function AuthenticatedApp() {
   return (
@@ -22,7 +23,8 @@ function AuthenticatedApp() {
           <Route path="/payment-method" element={<PaymentMethodPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/cancel" element={<CancelPage />} />
-          <Route path="*" element={<HomePage />} />
+          <Route path="/changedate" element={<ChangeDatePage />} />
+        <Route path="*" element={<HomePage />} />
         </Routes>
       </BookingProvider>
     </div>

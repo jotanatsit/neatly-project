@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Nav_user from "../Components/Nav_user";
 import Footer from "../components/Footer";
 import {
@@ -181,45 +181,56 @@ const HistoryPage = () => {
               </Box>
             </Flex>
           </Box>
-          <Box w="1120px" display="flex" justifyContent="flex-end" mt="20px">
+          <Box
+            w="1120px"
+            display="flex"
+            justifyContent="space-between"
+            mt="20px"
+          >
+            <Button variant="ghost" color="orange.600" onClick={onOpen}>
+              Cancel Booking
+            </Button>
             <Box>
-              <Button color="orange.600" border="none" bg="none">
+              <Button variant="ghost" color="orange.600" mr={5}>
                 Room Detail
               </Button>
 
-              <Button variant="primary" onClick={onOpen}>
-                Cancel Booking
-              </Button>
-              <AlertDialog
-                motionPreset="slideInBottom"
-                leastDestructiveRef={cancelRef}
-                onClose={onClose}
-                isOpen={isOpen}
-                isCentered
-              >
-                <AlertDialogOverlay />
-
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <Text color="black"> Cancel Booking</Text>
-                  </AlertDialogHeader>
-                  <AlertDialogCloseButton />
-                  <AlertDialogBody>
-                    <Text textStyle="b1">
-                      Are you sure you would like to cancel this booking?
-                    </Text>
-                  </AlertDialogBody>
-                  <AlertDialogFooter>
-                    <Button ref={cancelRef} variant="secondary" onClick={eiei}>
-                      Yes, I want to cancel
-                    </Button>
-                    <Button variant="primary" onClick={onClose} ml={3}>
-                      No, Don’t Cancel
-                    </Button>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <Link to="/changedate">
+                <Button variant="primary" p="25px 25px">
+                  Change Date
+                </Button>
+              </Link>
             </Box>
+
+            <AlertDialog
+              motionPreset="slideInBottom"
+              leastDestructiveRef={cancelRef}
+              onClose={onClose}
+              isOpen={isOpen}
+              isCentered
+            >
+              <AlertDialogOverlay />
+
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <Text color="black"> Cancel Booking</Text>
+                </AlertDialogHeader>
+                <AlertDialogCloseButton />
+                <AlertDialogBody>
+                  <Text textStyle="b1">
+                    Are you sure you would like to cancel this booking?
+                  </Text>
+                </AlertDialogBody>
+                <AlertDialogFooter>
+                  <Button ref={cancelRef} variant="secondary" onClick={eiei}>
+                    Yes, I want to cancel
+                  </Button>
+                  <Button variant="primary" onClick={onClose} ml={3}>
+                    No, Don’t Cancel
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </Box>
         </Flex>
       </Flex>
