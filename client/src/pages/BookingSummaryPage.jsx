@@ -3,7 +3,8 @@ import Nav_user from "../Components/Nav_user";
 import StepPayment from "../Components/StepPayment";
 import PackageSummary from "../Components/PackageSummary.jsx";
 import BasicInfoSummary from "../Components/BasicInfoSummary.jsx";
-/* import SpecialRequest from "../Components/SpecialRequest"; */
+import SpecialRequest from "../Components/SpecialRequest";
+import PaymentMethod from "../Components/PaymentMethod";
 
 function BookingSummary() {
   return (
@@ -29,8 +30,9 @@ function BookingSummary() {
             <StepPayment status="none" step={3} title="Payment Method" />
           </Flex>
           <Flex mt="40px" gap="24px">
-            <BasicInfoSummary />
+            {/* <BasicInfoSummary /> */}
             {/* <SpecialRequest /> */}
+            <PaymentMethod />
             <PackageSummary />
           </Flex>
         </Flex>
