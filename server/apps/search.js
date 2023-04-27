@@ -78,12 +78,12 @@ searchRouter.get("/", async (req, res) => {
         [roomsTypeForBooking[i][0]]
       );
 
-      results.rows[i] = {
-        ...results.rows[i],
+      results.rows[0] = {
+        ...results.rows[0],
         available_room: roomsTypeForBooking[i][1],
       };
 
-      roomsTypeData.push(results.rows);
+      roomsTypeData.push(results.rows[0]);
     }
 
     return res.status(200).json({ data: roomsTypeData });
