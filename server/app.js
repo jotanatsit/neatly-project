@@ -7,6 +7,7 @@ import cloudinary from "cloudinary";
 import roomRouter from "./apps/rooms.js";
 import bookingRouter from "./apps/booking.js";
 import searchRouter from "./apps/search.js";
+import paymentRouter from "./apps/stripe.js";
 
 async function init() {
   dotenv.config();
@@ -22,6 +23,14 @@ async function init() {
 
   app.use(cors());
 
+  app.use(
+    express.json({
+      verify: function (req, res, buf) {
+        req.rawBody = buf;
+      },
+    })
+  );
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use("/auth", authRouter);
@@ -29,6 +38,7 @@ async function init() {
   app.use("/profile", profileRouter);
   app.use("/search", searchRouter);
   app.use("/booking", bookingRouter);
+  app.use("/payment", paymentRouter);
 
   app.get("/", (req, res) => {
     res.send("Hello World!");

@@ -17,7 +17,7 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
+import Footer from "../Components/Footer";
 import { useAuth } from "../contexts/authentication";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
