@@ -1,26 +1,6 @@
 import { Flex, Text, UnorderedList, ListItem, Box } from "@chakra-ui/react";
 import { HiOutlineBriefcase } from "react-icons/hi2";
 
-function Note() {
-  return (
-    <Flex w="358px" h="124px" bg="gray.300" borderRadius="4px">
-      <UnorderedList gap="20px" p="16px">
-        <ListItem>
-          <Text textStyle="b3" color="green.600">
-            Cancel booking will get full refund if the cancelation occurs before
-            24 hours of the check-in date.
-          </Text>
-        </ListItem>
-        <ListItem>
-          <Text textStyle="b3" color="green.600">
-            Able to change check-in or check-out date booking within 24 hours of
-            the booking date
-          </Text>
-        </ListItem>
-      </UnorderedList>
-    </Flex>
-  );
-}
 function PackageSummary() {
   return (
     <Flex direction="column" w="358px" h="568px" gap="16px">
@@ -75,8 +55,25 @@ function PackageSummary() {
           </Flex>
         </Flex>
       </Box>
-      <Note />
+
+      <Flex w="358px" h="124px" bg="gray.300" borderRadius="4px">
+        <UnorderedList gap="20px" p="16px">
+          <ListItem>
+            <Text textStyle="b3" color="green.600">
+              Cancel booking will get full refund if the cancelation occurs
+              before 24 hours of the check-in date.
+            </Text>
+          </ListItem>
+          <ListItem>
+            <Text textStyle="b3" color="green.600">
+              Able to change check-in or check-out date booking within 24 hours
+              of the booking date
+            </Text>
+          </ListItem>
+        </UnorderedList>
+      </Flex>
     </Flex>
   );
 }
+
 export default PackageSummary;

@@ -1,11 +1,15 @@
-import { Flex, Text, Input, Box, Select, Button } from "@chakra-ui/react";
-import OptionCountry from "../Components/SelectCountry.jsx";
+import { Flex, Text, Input, Box } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { useState, useEffect } from "react";
-import { useAuth } from "../contexts/authentication";
+import { useAuth } from "../contexts/authentication.jsx";
 import axios from "axios";
+import React from "react";
+// import { useBooking } from "../contexts/booking";
 
 function BasicInfoSummary() {
+  // const bookingData = useBooking();
+  // console.log(bookingData);
+
   const [userData, setUserData] = useState({});
   const userId = useAuth();
   async function getUserData() {
@@ -49,6 +53,7 @@ function BasicInfoSummary() {
 
   return (
     <Flex gap="24px">
+      {/* <Flex>{bookingContext.BookingData}</Flex> */}
       <form onSubmit={formik.handleSubmit}>
         <Flex
           direction="column"
@@ -57,8 +62,9 @@ function BasicInfoSummary() {
           p="40px"
           gap="40px"
           border="1px solid"
+          borderBottom="none"
           borderColor="gray.300"
-          borderRadius="4px"
+          borderTopRadius="4px"
         >
           <Text textStyle="h5" color="gray.600">
             Basic Information
@@ -113,7 +119,6 @@ function BasicInfoSummary() {
                 name="birth_date"
                 type="date"
                 value={formik.values.birth_date}
-                color={formik.values.birth_date ? "gray.800" : "gray.500"}
               />
             </label>
           </Box>
@@ -122,23 +127,14 @@ function BasicInfoSummary() {
               <Text textStyle="b1" color="gray.900">
                 Country
               </Text>
-              <Select
+              <Input
                 id="country"
                 name="country"
                 colorScheme="gray.800"
                 value={formik.values.country}
-                color={formik.values.country ? "gray.800" : "gray.500"}
-              >
-                <OptionCountry />
-              </Select>
+              />
             </label>
           </Box>
-          <Flex w="100%" justify="space-between">
-            <Button variant="ghost">Back</Button>
-            <Button type="submit" variant="primary">
-              Next
-            </Button>
-          </Flex>
         </Flex>
       </form>
     </Flex>

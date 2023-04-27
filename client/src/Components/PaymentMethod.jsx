@@ -1,4 +1,4 @@
-import { Flex, Button, Input, Box, Text, Image } from "@chakra-ui/react";
+import { Flex, Input, Box, Text, Image } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/authentication";
@@ -13,12 +13,15 @@ function PaymentCard(props) {
       w="212px"
       h="80px"
       boxShadow="neatly"
+      border="1px solid"
+      borderColor={props.borderColor}
+      borderRadius="4px"
     >
       <Image
         boxSize="32px"
         src={`/BookingSummaryPage/${props.icon}-${props.iconColor}.svg`}
       />
-      <Text textStyle="h5" color={props.textColor}>
+      <Text textStyle="h5" color={props.color}>
         {props.children}
       </Text>
     </Flex>
@@ -68,16 +71,41 @@ function PaymentMethod() {
   }, [userData]);
 
   return (
-    <Flex direction="column" w="740px" gap="40px" padding="40px" bg="white">
+    <Flex
+      direction="column"
+      w="740px"
+      gap="40px"
+      padding="40px"
+      bg="white"
+      border="1px solid"
+      borderBottom="none"
+      borderColor="gray.300"
+      borderTopRadius="4px"
+    >
       <Flex w="100%" justify="space-between">
-        <PaymentCard icon="credit" iconColor="gray" textColor="gray.600">
-          test
+        <PaymentCard
+          icon="credit"
+          iconColor="orange"
+          color="orange.500"
+          borderColor="orange.500"
+        >
+          Credit Card
         </PaymentCard>
-        <PaymentCard icon="cash" iconColor="gray" textColor="gray.600">
-          test
+        <PaymentCard
+          icon="cash"
+          iconColor="gray"
+          color="gray.600"
+          borderColor="gray.300"
+        >
+          Cash
         </PaymentCard>
-        <PaymentCard icon="cheque" iconColor="gray" textColor="gray.600">
-          test
+        <PaymentCard
+          icon="cheque"
+          iconColor="gray"
+          color="gray.600"
+          borderColor="gray.300"
+        >
+          Cheque
         </PaymentCard>
       </Flex>
       <form onSubmit={formik.handleSubmit}>
@@ -142,12 +170,6 @@ function PaymentMethod() {
           </Flex>
         </Flex>
       </form>
-      <Flex w="100%" justify="space-between">
-        <Button variant="ghost">Back</Button>
-        <Button type="submit" variant="primary">
-          Next
-        </Button>
-      </Flex>
     </Flex>
   );
 }

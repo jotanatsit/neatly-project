@@ -7,12 +7,17 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
+import { useBooking } from "../contexts/booking";
 
 function SpecialRequest() {
+  const bookingData = useBooking();
   const formik = useFormik({
     initialValues: {},
     onSubmit: {},
   });
+
+  console.log(formik);
+
   return (
     <Flex gap="24px">
       <form onSubmit={formik.handleSubmit}>
@@ -23,8 +28,9 @@ function SpecialRequest() {
           p="40px"
           gap="40px"
           border="1px solid"
+          borderBottom="none"
           borderColor="gray.300"
-          borderRadius="4px"
+          borderTopRadius="4px"
         >
           <Flex direction="column">
             <Text textStyle="h5" color="gray.600">
@@ -81,12 +87,6 @@ function SpecialRequest() {
               Additional Request
             </Text>
             <Textarea border="1px solid" borderColor="gray.400"></Textarea>
-          </Flex>
-          <Flex w="100%" justify="space-between">
-            <Button variant="ghost">Back</Button>
-            <Button type="submit" variant="primary">
-              Next
-            </Button>
           </Flex>
         </Flex>
       </form>

@@ -1,23 +1,42 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { useState } from "react";
+import { Flex, Text, Button } from "@chakra-ui/react";
 import Nav_user from "../Components/Nav_user";
 import StepPayment from "../Components/StepPayment";
-import PackageSummary from "../Components/PackageSummary.jsx";
 import BasicInfoSummary from "../Components/BasicInfoSummary.jsx";
 import SpecialRequest from "../Components/SpecialRequest";
 import PaymentMethod from "../Components/PaymentMethod";
-import { useLocation } from "react-router-dom";
+import ThankForBooking from "../Components/ThankForBooking";
+import PackageSummary from "../Components/PackageSummary.jsx";
+// import { useBooking } from "../contexts/booking";
 
 function BookingSummary() {
-  const location = useLocation();
-  const bookingData = location.state.bookingData;
+  // const bookingData = useBooking();
+  // bookingData["C"] = 3;
+  // bookingData.D = 4;
+  // console.log(bookingData);
 
-  console.log(bookingData);
-  // bookingData เป็น object ที่มี key-value เป็น state ที่ส่งมาจากหน้า search booking หลังกดปุ่ม Book now
+  const [status, setStatus] = useState(["current", "none", "none"]);
+
+  function nextStatus() {
+    if (status[0] === "current") {
+      setStatus(["finish", "current", "none"]);
+    } else if (status[1] === "current") {
+      setStatus(["finish", "finish", "current"]);
+    }
+  }
+
+  function backStatus() {
+    if (status[2] === "current") {
+      setStatus(["finish", "current", "none"]);
+    } else if (status[1] === "current") {
+      setStatus(["current", "none", "none"]);
+    }
+  }
 
   return (
     <Flex direction="column" w="1440px" bgColor="bg" m="auto">
       <Nav_user />
-      <Flex h="1287px" justify="center">
+      <Flex h="fit-content" justify="center" pb="106px">
         <Flex direction="column" w="1122px" mt="80px">
           <Text textStyle="h2" color="black" ml="3px">
             Booking Room
@@ -32,17 +51,54 @@ function BookingSummary() {
             borderBottom="1px solid"
             borderColor="gray.300"
           >
-            <StepPayment status="finish" step={1} title="Basic Information" />
-            <StepPayment status="current" step={2} title="Special Request" />
-            <StepPayment status="none" step={3} title="Payment Method" />
+            <StepPayment
+              status={status[0]}
+              step={1}
+              title="Basic Information"
+            />
+            <StepPayment status={status[1]} step={2} title="Special Request" />
+            <StepPayment status={status[2]} step={3} title="Payment Method" />
           </Flex>
-          <Flex mt="40px" gap="24px">
-            {/* <BasicInfoSummary /> */}
-            {/* <SpecialRequest /> */}
-            <PaymentMethod />
-            <PackageSummary />
+          <Flex direction="column" mt="40px">
+            <Flex gap="24px">
+              {status[0] === "current" ? <BasicInfoSummary /> : null}
+              {status[1] === "current" ? <SpecialRequest /> : null}
+              {status[2] === "current" ? <PaymentMethod /> : null}
+              <PackageSummary />
+            </Flex>
+
+            <Flex
+              w="740px"
+              p="40px"
+              bg="white"
+              justify="space-between"
+              border="1px solid"
+              borderTop="none"
+              borderColor="gray.300"
+              borderBottomRadius="4px"
+            >
+              {status[0] === "current" ? (
+                <Button variant="ghost" isDisabled>
+                  Back
+                </Button>
+              ) : (
+                <Button variant="ghost" onClick={backStatus}>
+                  Back
+                </Button>
+              )}
+              {status[2] === "current" ? (
+                <Button variant="primary" onClick={nextStatus}>
+                  Confirm Booking
+                </Button>
+              ) : (
+                <Button variant="primary" onClick={nextStatus}>
+                  Next
+                </Button>
+              )}
+            </Flex>
           </Flex>
         </Flex>
+        {/* <ThankForBooking /> */}
       </Flex>
     </Flex>
   );
