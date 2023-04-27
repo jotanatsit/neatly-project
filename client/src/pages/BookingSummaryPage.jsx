@@ -7,15 +7,10 @@ import SpecialRequest from "../Components/SpecialRequest";
 import PaymentMethod from "../Components/PaymentMethod";
 import ThankForBooking from "../Components/ThankForBooking";
 import PackageSummary from "../Components/PackageSummary.jsx";
-// import { useBooking } from "../contexts/booking";
 
 function BookingSummary() {
-  // const bookingData = useBooking();
-  // bookingData["C"] = 3;
-  // bookingData.D = 4;
-  // console.log(bookingData);
-
   const [status, setStatus] = useState(["current", "none", "none"]);
+  const [confirm, setConfirm] = useState(false);
 
   function nextStatus() {
     if (status[0] === "current") {
@@ -33,72 +28,84 @@ function BookingSummary() {
     }
   }
 
+  function confirmBooking() {
+    setConfirm(true);
+  }
+
   return (
     <Flex direction="column" w="1440px" bgColor="bg" m="auto">
       <Nav_user />
-      <Flex h="fit-content" justify="center" pb="106px">
-        <Flex direction="column" w="1122px" mt="80px">
-          <Text textStyle="h2" color="black" ml="3px">
-            Booking Room
-          </Text>
-          <Flex
-            align="center"
-            w="1119px"
-            h="146px"
-            ml="3px"
-            gap="60px"
-            p="40px 0px"
-            borderBottom="1px solid"
-            borderColor="gray.300"
-          >
-            <StepPayment
-              status={status[0]}
-              step={1}
-              title="Basic Information"
-            />
-            <StepPayment status={status[1]} step={2} title="Special Request" />
-            <StepPayment status={status[2]} step={3} title="Payment Method" />
-          </Flex>
-          <Flex direction="column" mt="40px">
-            <Flex gap="24px">
-              {status[0] === "current" ? <BasicInfoSummary /> : null}
-              {status[1] === "current" ? <SpecialRequest /> : null}
-              {status[2] === "current" ? <PaymentMethod /> : null}
-              <PackageSummary />
-            </Flex>
 
+      <Flex h="fit-content" justify="center" pb="106px">
+        {confirm ? (
+          <ThankForBooking />
+        ) : (
+          <Flex direction="column" w="1122px" mt="80px">
+            <Text textStyle="h2" color="black" ml="3px">
+              Booking Room
+            </Text>
             <Flex
-              w="740px"
-              p="40px"
-              bg="white"
-              justify="space-between"
-              border="1px solid"
-              borderTop="none"
+              align="center"
+              w="1119px"
+              h="146px"
+              ml="3px"
+              gap="60px"
+              p="40px 0px"
+              borderBottom="1px solid"
               borderColor="gray.300"
-              borderBottomRadius="4px"
             >
-              {status[0] === "current" ? (
-                <Button variant="ghost" isDisabled>
-                  Back
-                </Button>
-              ) : (
-                <Button variant="ghost" onClick={backStatus}>
-                  Back
-                </Button>
-              )}
-              {status[2] === "current" ? (
-                <Button variant="primary" onClick={nextStatus}>
-                  Confirm Booking
-                </Button>
-              ) : (
-                <Button variant="primary" onClick={nextStatus}>
-                  Next
-                </Button>
-              )}
+              <StepPayment
+                status={status[0]}
+                step={1}
+                title="Basic Information"
+              />
+              <StepPayment
+                status={status[1]}
+                step={2}
+                title="Special Request"
+              />
+              <StepPayment status={status[2]} step={3} title="Payment Method" />
+            </Flex>
+            <Flex direction="column" mt="40px">
+              <Flex gap="24px">
+                {status[0] === "current" ? <BasicInfoSummary /> : null}
+                {status[1] === "current" ? <SpecialRequest /> : null}
+                {status[2] === "current" ? <PaymentMethod /> : null}
+                <PackageSummary />
+              </Flex>
+
+              <Flex
+                w="740px"
+                p="40px"
+                bg="white"
+                justify="space-between"
+                border="1px solid"
+                borderTop="none"
+                borderColor="gray.300"
+                borderBottomRadius="4px"
+              >
+                {status[0] === "current" ? (
+                  <Button variant="ghost" isDisabled>
+                    Back
+                  </Button>
+                ) : (
+                  <Button variant="ghost" onClick={backStatus}>
+                    Back
+                  </Button>
+                )}
+                {status[2] === "current" ? (
+                  <Button variant="primary" onClick={confirmBooking}>
+                    Confirm Booking
+                  </Button>
+                ) : (
+                  <Button variant="primary" onClick={nextStatus}>
+                    Next
+                  </Button>
+                )}
+              </Flex>
             </Flex>
           </Flex>
-        </Flex>
-        {/* <ThankForBooking /> */}
+        )}
       </Flex>
     </Flex>
   );
