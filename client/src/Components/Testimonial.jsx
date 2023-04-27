@@ -25,10 +25,10 @@ function Testimonial() {
             spaceBetween={30}
             centeredSlides={true}
             loop={true}
-            /*  autoplay={{
+            autoplay={{
               delay: 8000,
               disableOnInteraction: false,
-            }} */
+            }}
             pagination={{
               clickable: true,
             }}
@@ -39,39 +39,42 @@ function Testimonial() {
             }}
             modules={[Autoplay, Pagination, Navigation]}
           >
-            <SwiperSlide>
-              <Flex justify="center">
-                <Flex
-                  direction="column"
-                  align="center"
-                  justify="space-between"
-                  gap="32px"
-                >
-                  <Text
-                    w="840px"
-                    h="188px"
-                    textStyle="h5"
-                    color="green.700"
-                    textAlign="center"
-                  >
-                    “lorem ipsum dolor sit amet minim mollit non deserunt
-                    ullamco est sit aliqua dolor do amet sint, velit official
-                    consequat duis enim velit mollit, exercitation minim amet
-                    consequat sunt.”
-                  </Text>
-                  <Flex p="4px" gap="16px" w="fit-content" h="fit-content">
-                    <Image
-                      boxSize="32px"
-                      src="/HomePage/avatar-testimonial.svg"
-                    />
-                    <Text textStyle="b1" color="gray.700">
-                      Katherine, Company®
-                    </Text>
+            {[1, 2, 3].map((id) => {
+              return (
+                <SwiperSlide key={id}>
+                  <Flex justify="center">
+                    <Flex
+                      direction="column"
+                      align="center"
+                      justify="space-between"
+                      gap="32px"
+                    >
+                      <Text
+                        w="840px"
+                        h="188px"
+                        textStyle="h5"
+                        color="green.700"
+                        textAlign="center"
+                      >
+                        “lorem ipsum dolor sit amet minim mollit non deserunt
+                        ullamco est sit aliqua dolor do amet sint, velit
+                        official consequat duis enim velit mollit, exercitation
+                        minim amet consequat sunt.”
+                      </Text>
+                      <Flex p="4px" gap="16px" w="fit-content" h="fit-content">
+                        <Image
+                          boxSize="32px"
+                          src="/HomePage/avatar-testimonial.svg"
+                        />
+                        <Text textStyle="b1" color="gray.700">
+                          Katherine, Company®
+                        </Text>
+                      </Flex>
+                    </Flex>
                   </Flex>
-                </Flex>
-              </Flex>
-            </SwiperSlide>
-            <SwiperSlide>sadf</SwiperSlide>
+                </SwiperSlide>
+              );
+            })}
             <Flex>
               <Image
                 top="23px"
