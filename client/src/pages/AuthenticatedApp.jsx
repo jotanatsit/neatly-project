@@ -24,7 +24,7 @@ function AuthenticatedApp() {
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/cancel" element={<CancelPage />} />
           <Route path="/changedate" element={<ChangeDatePage />} />
-        <Route path="*" element={<HomePage />} />
+          <Route path="*" element={<HomePage />} />
         </Routes>
       </BookingProvider>
     </div>

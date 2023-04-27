@@ -16,7 +16,8 @@ import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
+import Footer from "../Components/Footer";
 import { useAuth } from "../contexts/authentication";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
@@ -62,7 +63,6 @@ const BookingPage = () => {
       console.log(error);
     }
   }
-  
 
   useEffect(() => {
     getRoomData();
@@ -272,9 +272,8 @@ const BookingPage = () => {
         flexDirection="column"
         alignItems="center"
         bg="bg"
-       
       >
-        {roomData.map((item,index) => {
+        {roomData.map((item, index) => {
           return (
             <SearchRooms
               key={index}
