@@ -11,8 +11,10 @@ searchRouter.get("/", async (req, res) => {
   try {
     // get booking data // assume: amount_guests = 2
     const table1 = await pool.query(
-      `select booking.room_id, booking.check_in_date, booking.check_out_date, rooms.room_type_id ,rooms_type.amount_person
+      `select booking.room_id, booking_details.check_in_date, booking_details.check_out_date, rooms.room_type_id ,rooms_type.amount_person
         from booking
+        inner join booking_details
+        ON booking_details.booking_detail_id = booking.booking_detail_id
         inner join rooms
         ON booking.room_id = rooms.room_id
         inner join rooms_type
@@ -22,7 +24,7 @@ searchRouter.get("/", async (req, res) => {
     );
 
     // Unavailable rooms at check_date - array - [ 5, 10 ]
-    const unavailableRooms = table1.rows
+    const unAvailableRooms = table1.rows
       .filter((row) => {
         return (
           check_in_date < row.check_out_date &&
@@ -44,13 +46,13 @@ searchRouter.get("/", async (req, res) => {
     const allRooms = table2.rows.map((room) => room.room_id);
 
     // Available rooms at check_date - array - [ 6, 7, 8, 9, 11, 12, 17, 18, 19, 20 ]
-    const availableRoom = allRooms.filter(
-      (room) => !unavailableRooms.includes(room)
+    const availableRooms = allRooms.filter(
+      (room) => !unAvailableRooms.includes(room)
     );
 
     // Turn available room_id to room_type_id - array - [ 2, 2, 2, 3, 3, 3, 5, 5, 6, 6 ]
     const availableRoomType = table2.rows
-      .filter((room) => availableRoom.includes(room.room_id))
+      .filter((room) => availableRooms.includes(room.room_id))
       .map((room) => room.room_type_id);
 
     // Count rooms reference room_type_id - array - [ [ 2, 3 ], [ 3, 3 ], [ 5, 2 ], [ 6, 2 ] ]
@@ -78,12 +80,12 @@ searchRouter.get("/", async (req, res) => {
         [roomsTypeForBooking[i][0]]
       );
 
-      results.rows[i] = {
-        ...results.rows[i],
+      results.rows[0] = {
+        ...results.rows[0],
         available_room: roomsTypeForBooking[i][1],
       };
 
-      roomsTypeData.push(results.rows);
+      roomsTypeData.push(results.rows[0]);
     }
 
     return res.status(200).json({ data: roomsTypeData });
