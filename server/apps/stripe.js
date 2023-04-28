@@ -12,7 +12,7 @@ const paymentRouter = Router();
 paymentRouter.post("/create-payment-intent", protect, async (req, res) => {
   try {
     const data = req.body;
-    
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount: data.total_price_per_room * 100,
       currency: "thb",
