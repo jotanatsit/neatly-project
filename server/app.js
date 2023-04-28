@@ -22,7 +22,6 @@ async function init() {
   const port = 4000;
 
   app.use(cors());
-
   app.use(
     express.json({
       verify: function (req, res, buf) {
