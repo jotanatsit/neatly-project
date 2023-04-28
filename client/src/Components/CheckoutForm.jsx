@@ -2,6 +2,8 @@ import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Flex, Text, Button } from "@chakra-ui/react";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -23,7 +25,7 @@ export default function CheckoutForm() {
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/completion`,
+        return_url: `${window.location.origin}/succeed`,
       },
       //   redirect: "if_required",
     });
@@ -48,12 +50,36 @@ export default function CheckoutForm() {
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
-      <button disabled={isProcessing || !stripe || !elements} id="submit">
+      {/* <button disabled={isProcessing || !stripe || !elements} id="submit">
         <span id="button-text">
-          {isProcessing ? "Processing ... " : "Pay now"}
+          {isProcessing ? "Processing ... " : "Confirm Booking"}
         </span>
-      </button>
+      </button> */}
       {/* Show any error or success messages */}
+      {/* {message && <div id="payment-message">{message}</div>} */}
+      <Flex
+        w="740px"
+        p="40px"
+        bg="white"
+        justify="space-between"
+        border="1px solid"
+        borderTop="none"
+        borderColor="gray.300"
+        borderBottomRadius="4px"
+      >
+        <Button variant="ghost">Back</Button>
+
+        <Button
+          disabled={isProcessing || !stripe || !elements}
+          type="submit"
+          id="submit"
+          variant="primary"
+        >
+          <span id="button-text">
+            {isProcessing ? "Processing ... " : "Confirm Booking"}
+          </span>
+        </Button>
+      </Flex>
       {message && <div id="payment-message">{message}</div>}
     </form>
   );

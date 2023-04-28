@@ -5,14 +5,7 @@ import { Link } from "react-router-dom";
 
 const CancelPage = () => {
   return (
-    <Flex
-      Flex
-      flexDirection="column"
-      w="1440px"
-      h="1028px"
-      m="auto"
-      bg="bg"
-    >
+    <Flex Flex flexDirection="column" w="1440px" h="1028px" m="auto" bg="bg">
       <Nav_user />
       <Flex flexDirection="column" w="1440px" h="1028px" mt={20}>
         <Flex

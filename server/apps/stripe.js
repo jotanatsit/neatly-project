@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { pool } from "../utils/db.js";
 import Stripe from "stripe";
-// import { protect } from "../middleware/protect.js";
+import { protect } from "../middleware/protect.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -9,7 +9,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 const paymentRouter = Router();
 
-// paymentRouter.use(protect);
+paymentRouter.use(protect);
 
 paymentRouter.post("/create-payment-intent", async (req, res) => {
   try {

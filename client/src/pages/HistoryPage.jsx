@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Nav_user from "../Components/Nav_user";
-import Footer from "../components/Footer";
+import Footer from "../Components/Footer";
 import {
   Button,
   Flex,

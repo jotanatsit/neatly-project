@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { pool } from "../utils/db.js";
+import { protect } from "../middleware/protect.js";
 
 const bookingRouter = Router();
+
+bookingRouter.use(protect);
 
 bookingRouter.post("/", async (req, res) => {
   const room_type_id = req.body.room_type_id;
