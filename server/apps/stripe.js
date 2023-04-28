@@ -13,12 +13,16 @@ const paymentRouter = Router();
 
 paymentRouter.post("/create-payment-intent", async (req, res) => {
   try {
-    const { paymentMethodType, currency } = req.body;
+    const data = req.body;
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1999,
-      currency: currency,
-      payment_method_types: [paymentMethodType],
+      amount: data.price * 100,
+      currency: data.currency,
+      metadata: data,
+      automatic_payment_methods: {
+        enabled: true,
+      },
     });
+
     return res.json({ clientSecret: paymentIntent.client_secret });
   } catch (err) {
     res.status(400).json({ error: { message: err.message } });
@@ -68,6 +72,8 @@ paymentRouter.post("/webhook", async (req, res) => {
     // Funds have been captured
     // Fulfill any orders, e-mail receipts, etc
     // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
+    const checkOutData = data.object.metadata;
+    console.log(checkOutData);
     console.log("💰 Payment captured!");
   } else if (eventType === "payment_intent.payment_failed") {
     console.log("❌ Payment failed.");
