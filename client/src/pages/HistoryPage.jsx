@@ -496,7 +496,7 @@ const HistoryPage = () => {
                               {roomDetail &&
                                 roomDetail.room_amenity &&
                                 roomDetail.room_amenity.map((item, index) => {
-                                  return <li key={index}>{item}</li>;
+                                  return <li key={index}>{item.split("_").join(" ")}</li>;
                                 })}
                             </ul>
                           </Box>
