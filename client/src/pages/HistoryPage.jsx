@@ -91,7 +91,7 @@ const HistoryPage = () => {
   return (
     <Flex flexDirection="column" w="1440px" m="auto" bg="bg">
       <Nav_user />
-      <Flex flexDirection="column" w="1440px" h="1500px" overflow="auto">
+      <Flex flexDirection="column" w="1440px" h="auto">
         <Text textStyle="h2" color="black" ml="150px" mt="50px">
           Booking History
         </Text>
