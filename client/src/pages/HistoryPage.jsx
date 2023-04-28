@@ -221,31 +221,33 @@ const HistoryPage = () => {
                         </AccordionPanel>
 
                         {item.booking_request.map((item, index) => {
-                          return (
-                            <AccordionPanel pb={4} key={index}>
-                              <Box
-                                display="flex"
-                                justifyContent="space-between"
-                              >
-                                <Text
-                                  textStyle="b1"
-                                  fontWeight="400"
-                                  color="gray.700"
+                          if (typeof item[1] === "number") {
+                            return (
+                              <AccordionPanel pb={4} key={index}>
+                                <Box
+                                  display="flex"
+                                  justifyContent="space-between"
                                 >
-                                  {item[0].split("_").join(" ")}
-                                </Text>
-                                <Text
-                                  textStyle="b1"
-                                  fontWeight="600"
-                                  color="gray.900"
-                                >
-                                  {item[1].toLocaleString("th-TH", {
-                                    minimumFractionDigits: 2,
-                                  })}
-                                </Text>
-                              </Box>
-                            </AccordionPanel>
-                          );
+                                  <Text
+                                    textStyle="b1"
+                                    fontWeight="400"
+                                    color="gray.700"
+                                  >
+                                    {item[0].split("_").join(" ")}
+                                  </Text>
+                                  <Text
+                                    textStyle="b1"
+                                    fontWeight="600"
+                                    color="gray.900"
+                                  >
+                                    {item[1].toLocaleString("th-TH", {
+                                      minimumFractionDigits: 2,
+                                    })}
+                                  </Text>
+                                </Box>
+                              </AccordionPanel>
+                            );
+                          }
                         })}
 
                         <AccordionPanel pb={4}>
@@ -271,10 +273,12 @@ const HistoryPage = () => {
                               THB{" "}
                               {(
                                 item.price +
-                                item.booking_request.reduce(
-                                  (sum, current) => sum + current[1],
-                                  0
-                                )
+                                item.booking_request.reduce((sum, current) => {
+                                  if (typeof current[1] === "number") {
+                                    return sum + current[1];
+                                  }
+                                  return sum;
+                                }, 0)
                               ).toLocaleString("th-TH", {
                                 minimumFractionDigits: 2,
                               })}
