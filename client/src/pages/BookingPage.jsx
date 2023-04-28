@@ -54,6 +54,10 @@ const BookingPage = () => {
       console.log(error);
     }
   }
+  console.log(roomData);
+  console.log(checkInDate);
+  console.log(checkOutDate);
+  console.log(guests);
 
   useEffect(() => {
     getRoomData();
@@ -250,6 +254,8 @@ const BookingPage = () => {
         {roomData.map((item) => {
           return (
             <SearchRooms
+              room_type_id={item.room_type_id}
+              // index={index}
               room={item}
               rooms={rooms}
               checkInDate={checkInDate}

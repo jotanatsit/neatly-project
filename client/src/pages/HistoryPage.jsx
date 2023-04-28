@@ -46,7 +46,6 @@ const HistoryPage = () => {
   const cancelRef = React.useRef();
   const navigate = useNavigate();
   const userId = useAuth();
-
   const [roomData, setRoomData] = useState([]);
   const [roomDetail, setRoomDetail] = useState([]);
 
@@ -398,21 +397,19 @@ const HistoryPage = () => {
                             dynamicBullets: true,
                           }}
                         >
-                          {roomDetail &&
-                            roomDetail.room_picture &&
-                            roomDetail.room_picture.map((picture, index) => {
-                              return (
-                                <SwiperSlide key={index}>
-                                  <Image
-                                    src={picture}
-                                    w="640px"
-                                    h="400px"
-                                    objectFit="cover"
-                                    borderRadius="10px"
-                                  ></Image>
-                                </SwiperSlide>
-                              );
-                            })}
+                          {roomDetail?.room_picture?.map((picture, index) => {
+                            return (
+                              <SwiperSlide key={index}>
+                                <Image
+                                  src={picture}
+                                  w="640px"
+                                  h="400px"
+                                  objectFit="cover"
+                                  borderRadius="10px"
+                                ></Image>
+                              </SwiperSlide>
+                            );
+                          })}
 
                           <Flex>
                             <Box>

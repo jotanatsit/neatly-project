@@ -68,7 +68,7 @@ function ProfilePage() {
         );
         console.log(response.data);
         alert(response.data.message);
-        navigate("/profile");
+        navigate("/");
       } catch (error) {
         console.log(error);
         alert(error.message);
@@ -333,6 +333,7 @@ function ProfilePage() {
                           color="orange.500"
                           fontSize={30}
                           textAlign="center"
+                          cursor="pointer"
                         >
                           +
                         </Text>

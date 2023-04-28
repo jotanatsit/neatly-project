@@ -4,8 +4,12 @@ import { pool } from "../utils/db.js";
 const searchRouter = Router();
 
 searchRouter.get("/", async (req, res) => {
-  const check_in_date = req.query.check_in_date;
-  const check_out_date = req.query.check_out_date;
+  const check_in_date = new Date(req.query.check_in_date)
+    .toISOString()
+    .slice(0, 10);
+  const check_out_date = new Date(req.query.check_out_date)
+    .toISOString()
+    .slice(0, 10);
   const amount_guests = req.query.amount_guests;
 
   try {

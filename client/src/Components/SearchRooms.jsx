@@ -21,16 +21,18 @@ import "swiper/swiper-bundle.min.css";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function SearchRooms(props) {
   const auth = useAuth();
   const rooms = props.rooms;
   const room = props.room;
+  const room_type_id = props.room_type_id;
+  // const index = props.index;
   const startDate = props.checkInDate;
   const endDate = props.checkOutDate;
-
   const navigate = useNavigate();
-
+  const [roomDetail, setRoomDetail] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpen2,
@@ -61,13 +63,22 @@ function SearchRooms(props) {
       navigate("*");
     }
   }
-
-  console.log(rooms);
-  console.log(room.price);
-  console.log(room.checkInDate);
-  console.log(room.checkOutDate);
-  console.log(room.amount_person);
-
+  console.log(room);
+  async function getRoomdetail(room_type_id) {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/rooms/room-type/${room_type_id}`
+      );
+      {
+        console.log(response.data.data);
+      }
+      setRoomDetail(response.data.data);
+      onOpen2(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  console.log(room_type_id);
   return (
     <Flex
       width="1120px"
@@ -191,7 +202,9 @@ function SearchRooms(props) {
             </Flex>
             <Flex justifyContent="flex-end">
               <Button
-                onClick={onOpen2}
+                onClick={(room_type_id) => {
+                  getRoomdetail(room_type_id);
+                }}
                 bg="none"
                 color="orange.600"
                 p="16px 32px"
@@ -299,11 +312,11 @@ function SearchRooms(props) {
                     dynamicBullets: true,
                   }}
                 >
-                  {room.room_picture.map((room, index) => {
+                  {roomDetail?.room_picture?.map((picture, index) => {
                     return (
                       <SwiperSlide key={index}>
                         <Image
-                          src={room}
+                          src={picture}
                           w="640px"
                           h="400px"
                           objectFit="cover"
@@ -312,6 +325,7 @@ function SearchRooms(props) {
                       </SwiperSlide>
                     );
                   })}
+
                   <Flex>
                     <Box>
                       <Image
@@ -348,23 +362,24 @@ function SearchRooms(props) {
                   <Box display="flex" flexDirection="row">
                     <Box pr={2}>
                       <Text textStyle="b1" color="gray.700" paddingRight="5px">
-                        {room.amount_person} Person
+                        {roomDetail?.amount_person} Person
                       </Text>
                     </Box>
                     <Box borderX="1px solid" borderColor="gray.500" px={2}>
                       <Text textStyle="b1" color="gray.700" paddingRight="5px">
-                        {room.bed_type}
+                        {roomDetail?.bed_type}
                       </Text>
                     </Box>
                     <Box pl={2}>
                       <Text textStyle="b1" color="gray.700" paddingRight="5px">
-                        {room.room_size} sqm
+                        {roomDetail?.room_size} sqm
                       </Text>
                     </Box>
                   </Box>
                 </Box>
+
                 <Text mt={3} textStyle="b1" color="gray.700">
-                  {room.description}
+                  {roomDetail?.description}
                 </Text>
               </Box>
               <Flex w="640px" flexDirection="column" mt={5}>
@@ -372,24 +387,16 @@ function SearchRooms(props) {
                   Room Amenities
                 </Text>
                 <Flex w="640px" mt={3} ml={5}>
-                  <Box w="50%">
+                  <Box w="47%">
                     <ul>
-                      <li>Safe in Room</li>
-                      <li>Air Conditioning</li>
-                      <li>High speed internet connection</li>
-                      <li>Hairdryer</li>
-                      <li>Shower</li>
-                      <li>Bathroom amenities</li>
-                      <li>Lamp</li>
+                      {roomDetail &&
+                        roomDetail.room_amenity &&
+                        roomDetail.room_amenity.map((item, index) => {
+                          return (
+                            <li key={index}>{item.split("_").join(" ")}</li>
+                          );
+                        })}
                     </ul>
-                  </Box>
-                  <Box w="50%">
-                    <li>Minibar</li>
-                    <li>Telephone</li>
-                    <li>Ironing board</li>
-                    <li>A floor only accessible via a guest room key</li>
-                    <li>Alarm clock</li>
-                    <li>Bathrobe</li>
                   </Box>
                 </Flex>
               </Flex>

@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { format } from "date-fns";
+import { format, addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -29,7 +29,7 @@ const Booking_box = () => {
   const [date, setDate] = useState([
     {
       startDate: new Date(),
-      endDate: new Date(),
+      endDate: addDays(new Date(), 1),
       key: "selection",
     },
   ]);
@@ -133,6 +133,7 @@ const Booking_box = () => {
                 moveRangeOnFirstSelection={false}
                 ranges={date}
                 style={{ width: "500px" }}
+                minDate={addDays(new Date(), 0)}
               />
             </MenuList>
           </Menu>
