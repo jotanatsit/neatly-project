@@ -45,13 +45,13 @@ function SearchRooms(props) {
 
     if (auth.isAuthenticated) {
       const bookingData = {
-        roomTypeId: room.room_type_id,
-        roomType: room.room_type_name,
-        checkInDate: startDate,
-        checkOutDate: endDate,
-        amountRoom: rooms,
-        amountGuest: room.amount_person,
-        totalPrice: netPrice * rooms,
+        room_type_id: room.room_type_id,
+        room_type: room.room_type_name,
+        check_in_date: startDate,
+        check_out_date: endDate,
+        amount_rooms: rooms,
+        amount_guests: room.amount_person,
+        total_price_per_room: netPrice,
       };
 
       // Navigate to /booking-summary and pass bookingData as state

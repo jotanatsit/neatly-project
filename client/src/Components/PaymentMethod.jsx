@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/authentication";
 import axios from "axios";
+import { useBooking } from "../contexts/booking";
 
 function PaymentCard(props) {
   return (
@@ -30,6 +31,7 @@ function PaymentCard(props) {
 function PaymentMethod() {
   const [userData, setUserData] = useState({});
   const userId = useAuth();
+  let bookingData = useBooking();
 
   async function getUserData() {
     try {
@@ -41,6 +43,13 @@ function PaymentMethod() {
       console.log(error);
     }
   }
+
+  bookingData = {
+    user_id: userId.UserIdFromLocalStorage,
+    ...bookingData,
+    ...userData,
+  };
+  console.log(bookingData);
 
   useEffect(() => {
     getUserData();

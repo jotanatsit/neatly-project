@@ -15,9 +15,9 @@ bookingRouter.post("/", async (req, res) => {
     total_price_per_room: req.body.total_price_per_room,
     payment_type: req.body.payment_type,
     user_credit_card_id: req.body.user_credit_card_id,
-    booking_status: req.body.booking_status,
-    booking_date: req.body.booking_date,
-    cancellation_date: req.body.cancellation_date,
+    booking_status: "Complete",
+    booking_date: new Date(),
+    cancellation_date: null,
   };
 
   const booking_requests = {
