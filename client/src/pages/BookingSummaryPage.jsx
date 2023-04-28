@@ -7,6 +7,7 @@ import SpecialRequest from "../Components/SpecialRequest";
 import PaymentMethod from "../Components/PaymentMethod";
 import ThankForBooking from "../Components/ThankForBooking";
 import PackageSummary from "../Components/PackageSummary.jsx";
+import Payment from "../Components/Payment";
 
 function BookingSummary() {
   const [status, setStatus] = useState(["current", "none", "none"]);
@@ -70,7 +71,7 @@ function BookingSummary() {
               <Flex gap="24px">
                 {status[0] === "current" ? <BasicInfoSummary /> : null}
                 {status[1] === "current" ? <SpecialRequest /> : null}
-                {status[2] === "current" ? <PaymentMethod /> : null}
+                {status[2] === "current" ? <Payment /> : null}
                 <PackageSummary />
               </Flex>
 

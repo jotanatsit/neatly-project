@@ -3,6 +3,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
+import { Flex, Text, Button } from "@chakra-ui/react";
 
 const formdata = {
   roomId: "2",
@@ -38,7 +39,6 @@ const Payment = (props) => {
 
   return (
     <>
-      <h1>Payment</h1>
       {stripePromise && clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <CheckoutForm />

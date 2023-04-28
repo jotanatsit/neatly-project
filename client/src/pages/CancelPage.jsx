@@ -34,7 +34,7 @@ const CancelPage = () => {
   }, []);
 
   return (
-    <Flex flexDirection="column" w="1440px" h="1028px" m="auto" bg="bg">
+    <Flex Flex flexDirection="column" w="1440px" h="1028px" m="auto" bg="bg">
       <Nav_user />
       <Flex flexDirection="column" w="1440px" h="1028px" mt={20}>
         <Flex
