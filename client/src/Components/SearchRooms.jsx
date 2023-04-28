@@ -113,7 +113,8 @@ function SearchRooms(props) {
           >
             <Flex flexDirection="column">
               <Text textStyle="h4" color="black">
-                {room.room_type_name}
+                {room.room_type_name[0].toUpperCase() +
+                  room.room_type_name.slice(1)}
               </Text>
               <Flex flexDirection="row" mt="10px">
                 <Box pr={2}>
@@ -123,7 +124,7 @@ function SearchRooms(props) {
                 </Box>
                 <Box borderX="1px solid" borderColor="gray.500" px={2}>
                   <Text textStyle="b1" color="gray.700" paddingRight="5px">
-                    {room.bed_type}
+                    {room.bed_type[0].toUpperCase() + room.bed_type.slice(1)}
                   </Text>
                 </Box>
                 <Box pl={2}>
@@ -145,16 +146,25 @@ function SearchRooms(props) {
               {room.promotion_price === null ? (
                 <>
                   <Text textStyle="h5" color="black">
-                    THB {room.price}
+                    THB{" "}
+                    {room.price.toLocaleString("th-TH", {
+                      minimumFractionDigits: 2,
+                    })}
                   </Text>
                 </>
               ) : (
                 <>
                   <Text as="del" textStyle="b1" color="gray.700">
-                    THB {room.price}
+                    THB{" "}
+                    {room.price.toLocaleString("th-TH", {
+                      minimumFractionDigits: 2,
+                    })}
                   </Text>
                   <Text textStyle="h5" color="black">
-                    THB {room.promotion_price}
+                    THB{" "}
+                    {room.promotion_price.toLocaleString("th-TH", {
+                      minimumFractionDigits: 2,
+                    })}
                   </Text>
                 </>
               )}

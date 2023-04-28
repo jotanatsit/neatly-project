@@ -95,11 +95,12 @@ const RoomDetailPage = () => {
       {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
       <Flex mt="80px" justify="center">
         <Swiper
+          spaceBetween={25}
           slidesPerView={1.5}
-          spaceBetween={24}
+          grabCursor={true}
           centeredSlides={true}
           initialSlide={0}
-          rewind={true}
+          loop={true}
           navigation={{
             nextEl: ".button-next",
             prevEl: ".button-prev",
