@@ -47,6 +47,7 @@ function SearchRooms(props) {
 
     if (auth.isAuthenticated) {
       const bookingData = {
+        user_id: auth.UserIdFromLocalStorage,
         room_type_id: room.room_type_id,
         room_type: room.room_type_name,
         check_in_date: startDate,
@@ -57,7 +58,7 @@ function SearchRooms(props) {
       };
 
       // Navigate to /booking-summary and pass bookingData as state
-      navigate("/booking-summary", { state: { bookingData: bookingData } });
+      navigate("/booking-summary", { state: bookingData });
     } else {
       // Navigate to login page
       navigate("*");

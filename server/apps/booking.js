@@ -4,20 +4,24 @@ import { protect } from "../middleware/protect.js";
 
 const bookingRouter = Router();
 
-bookingRouter.use(protect);
+// bookingRouter.use(protect);
+
+// ------------------------------------------- create booking -------------------------------------------
 
 bookingRouter.post("/", async (req, res) => {
   const room_type_id = req.body.room_type_id;
   const user_id = req.body.user_id;
 
   const booking_details = {
-    check_in_date: req.body.check_in_date,
-    check_out_date: req.body.check_out_date,
+    check_in_date: new Date(req.body.check_in_date).toISOString().slice(0, 10),
+    check_out_date: new Date(req.body.check_out_date)
+      .toISOString()
+      .slice(0, 10),
     amount_guests: req.body.amount_guests,
     amount_rooms: req.body.amount_rooms,
     total_price_per_room: req.body.total_price_per_room,
-    payment_type: req.body.payment_type,
-    user_credit_card_id: req.body.user_credit_card_id,
+    payment_type: "credit card", //ข้อมูลmock ถ้าไม่ได้ใช้ เดี๋ยวมาลบออก
+    user_credit_card_id: user_id, //ข้อมูลmock ถ้าไม่ได้ใช้ เดี๋ยวมาลบออก
     booking_status: "Complete",
     booking_date: new Date(),
     cancellation_date: null,
@@ -39,7 +43,7 @@ bookingRouter.post("/", async (req, res) => {
   };
 
   try {
-    // get booking data
+    // get all booking data in database where room_type_id
     const table1 = await pool.query(
       `select booking.room_id, booking_details.check_in_date, booking_details.check_out_date, rooms.room_type_id
           from booking_details
@@ -51,7 +55,7 @@ bookingRouter.post("/", async (req, res) => {
       [room_type_id]
     );
 
-    // Unavailable rooms for booking
+    // Unavailable rooms for booking - array - [8]
     const unAvailableRooms = table1.rows
       .filter((row) => {
         return (
@@ -61,27 +65,25 @@ bookingRouter.post("/", async (req, res) => {
       })
       .map((row) => row.room_id);
 
+    // get all rooms data in database where room_type_id
     const table2 = await pool.query(
       `select * from rooms where room_type_id=$1`,
       [room_type_id]
     );
 
-    // All rooms in the same room type
+    // All rooms in the same room type - array - [5, 6, 7, 8]
     const allRooms = table2.rows.map((room) => room.room_id);
 
-    // Available rooms for booking
+    // Available rooms for booking - array - [5, 6, 7]
     const availableRooms = allRooms.filter(
       (room) => !unAvailableRooms.includes(room)
     );
 
-    console.log(table2.rows); //
-    console.log(availableRooms); //
-
     // create booking_details data
     await pool.query(
-      `insert into booking_details (check_in_date, check_out_date, amount_guests, amount_rooms, total_price_per_room, 
-        payment_type, user_credit_card_id, booking_status, booking_date, cancellation_date)
-          values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      `insert into booking_details (check_in_date, check_out_date, amount_guests, amount_rooms, total_price_per_room,
+          payment_type, user_credit_card_id, booking_status, booking_date, cancellation_date)
+            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
         booking_details.check_in_date,
         booking_details.check_out_date,
@@ -106,7 +108,7 @@ bookingRouter.post("/", async (req, res) => {
     for (let i = 0; i < booking_details.amount_rooms; i++) {
       await pool.query(
         `insert into booking (user_id, room_id, booking_detail_id)
-              values ($1, $2, $3)`,
+                values ($1, $2, $3)`,
         [
           user_id,
           availableRooms[i],
@@ -118,9 +120,9 @@ bookingRouter.post("/", async (req, res) => {
     // create booking_requests data
     await pool.query(
       `insert into booking_requests (booking_detail_id, early_check_in, late_check_out, non_smoking_room,
-          a_room_on_the_high_floor, a_quiet_room, baby_cot, airport_transfer, extra_bed, extra_pillows,
-          phone_chargers_and_adapters, breakfast, additional_request)
-         values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+            a_room_on_the_high_floor, a_quiet_room, baby_cot, airport_transfer, extra_bed, extra_pillows,
+            phone_chargers_and_adapters, breakfast, additional_request)
+           values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
       [
         lastest_booking_detail.rows[0].booking_detail_id,
         booking_requests.early_check_in,
@@ -146,8 +148,10 @@ bookingRouter.post("/", async (req, res) => {
   });
 });
 
+// ------------------------------------------- get all user's booking -------------------------------------------
+
 bookingRouter.get("/:userId", async (req, res) => {
-  const userId = req.params.userId;
+  const user_id = Number(req.params.userId);
 
   const results = await pool.query(
     `SELECT 
@@ -172,7 +176,7 @@ bookingRouter.get("/:userId", async (req, res) => {
         r.room_id
       ORDER BY 
         bd.booking_detail_id DESC;`,
-    [userId]
+    [user_id]
   );
 
   const newArr = results.rows;
@@ -197,6 +201,7 @@ bookingRouter.get("/:userId", async (req, res) => {
     return booking_request;
   });
 
+  // Collect booking_request key-value pairs to Array of array - [[late_check_out, 0],[extra_bed, 500],[additional_request, "add something"], ...]
   const bookingRequest = temp.map((item) => {
     const arr = [];
     for (const key in item) {
@@ -207,31 +212,25 @@ bookingRouter.get("/:userId", async (req, res) => {
     return arr;
   });
 
-  const collectBookingDetailId = [];
-
+  // Object data that return to client
   for (let i = 0; i < newArr.length; i++) {
-    // Prevent sending duplicate booking_details
-    if (!collectBookingDetailId.includes(newArr[i].booking_detail_id)) {
-      collectBookingDetailId.push(newArr[i].booking_detail_id);
-
-      newResults.push({
-        room_type_id: newArr[i].room_type_id,
-        booking_detail_id: newArr[i].booking_detail_id,
-        room_type_name: newArr[i].room_type_name,
-        booking_date: newArr[i].booking_date,
-        cancellation_date: newArr[i].cancellation_date,
-        check_in_date: newArr[i].check_in_date,
-        check_out_date: newArr[i].check_out_date,
-        amount_guests: newArr[i].amount_guests,
-        amount_rooms: newArr[i].amount_rooms,
-        price: newArr[i].price,
-        promotion_price: newArr[i].promotion_price,
-        booking_request: bookingRequest[i],
-        payment_type: newArr[i].payment_type,
-        booking_status: newArr[i].booking_status,
-        room_picture: newArr[i].room_picture,
-      });
-    }
+    newResults.push({
+      booking_detail_id: newArr[i].booking_detail_id,
+      room_type_id: newArr[i].room_type_id,
+      room_type_name: newArr[i].room_type_name,
+      booking_date: newArr[i].booking_date,
+      cancellation_date: newArr[i].cancellation_date,
+      check_in_date: newArr[i].check_in_date,
+      check_out_date: newArr[i].check_out_date,
+      amount_guests: newArr[i].amount_guests,
+      amount_rooms: newArr[i].amount_rooms,
+      price: newArr[i].price,
+      promotion_price: newArr[i].promotion_price,
+      booking_request: bookingRequest[i],
+      payment_type: newArr[i].payment_type,
+      booking_status: newArr[i].booking_status,
+      room_picture: newArr[i].room_picture,
+    });
   }
 
   return res.json({
@@ -239,9 +238,11 @@ bookingRouter.get("/:userId", async (req, res) => {
   });
 });
 
+// ------------------------------------------- get one user's booking by id -------------------------------------------
+
 bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
-  const userId = req.params.userId;
-  const bookingDetailId = req.params.bookingDetailId;
+  const user_id = Number(req.params.userId);
+  const booking_detail_id = Number(req.params.bookingDetailId);
 
   const results = await pool.query(
     `SELECT 
@@ -264,7 +265,7 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
         br.booking_request_id,
         rt.room_type_id,
         r.room_id`,
-    [userId, bookingDetailId]
+    [user_id, booking_detail_id]
   );
 
   const newArr = results.rows[0];
@@ -285,15 +286,17 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
     additional_request: newArr.additional_request,
   };
 
+  // Sum value of key in booking_requests - return total price of booking_requests - number
   let totalRequestPrice = 0;
-
   for (const key in bookingRequest) {
     if (bookingRequest[key] !== null) {
       totalRequestPrice = totalRequestPrice + bookingRequest[key];
     }
   }
 
+  // Object data that return to client
   const newResults = {
+    booking_detail_id: newArr.booking_detail_id,
     room_type_id: newArr.room_type_id,
     room_type_name: newArr.room_type_name,
     booking_date: newArr.booking_date,
@@ -305,6 +308,7 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
     price: newArr.price,
     promotion_price: newArr.promotion_price,
     booking_request_price: totalRequestPrice,
+    payment_type: newArr.payment_type,
     booking_status: newArr.booking_status,
     room_picture: newArr.room_picture,
   };
@@ -314,8 +318,130 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
   });
 });
 
-bookingRouter.put("/:userId/:bookingDetailId", async (req, res) => {});
+// ------------------------------------------- update check_in & check_out date -------------------------------------------
 
-bookingRouter.delete("/:userId/:bookingDetailId", async (req, res) => {});
+bookingRouter.put("/:userId/:bookingDetailId", async (req, res) => {
+  const user_id = Number(req.params.userId);
+  const booking_detail_id = Number(req.params.bookingDetailId);
 
+  const booking_details = {
+    room_type_id: req.body.room_type_id,
+    amount_rooms: req.body.amount_rooms,
+    check_in_date: new Date(req.body.check_in_date).toISOString().slice(0, 10),
+    check_out_date: new Date(req.body.check_out_date)
+      .toISOString()
+      .slice(0, 10),
+  };
+
+  // get user data in database where booking_detail_id
+  const userData = await pool.query(
+    `select booking.booking_detail_id, booking.booking_id, booking.room_id
+          from booking_details
+          inner join booking
+          ON booking_details.booking_detail_id = booking.booking_detail_id
+          where booking.booking_detail_id=$1`,
+    [booking_detail_id]
+  );
+
+  const userData_booking_id = userData.rows.map((row) => row.booking_id);
+
+  // get all booking data in database where room_type_id
+  const table1 = await pool.query(
+    `select booking.room_id, booking_details.check_in_date, booking_details.check_out_date, rooms.room_type_id
+          from booking_details
+          inner join booking
+          ON booking_details.booking_detail_id = booking.booking_detail_id
+          inner join rooms
+          ON booking.room_id = rooms.room_id
+          where rooms.room_type_id=$1`,
+    [booking_details.room_type_id]
+  );
+
+  const bookingDetailData = table1.rows;
+
+  // Unavailable rooms for booking - array - [8]
+  const unAvailableRooms = bookingDetailData
+    .filter((row) => {
+      return (
+        booking_details.check_in_date < row.check_out_date &&
+        booking_details.check_out_date > row.check_in_date
+      );
+    })
+    .map((row) => row.room_id);
+
+  const table2 = await pool.query(`select * from rooms where room_type_id=$1`, [
+    booking_details.room_type_id,
+  ]);
+
+  // All rooms in the same room type - array - [5, 6, 7, 8]
+  const allRooms = table2.rows.map((room) => room.room_id);
+
+  // Available rooms for booking - array - [5, 6, 7]
+  const availableRooms = allRooms.filter(
+    (room) => !unAvailableRooms.includes(room)
+  );
+
+  if (booking_details.amount_rooms > availableRooms.length) {
+    return res.json({ message: `The booking date has no available rooms.` });
+  }
+
+  // update check_in_date, check_out_date in booking_details
+  await pool.query(
+    `update booking_details set check_in_date=$1, check_out_date=$2 where booking_detail_id=$3`,
+    [
+      booking_details.check_in_date,
+      booking_details.check_out_date,
+      booking_detail_id,
+    ]
+  );
+
+  // update room_id in booking
+  for (let i = 0; i < booking_details.amount_rooms; i++) {
+    await pool.query(`update booking set room_id=$1 where booking_id=$2`, [
+      availableRooms[i],
+      userData_booking_id[i],
+    ]);
+  }
+
+  return res.json({
+    message: `Booking has been updated successfully`,
+  });
+});
+
+// ------------------------------------------- delete - update cancellation_date -------------------------------------------
+
+bookingRouter.delete("/:userId/:bookingDetailId", async (req, res) => {
+  const user_id = Number(req.params.userId);
+  const booking_detail_id = Number(req.params.bookingDetailId);
+  const booking_status = "Cancel";
+  const cancellation_date = new Date();
+
+  const result = await pool.query(
+    `select * from booking_details
+    inner join booking
+    on booking_details.booking_detail_id = booking.booking_detail_id
+    where booking_details.booking_detail_id=$1`,
+    [booking_detail_id]
+  );
+
+  const bookingDetailData = result.rows[0];
+
+  if (
+    bookingDetailData.user_id !== user_id ||
+    bookingDetailData.booking_status === "Cancel"
+  ) {
+    return res.json({
+      message: `Booking not found.`,
+    });
+  }
+
+  await pool.query(
+    `update booking_details set booking_status=$1, cancellation_date=$2 where booking_detail_id=$3`,
+    [booking_status, cancellation_date, booking_detail_id]
+  );
+
+  return res.json({
+    message: `Booking has been cancelled.`,
+  });
+});
 export default bookingRouter;

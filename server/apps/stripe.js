@@ -9,9 +9,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 const paymentRouter = Router();
 
-paymentRouter.use(protect);
-
-paymentRouter.post("/create-payment-intent", async (req, res) => {
+paymentRouter.post("/create-payment-intent", protect, async (req, res) => {
   try {
     const data = req.body;
     const paymentIntent = await stripe.paymentIntents.create({

@@ -8,9 +8,10 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { useBooking } from "../contexts/booking";
+import { useEffect } from "react";
 
 function SpecialRequest() {
-  let bookingData = useBooking();
+  const { bookingData, addBookingData } = useBooking();
 
   const formik = useFormik({
     initialValues: {
@@ -29,8 +30,12 @@ function SpecialRequest() {
     },
   });
 
-  bookingData = { ...bookingData, ...formik.values };
-  console.log(bookingData);
+  useEffect(() => {
+    addBookingData({
+      ...bookingData,
+      ...formik.values,
+    });
+  }, [formik.values]);
 
   return (
     <Flex gap="24px">

@@ -4,14 +4,11 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/authentication.jsx";
 import axios from "axios";
 import React from "react";
-import { useBooking } from "../contexts/booking";
 
 function BasicInfoSummary() {
-  const bookingData = useBooking();
-  console.log(bookingData);
-
   const [userData, setUserData] = useState({});
   const userId = useAuth();
+
   async function getUserData() {
     try {
       const response = await axios.get(
