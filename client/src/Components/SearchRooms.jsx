@@ -79,6 +79,7 @@ function SearchRooms(props) {
     }
   }
   console.log(room_type_id);
+
   return (
     <Flex
       width="1120px"

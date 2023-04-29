@@ -19,7 +19,8 @@ import { Navigation, Pagination } from "swiper";
 import Footer from "../components/Footer";
 import { useAuth } from "../contexts/authentication";
 import ExploreRoomButton from "../Components/ExploreRoomButton";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { addDays } from "date-fns";
 
 const roomType = [
   {
@@ -58,6 +59,7 @@ const RoomDetailPage = () => {
   const auth = useAuth();
   const params = useParams();
   const [room, setRoom] = useState({});
+  const navigate = useNavigate();
 
   const getRoomById = async () => {
     try {
@@ -69,6 +71,7 @@ const RoomDetailPage = () => {
       console.log(error);
     }
   };
+  console.log(room);
   const othersRoom = [];
   let id = Number(params.roomTypeId);
 
@@ -89,6 +92,20 @@ const RoomDetailPage = () => {
   useEffect(() => {
     getRoomById();
   }, [params.roomTypeId]);
+
+  // Set ค่า State สำหรับกดปุ่ม Book Now ให้ navigate ไปหน้า booking default
+  const [rooms] = useState(1);
+  const [guests] = useState(2);
+  const [date] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 1),
+      key: "selection",
+    },
+  ]);
+  function handleSubmit() {
+    navigate("/booking", { state: { date, rooms, guests } });
+  }
 
   return (
     <Flex flexDirection="column" w="1440px" bgColor="bg" m="auto">
@@ -196,21 +213,36 @@ const RoomDetailPage = () => {
                 <Flex flexDirection="column" w="260px" h="58px" textAlign="end">
                   {room.promotion_price === null ? (
                     <Text textStyle="h5" color="gray.900">
-                      THB {room.price}
+                      THB{" "}
+                      {room.price?.toLocaleString("th-TH", {
+                        minimumFractionDigits: 2,
+                      })}
                     </Text>
                   ) : (
                     <Box>
                       <Text textStyle="b1" as="del" color="gray.700">
-                        THB {room.price}
+                        THB{" "}
+                        {room.price?.toLocaleString("th-TH", {
+                          minimumFractionDigits: 2,
+                        })}
                       </Text>
                       <Text textStyle="h5" color="gray.900">
-                        THB {room.promotion_price}
+                        THB{" "}
+                        {room.promotion_price?.toLocaleString("th-TH", {
+                          minimumFractionDigits: 2,
+                        })}
                       </Text>
                     </Box>
                   )}
                 </Flex>
 
-                <Button variant="primary" w="fit-content" alignSelf="end">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  w="fit-content"
+                  alignSelf="end"
+                  onClick={handleSubmit}
+                >
                   Book Now
                 </Button>
               </Flex>

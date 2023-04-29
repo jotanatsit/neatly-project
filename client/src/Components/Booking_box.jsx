@@ -61,8 +61,6 @@ const Booking_box = () => {
     navigate("/booking", { state: { date, rooms, guests } });
   };
 
-  const currentDate = new Date();
-
   return (
     <form onSubmit={handleSubmit}>
       <Flex
