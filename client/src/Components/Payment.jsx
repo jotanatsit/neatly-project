@@ -4,6 +4,7 @@ import axios from "axios";
 import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 import { Flex, Text, Button } from "@chakra-ui/react";
+import { useBooking } from "../contexts/booking";
 
 const formdata = {
   roomId: "2",
@@ -15,6 +16,8 @@ const formdata = {
 const Payment = (props) => {
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
+  const { bookingData } = useBooking(); // ข้อมูลเป็น object ที่จะถูกส่งไป database
+  // console.log(bookingData);
 
   const syncStripePromise = async () => {
     const result = await axios.get("http://localhost:4000/payment/config");

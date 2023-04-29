@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Flex, Text, Button } from "@chakra-ui/react";
 import Nav_user from "../Components/Nav_user";
 import StepPayment from "../Components/StepPayment";
@@ -8,10 +8,15 @@ import PaymentMethod from "../Components/PaymentMethod";
 import ThankForBooking from "../Components/ThankForBooking";
 import PackageSummary from "../Components/PackageSummary.jsx";
 import Payment from "../Components/Payment";
+import { useBooking } from "../contexts/booking";
 
 function BookingSummary() {
   const [status, setStatus] = useState(["current", "none", "none"]);
   const [confirm, setConfirm] = useState(false);
+
+  // useBooking() เป็น context ที่เกี่ยวกับการเก็บข้อมูลการ Booking
+  const { resetBookingData } = useBooking();
+  useEffect(() => resetBookingData(), []);
 
   function nextStatus() {
     if (status[0] === "current") {

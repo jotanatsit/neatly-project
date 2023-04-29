@@ -47,6 +47,7 @@ function SearchRooms(props) {
 
     if (auth.isAuthenticated) {
       const bookingData = {
+        user_id: auth.UserIdFromLocalStorage,
         roomTypeId: room.room_type_id,
         roomType: room.room_type_name,
         checkInDate: startDate,
@@ -57,13 +58,13 @@ function SearchRooms(props) {
       };
 
       // Navigate to /booking-summary and pass bookingData as state
-      navigate("/booking-summary", { state: { bookingData: bookingData } });
+      navigate("/booking-summary", { state: bookingData });
     } else {
       // Navigate to login page
       navigate("*");
     }
   }
-  
+
   async function getRoomdetail(room_type_id) {
     try {
       const response = await axios.get(
@@ -393,7 +394,11 @@ function SearchRooms(props) {
                         roomDetail.room_amenity &&
                         roomDetail.room_amenity.map((item, index) => {
                           return (
-                            <li key={index}><Text textStyle="b1" color="gray.700">{item.split("_").join(" ")}</Text></li>
+                            <li key={index}>
+                              <Text textStyle="b1" color="gray.700">
+                                {item.split("_").join(" ")}
+                              </Text>
+                            </li>
                           );
                         })}
                     </ul>
