@@ -33,8 +33,10 @@ import axios from "axios";
 import { useAuth } from "../contexts/authentication";
 import { useDisclosure } from "@chakra-ui/react";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const ChangeDatePage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   console.log(location);
   const userId = useAuth();
@@ -57,6 +59,13 @@ const ChangeDatePage = () => {
         `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[index].booking_detail_id}`
       );
       setRoomDetail(response.data.data);
+      setDate([
+        {
+          startDate: new Date(response.data.data.check_in_date),
+          endDate: new Date(response.data.data.check_out_date),
+          key: "selection",
+        },
+      ]);
     } catch (error) {
       console.log(error);
     }
@@ -66,18 +75,24 @@ const ChangeDatePage = () => {
     getRoomData();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   async function changeDate() {
     try {
       axios
         .put(
           `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[index].booking_detail_id}`,
           {
-            check_in_date: date[0].startDate,
-            check_out_date: date[0].endDate,
+            check_in_date: new Date(date[0].startDate.getTime() + 43200000),
+            check_out_date: new Date(date[0].endDate.getTime() + 43200000),
           }
         )
         .then((response) => {
           console.log(response.data);
+
+          navigate("/history");
         });
     } catch (error) {
       console.log(error);

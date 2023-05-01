@@ -63,7 +63,7 @@ const HistoryPage = () => {
       console.log(error);
     }
   }
-
+  console.log(roomData);
   async function deleteRoom() {
     try {
       await axios.delete(
@@ -99,7 +99,11 @@ const HistoryPage = () => {
   useEffect(() => {
     getRoomData();
   }, []);
-  console.log(roomData);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Flex flexDirection="column" w="1440px" m="auto" bg="bg">
       <Nav_user />
@@ -404,23 +408,25 @@ const HistoryPage = () => {
               </Box>
               {item.booking_status === "Cancel" ||
               moment().isAfter(moment(item.check_out_date)) ? null : (
-                <Box
-                  w="1120px"
-                  display="flex"
-                  justifyContent="space-between"
-                  mt="20px"
-                >
-                  <Button
-                    variant="ghost"
-                    color="orange.600"
-                    onClick={() => {
-                      setCancelIndex(index);
-                      onOpen();
-                    }}
-                  >
-                    Cancel Booking
-                  </Button>
-                  <Box>
+                <Box w="1120px" display="flex" mt="20px">
+                  <Box w="50%">
+                    {moment(item.check_in_date)
+                      .subtract(1, "days")
+                      .isAfter(moment()) ? (
+                      <Button
+                        variant="ghost"
+                        color="orange.600"
+                        onClick={() => {
+                          setCancelIndex(index);
+                          onOpen();
+                        }}
+                      >
+                        Cancel Booking
+                      </Button>
+                    ) : null}
+                  </Box>
+
+                  <Flex w="50%" justifyContent="flex-end" alignItems="center">
                     <Button
                       variant="ghost"
                       color="orange.600"
@@ -431,8 +437,8 @@ const HistoryPage = () => {
                     >
                       Room Detail
                     </Button>
-                    {moment(item.booking_date)
-                      .add(24, "hours")
+                    {moment(item.check_in_date)
+                      .subtract(3, "days")
                       .isAfter(moment()) ? (
                       <Button
                         variant="primary"
@@ -444,7 +450,7 @@ const HistoryPage = () => {
                         Change Date
                       </Button>
                     ) : null}
-                  </Box>
+                  </Flex>
                 </Box>
               )}
 

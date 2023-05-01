@@ -68,6 +68,10 @@ const BookingPage = () => {
     getRoomData();
   }, [guests, rooms]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   async function getMaximam() {
     try {
       const response = await axios.get(

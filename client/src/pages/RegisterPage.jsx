@@ -229,7 +229,7 @@ function RegisterPage() {
                     value={formik.values.birth_date}
                     placeholder="Select your date of birth"
                     max={new Date(
-                      new Date().getFullYear() - 17 - 1,
+                      new Date().getFullYear() - 18,
                       new Date().getMonth(),
                       new Date().getDate()
                     )
