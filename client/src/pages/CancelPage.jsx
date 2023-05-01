@@ -1,18 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Nav_user from "../Components/Nav_user";
 import { Button, Flex, Text, Image, Box } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../contexts/authentication";
 
 const CancelPage = () => {
+  const location = useLocation();
+  console.log(location);
+  const userId = useAuth();
+
+  const [roomData, setRoomData] = useState(location.state.roomData);
+  const [roomDetail, setRoomDetail] = useState({});
+  const index = location.state.cancelIndex;
+
+  async function getRoomData() {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[index].booking_detail_id}`
+      );
+      {
+        console.log(response.data.data);
+      }
+      setRoomDetail(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getRoomData();
+  }, []);
+
   return (
-    <Flex
-      Flex
-      flexDirection="column"
-      w="1440px"
-      h="1028px"
-      m="auto"
-      bg="bg"
-    >
+    <Flex flexDirection="column" w="1440px" h="1028px" m="auto" bg="bg">
       <Nav_user />
       <Flex flexDirection="column" w="1440px" h="1028px" mt={20}>
         <Flex
@@ -58,13 +80,13 @@ const CancelPage = () => {
                   justifyContent="space-around"
                 >
                   <Text textStyle="h5" fontWeight="600" color="white">
-                    Superior Garden View
+                    {roomDetail.room_type_name}
                   </Text>
                   <Text textStyle="b1" fontWeight="600" color="white">
                     Th, 19 Oct 2022 - Fri, 20 Oct 2022
                   </Text>
                   <Text textStyle="b1" fontWeight="400" color="white">
-                    2 Guests
+                    {roomDetail.amount_guests} Guests
                   </Text>
                 </Box>
                 <Box

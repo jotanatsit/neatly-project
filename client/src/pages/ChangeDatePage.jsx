@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Nav_user from "../Components/Nav_user";
 import {
   Button,
@@ -9,7 +9,18 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  Icon,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
 } from "@chakra-ui/react";
 import { CalendarIcon } from "@chakra-ui/icons";
 import { DateRange } from "react-date-range";
@@ -17,8 +28,21 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../contexts/authentication";
+import { useDisclosure } from "@chakra-ui/react";
+import moment from "moment";
 
 const ChangeDatePage = () => {
+  const location = useLocation();
+  console.log(location);
+  const userId = useAuth();
+  const [roomData, setRoomData] = useState(location.state.roomData);
+  const [roomDetail, setRoomDetail] = useState({});
+  const index = location.state.index;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef();
   const [date, setDate] = useState([
     {
       startDate: new Date(),
@@ -26,6 +50,40 @@ const ChangeDatePage = () => {
       key: "selection",
     },
   ]);
+
+  async function getRoomData() {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[index].booking_detail_id}`
+      );
+      setRoomDetail(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getRoomData();
+  }, []);
+
+  async function changeDate() {
+    try {
+      axios
+        .put(
+          `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[index].booking_detail_id}`,
+          {
+            check_in_date: date[0].startDate,
+            check_out_date: date[0].endDate,
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Flex flexDirection="column" w="1440px" m="auto" bg="bg">
       <Nav_user />
@@ -44,7 +102,11 @@ const ChangeDatePage = () => {
         >
           <Box display="flex" flexDirection="row">
             <Image
-              src="/HomePage/room_3.svg"
+              src={
+                roomDetail &&
+                roomDetail.room_picture &&
+                roomDetail.room_picture[0]
+              }
               w="310px"
               h="210px"
               objectFit="cover"
@@ -53,10 +115,19 @@ const ChangeDatePage = () => {
             <Flex w="769px" flexDirection="column" ml="40px">
               <Box display="flex" justifyContent="space-between">
                 <Text textStyle="h4" color="black">
-                  Superior Garden View
+                  {roomDetail.room_type_name}
                 </Text>
                 <Text textStyle="b1" color="gray.600">
-                  Booking date: Tue, 16 Oct 2022
+                  Booking date:{" "}
+                  {new Date(roomDetail.booking_date).toLocaleDateString(
+                    "en-US",
+                    {
+                      day: "numeric",
+                      weekday: "short",
+                      year: "numeric",
+                      month: "long",
+                    }
+                  )}
                 </Text>
               </Box>
               <Box display="flex" mt="20px">
@@ -64,7 +135,27 @@ const ChangeDatePage = () => {
                   <Text textStyle="b1" fontWeight="600">
                     Original Date
                   </Text>
-                  <Text textStyle="b1">Th, 19 Oct 2022 - Fri, 20 Oct 2022</Text>
+                  <Text textStyle="b1">
+                    {new Date(roomDetail.check_in_date).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        weekday: "short",
+                        year: "numeric",
+                        month: "long",
+                      }
+                    )}{" "}
+                    -{" "}
+                    {new Date(roomDetail.check_out_date).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        weekday: "short",
+                        year: "numeric",
+                        month: "long",
+                      }
+                    )}{" "}
+                  </Text>
                 </Box>
               </Box>
               <Box
@@ -166,13 +257,47 @@ const ChangeDatePage = () => {
               Cancel Booking
             </Button>
             <Box>
-              <Button variant="primary" p="25px 25px">
+              <Button variant="primary" p="25px 25px" onClick={onOpen}>
                 Change Date
               </Button>
             </Box>
           </Box>
         </Flex>
       </Flex>
+      <AlertDialog
+        motionPreset="slideInBottom"
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        isOpen={isOpen}
+        isCentered
+      >
+        <AlertDialogOverlay />
+
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <Text color="black">Change Date</Text>
+          </AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
+            <Text textStyle="b1">
+              Are you sure you want to change your check-in and check-out date?
+            </Text>
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Button variant="secondary" onClick={onClose}>
+              No, I don’t
+            </Button>
+            <Button
+              variant="primary"
+              ref={cancelRef}
+              onClick={changeDate}
+              ml={3}
+            >
+              Yes, I want to change
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Flex>
   );
 };

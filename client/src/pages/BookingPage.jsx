@@ -62,7 +62,7 @@ const BookingPage = () => {
       console.log(error);
     }
   }
-  console.log(roomData);
+  
 
   useEffect(() => {
     getRoomData();
@@ -254,11 +254,14 @@ const BookingPage = () => {
         flexDirection="column"
         alignItems="center"
         bg="bg"
-        overflow="scroll"
+       
       >
-        {roomData.map((item) => {
+        {roomData.map((item,index) => {
           return (
             <SearchRooms
+              key={index}
+              // index={index}
+              room_type_id={item.room_type_id}
               room={item}
               rooms={rooms}
               checkInDate={checkInDate}

@@ -311,8 +311,130 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
   });
 });
 
-bookingRouter.put("/:userId/:bookingDetailId", async (req, res) => {});
+// ------------------------------------------- update check_in & check_out date -------------------------------------------
 
-bookingRouter.delete("/:userId/:bookingDetailId", async (req, res) => {});
+bookingRouter.put("/:userId/:bookingDetailId", async (req, res) => {
+  const user_id = Number(req.params.userId);
+  const booking_detail_id = Number(req.params.bookingDetailId);
 
+  const booking_details = {
+    room_type_id: req.body.room_type_id,
+    amount_rooms: req.body.amount_rooms,
+    check_in_date: new Date(req.body.check_in_date).toISOString().slice(0, 10),
+    check_out_date: new Date(req.body.check_out_date)
+      .toISOString()
+      .slice(0, 10),
+  };
+
+  // get user data in database where booking_detail_id
+  const userData = await pool.query(
+    `select booking.booking_detail_id, booking.booking_id, booking.room_id
+          from booking_details
+          inner join booking
+          ON booking_details.booking_detail_id = booking.booking_detail_id
+          where booking.booking_detail_id=$1`,
+    [booking_detail_id]
+  );
+
+  const userData_booking_id = userData.rows.map((row) => row.booking_id);
+
+  // get all booking data in database where room_type_id
+  const table1 = await pool.query(
+    `select booking.room_id, booking_details.check_in_date, booking_details.check_out_date, rooms.room_type_id
+          from booking_details
+          inner join booking
+          ON booking_details.booking_detail_id = booking.booking_detail_id
+          inner join rooms
+          ON booking.room_id = rooms.room_id
+          where rooms.room_type_id=$1`,
+    [booking_details.room_type_id]
+  );
+
+  const bookingDetailData = table1.rows;
+
+  // Unavailable rooms for booking - array - [8]
+  const unAvailableRooms = bookingDetailData
+    .filter((row) => {
+      return (
+        booking_details.check_in_date < row.check_out_date &&
+        booking_details.check_out_date > row.check_in_date
+      );
+    })
+    .map((row) => row.room_id);
+
+  const table2 = await pool.query(`select * from rooms where room_type_id=$1`, [
+    booking_details.room_type_id,
+  ]);
+
+  // All rooms in the same room type - array - [5, 6, 7, 8]
+  const allRooms = table2.rows.map((room) => room.room_id);
+
+  // Available rooms for booking - array - [5, 6, 7]
+  const availableRooms = allRooms.filter(
+    (room) => !unAvailableRooms.includes(room)
+  );
+
+  if (booking_details.amount_rooms > availableRooms.length) {
+    return res.json({ message: `The booking date has no available rooms.` });
+  }
+
+  // update check_in_date, check_out_date in booking_details
+  await pool.query(
+    `update booking_details set check_in_date=$1, check_out_date=$2 where booking_detail_id=$3`,
+    [
+      booking_details.check_in_date,
+      booking_details.check_out_date,
+      booking_detail_id,
+    ]
+  );
+
+  // update room_id in booking
+  for (let i = 0; i < booking_details.amount_rooms; i++) {
+    await pool.query(`update booking set room_id=$1 where booking_id=$2`, [
+      availableRooms[i],
+      userData_booking_id[i],
+    ]);
+  }
+
+  return res.json({
+    message: `Booking has been updated successfully`,
+  });
+});
+
+// ------------------------------------------- delete - update cancellation_date -------------------------------------------
+
+bookingRouter.delete("/:userId/:bookingDetailId", async (req, res) => {
+  const user_id = Number(req.params.userId);
+  const booking_detail_id = Number(req.params.bookingDetailId);
+  const booking_status = "Cancel";
+  const cancellation_date = new Date();
+
+  const result = await pool.query(
+    `select * from booking_details
+    inner join booking
+    on booking_details.booking_detail_id = booking.booking_detail_id
+    where booking_details.booking_detail_id=$1`,
+    [booking_detail_id]
+  );
+
+  const bookingDetailData = result.rows[0];
+
+  if (
+    bookingDetailData.user_id !== user_id ||
+    bookingDetailData.booking_status === "Cancel"
+  ) {
+    return res.json({
+      message: `Booking not found.`,
+    });
+  }
+
+  await pool.query(
+    `update booking_details set booking_status=$1, cancellation_date=$2 where booking_detail_id=$3`,
+    [booking_status, cancellation_date, booking_detail_id]
+  );
+
+  return res.json({
+    message: `Booking has been cancelled.`,
+  });
+});
 export default bookingRouter;

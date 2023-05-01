@@ -63,16 +63,15 @@ function SearchRooms(props) {
       navigate("*");
     }
   }
-  console.log(room);
+  
   async function getRoomdetail(room_type_id) {
     try {
       const response = await axios.get(
         `http://localhost:4000/rooms/room-type/${room_type_id}`
       );
-      {
-        console.log(response.data.data);
-      }
+
       setRoomDetail(response.data.data);
+      console.log(response.data.data);
       onOpen2(true);
     } catch (error) {
       console.log(error);
@@ -203,7 +202,7 @@ function SearchRooms(props) {
             </Flex>
             <Flex justifyContent="flex-end">
               <Button
-                onClick={(room_type_id) => {
+                onClick={() => {
                   getRoomdetail(room_type_id);
                 }}
                 bg="none"
@@ -394,7 +393,7 @@ function SearchRooms(props) {
                         roomDetail.room_amenity &&
                         roomDetail.room_amenity.map((item, index) => {
                           return (
-                            <li key={index}>{item.split("_").join(" ")}</li>
+                            <li key={index}><Text textStyle="b1" color="gray.700">{item.split("_").join(" ")}</Text></li>
                           );
                         })}
                     </ul>

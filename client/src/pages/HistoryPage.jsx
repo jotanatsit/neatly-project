@@ -19,21 +19,13 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   AlertDialogCloseButton,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
 } from "@chakra-ui/react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper";
-import "swiper/swiper-bundle.min.css";
 import { useDisclosure } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/authentication";
+import moment from "moment";
 
 const HistoryPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -48,11 +40,7 @@ const HistoryPage = () => {
   const userId = useAuth();
   const [roomData, setRoomData] = useState([]);
   const [roomDetail, setRoomDetail] = useState([]);
-
-  const eiei = () => {
-    navigate("/cancel");
-  };
-
+  const [cancelIndex, setCancelIndex] = useState(null);
   async function getRoomData() {
     try {
       const response = await axios.get(
@@ -67,14 +55,28 @@ const HistoryPage = () => {
     }
   }
 
+  async function deleteRoom() {
+    try {
+      // await axios.delete(
+      //   `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[cancelIndex].booking_detail_id}`
+      // );
+
+      // const newRoomData = [...roomData];
+      // newRoomData.splice(cancelIndex, 1);
+      // setRoomData(newRoomData);
+
+      navigate("/cancel", { state: { cancelIndex, roomData } });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function getRoomdetail(index) {
     try {
       const response = await axios.get(
         `http://localhost:4000/rooms/room-type/${roomData[index].room_type_id}`
       );
-      {
-        console.log(response.data.data);
-      }
+      console.log(index);
       setRoomDetail(response.data.data);
       onOpen2(true);
     } catch (error) {
@@ -82,12 +84,14 @@ const HistoryPage = () => {
     }
   }
 
-  console.log(roomData);
+  function getBookingRoomdetail(index) {
+    navigate("/changedate", { state: { index, roomData } });
+  }
 
   useEffect(() => {
     getRoomData();
   }, []);
-
+  console.log(roomData);
   return (
     <Flex flexDirection="column" w="1440px" m="auto" bg="bg">
       <Nav_user />
@@ -120,15 +124,53 @@ const HistoryPage = () => {
                     <Text textStyle="h4" color="black">
                       {item.room_type_name}
                     </Text>
-                    <Text textStyle="b1" color="gray.600">
-                      Booking date:{" "}
-                      {new Date(item.booking_date).toLocaleDateString("en-US", {
-                        day: "numeric",
-                        weekday: "short",
-                        year: "numeric",
-                        month: "long",
-                      })}
-                    </Text>
+                    {item.cancellation_date === null ? (
+                      <Box>
+                        <Text textStyle="b1" color="gray.600">
+                          Booking date:{" "}
+                          {new Date(item.booking_date).toLocaleDateString(
+                            "en-US",
+                            {
+                              day: "numeric",
+                              weekday: "short",
+                              year: "numeric",
+                              month: "long",
+                            }
+                          )}
+                        </Text>
+                      </Box>
+                    ) : (
+                      <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="end"
+                      >
+                        <Text textStyle="b1" color="gray.600">
+                          Booking date:{" "}
+                          {new Date(item.booking_date).toLocaleDateString(
+                            "en-US",
+                            {
+                              day: "numeric",
+                              weekday: "short",
+                              year: "numeric",
+                              month: "long",
+                            }
+                          )}
+                        </Text>
+                        <Text textStyle="b1" color="gray.600">
+                          Cancellation date:
+                          {new Date(item.cancellation_date).toLocaleDateString(
+                            "en-US",
+                            {
+                              day: "numeric",
+                              weekday: "short",
+                              year: "numeric",
+                              month: "long",
+                            }
+                          )}{" "}
+                        </Text>
+                      </Box>
+                    )}
                   </Box>
                   <Box display="flex" mt="20px">
                     <Box>
@@ -136,15 +178,33 @@ const HistoryPage = () => {
                         Check-in
                       </Text>
                       <Text textStyle="b1">
-                        Th, {item.check_in_date} | After 2:00 PM
+                        {new Date(item.check_in_date).toLocaleDateString(
+                          "en-US",
+                          {
+                            day: "numeric",
+                            weekday: "short",
+                            year: "numeric",
+                            month: "long",
+                          }
+                        )}{" "}
+                        | After 2:00 PM
                       </Text>
                     </Box>
                     <Box ml="40px">
                       <Text textStyle="b1" fontWeight="600">
-                        Check-in
+                        Check-out
                       </Text>
                       <Text textStyle="b1">
-                        Th, {item.check_out_date}| After 2:00 PM
+                        {new Date(item.check_out_date).toLocaleDateString(
+                          "en-US",
+                          {
+                            day: "numeric",
+                            weekday: "short",
+                            year: "numeric",
+                            month: "long",
+                          }
+                        )}{" "}
+                        | After 2:00 PM
                       </Text>
                     </Box>
                   </Box>
@@ -208,15 +268,26 @@ const HistoryPage = () => {
                             >
                               {item.room_type_name}
                             </Text>
-                            <Text
-                              textStyle="b1"
-                              fontWeight="600"
-                              color="gray.900"
-                            >
-                              {item.price.toLocaleString("th-TH", {
-                                minimumFractionDigits: 2,
-                              })}
-                            </Text>
+
+                            {item.promotion_price ? (
+                              <Text
+                                textStyle="b1"
+                                fontWeight="600"
+                                color="gray.900"
+                              >
+                                {item.promotion_price}{" "}
+                              </Text>
+                            ) : (
+                              <Text
+                                textStyle="b1"
+                                fontWeight="600"
+                                color="gray.900"
+                              >
+                                {item.price.toLocaleString("th-TH", {
+                                  minimumFractionDigits: 2,
+                                })}
+                              </Text>
+                            )}
                           </Box>
                         </AccordionPanel>
 
@@ -301,13 +372,21 @@ const HistoryPage = () => {
                           >
                             Additional Request
                           </Text>
+
                           <Text
                             textStyle="b1"
                             fontWeight="400"
                             color="gray.700"
                             mt={1}
                           >
-                            Can i have some chocolate?
+                            {item.booking_request.length > 0 &&
+                            typeof item.booking_request[
+                              item.booking_request.length - 1
+                            ][1] === "string"
+                              ? item.booking_request[
+                                  item.booking_request.length - 1
+                                ][1]
+                              : null}
                           </Text>
                         </AccordionPanel>
                       </AccordionItem>
@@ -315,202 +394,85 @@ const HistoryPage = () => {
                   </Box>
                 </Flex>
               </Box>
-              <Box
-                w="1120px"
-                display="flex"
-                justifyContent="space-between"
-                mt="20px"
-              >
-                <Button variant="ghost" color="orange.600" onClick={onOpen}>
-                  Cancel Booking
-                </Button>
-                <Box>
+              {item.booking_status === "Cancel" ||
+              moment().isAfter(moment(item.check_out_date)) ? null : (
+                <Box
+                  w="1120px"
+                  display="flex"
+                  justifyContent="space-between"
+                  mt="20px"
+                >
                   <Button
                     variant="ghost"
                     color="orange.600"
                     onClick={() => {
-                      getRoomdetail(index);
+                      setCancelIndex(index);
+                      onOpen();
                     }}
-                    mr={5}
                   >
-                    Room Detail
+                    Cancel Booking
                   </Button>
-
-                  <Link to="/changedate">
-                    <Button variant="primary" p="25px 25px">
-                      Change Date
+                  <Box>
+                    <Button
+                      variant="ghost"
+                      color="orange.600"
+                      onClick={() => {
+                        getRoomdetail(index);
+                      }}
+                      mr={5}
+                    >
+                      Room Detail
                     </Button>
-                  </Link>
-                </Box>
-
-                <AlertDialog
-                  motionPreset="slideInBottom"
-                  leastDestructiveRef={cancelRef}
-                  onClose={onClose}
-                  isOpen={isOpen}
-                  isCentered
-                >
-                  <AlertDialogOverlay />
-
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <Text color="black"> Cancel Booking</Text>
-                    </AlertDialogHeader>
-                    <AlertDialogCloseButton />
-                    <AlertDialogBody>
-                      <Text textStyle="b1">
-                        Are you sure you would like to cancel this booking?
-                      </Text>
-                    </AlertDialogBody>
-                    <AlertDialogFooter>
+                    {moment(item.booking_date)
+                      .add(24, "hours")
+                      .isAfter(moment()) ? (
                       <Button
-                        ref={cancelRef}
-                        variant="secondary"
-                        onClick={eiei}
+                        variant="primary"
+                        p="25px 25px"
+                        onClick={() => {
+                          getBookingRoomdetail(index);
+                        }}
                       >
-                        Yes, I want to cancel
+                        Change Date
                       </Button>
-                      <Button variant="primary" onClick={onClose} ml={3}>
-                        No, Don’t Cancel
-                      </Button>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </Box>
+                    ) : null}
+                  </Box>
+                </Box>
+              )}
+            
+              <AlertDialog
+                motionPreset="slideInBottom"
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+                isOpen={isOpen}
+                isCentered
+              >
+                <AlertDialogOverlay />
 
-              <Modal isOpen={isOpen2} onClose={onClose2}>
-                <ModalOverlay />
-                <ModalContent h="840px" maxW="800px" style={{ left: "-6px" }}>
-                  <ModalHeader p={0}>
-                    <Flex w="800px" h="400px" justifyContent="center" mt={5}>
-                      <Box w="600px" borderRadius="10px" overflow="hidden">
-                        <Swiper
-                          modules={[Navigation, Pagination]}
-                          spaceBetween={1}
-                          slidesPerView={1}
-                          grabCursor={true}
-                          centeredSlides={true}
-                          initialSlide={0}
-                          loop={true}
-                          navigation={{
-                            nextEl: ".button-next",
-                            prevEl: ".button-prev",
-                            clickable: true,
-                          }}
-                          pagination={{
-                            dynamicBullets: true,
-                          }}
-                        >
-                          {roomDetail?.room_picture?.map((picture, index) => {
-                            return (
-                              <SwiperSlide key={index}>
-                                <Image
-                                  src={picture}
-                                  w="640px"
-                                  h="400px"
-                                  objectFit="cover"
-                                  borderRadius="10px"
-                                ></Image>
-                              </SwiperSlide>
-                            );
-                          })}
-
-                          <Flex>
-                            <Box>
-                              <Image
-                                w="50px"
-                                ml={5}
-                                src="/HomePage/icon/left-arrow.svg"
-                                className="button-prev swiper-button-prev"
-                              ></Image>
-                            </Box>
-                            <Box>
-                              <Image
-                                w="50px"
-                                mr={5}
-                                src="/HomePage/icon/right-arrow.svg"
-                                className="button-next swiper-button-next"
-                              ></Image>
-                            </Box>
-                          </Flex>
-                        </Swiper>
-                      </Box>
-                    </Flex>
-                  </ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody p={0}>
-                    <Flex w="800px" flexDirection="column" alignItems="center">
-                      <Box
-                        mt={10}
-                        w="640px"
-                        borderBottom="1px solid"
-                        borderColor="gray.200"
-                        pb={5}
-                      >
-                        <Box display="flex">
-                          <Box display="flex" flexDirection="row">
-                            <Box pr={2}>
-                              <Text
-                                textStyle="b1"
-                                color="gray.700"
-                                paddingRight="5px"
-                              >
-                                {roomDetail.amount_person} Person
-                              </Text>
-                            </Box>
-                            <Box
-                              borderX="1px solid"
-                              borderColor="gray.500"
-                              px={2}
-                            >
-                              <Text
-                                textStyle="b1"
-                                color="gray.700"
-                                paddingRight="5px"
-                              >
-                                {roomDetail.bed_type}
-                              </Text>
-                            </Box>
-                            <Box pl={2}>
-                              <Text
-                                textStyle="b1"
-                                color="gray.700"
-                                paddingRight="5px"
-                              >
-                                {roomDetail.room_size} sqm
-                              </Text>
-                            </Box>
-                          </Box>
-                        </Box>
-
-                        <Text mt={3} textStyle="b1" color="gray.700">
-                          {roomDetail.description}
-                        </Text>
-                      </Box>
-                      <Flex w="640px" flexDirection="column" mt={5}>
-                        <Text textStyle="b1" color="black">
-                          Room Amenities
-                        </Text>
-                        <Flex w="640px" mt={3} ml={5}>
-                          <Box w="47%">
-                            <ul>
-                              {roomDetail &&
-                                roomDetail.room_amenity &&
-                                roomDetail.room_amenity.map((item, index) => {
-                                  return (
-                                    <li key={index}>
-                                      {item.split("_").join(" ")}
-                                    </li>
-                                  );
-                                })}
-                            </ul>
-                          </Box>
-                        </Flex>
-                      </Flex>
-                    </Flex>
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <Text color="black"> Cancel Booking</Text>
+                  </AlertDialogHeader>
+                  <AlertDialogCloseButton />
+                  <AlertDialogBody>
+                    <Text textStyle="b1">
+                      Are you sure you would like to cancel this booking?
+                    </Text>
+                  </AlertDialogBody>
+                  <AlertDialogFooter>
+                    <Button
+                      ref={cancelRef}
+                      variant="secondary"
+                      onClick={() => deleteRoom(index)}
+                    >
+                      Yes, I want to cancel
+                    </Button>
+                    <Button variant="primary" onClick={onClose} ml={3}>
+                      No, Don’t Cancel
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </Flex>
           );
         })}
