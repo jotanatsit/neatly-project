@@ -10,11 +10,10 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const paymentRouter = Router();
 
 paymentRouter.post("/create-payment-intent", protect, async (req, res) => {
+  const data = req.body;
   try {
-    const data = req.body;
-
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: data.total_price_per_room * 100,
+      amount: data.totalPrice * 100,
       currency: "thb",
       metadata: data,
       automatic_payment_methods: {
@@ -68,10 +67,10 @@ paymentRouter.post("/webhook", async (req, res) => {
     );
   }
   if (eventType === "payment_intent.succeeded") {
-    // Funds have been captured
-    // Fulfill any orders, e-mail receipts, etc
-    // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
+    const paymentIntent = data.object;
+    const paymentId = paymentIntent.id;
     const checkOutData = data.object.metadata;
+    console.log(`payment ID : ${paymentId}`);
     console.log(checkOutData);
     console.log("💰 Payment captured!");
   } else if (eventType === "payment_intent.payment_failed") {
