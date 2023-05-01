@@ -4,15 +4,25 @@ import { useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Flex, Text, Button } from "@chakra-ui/react";
+import { useBooking } from "../contexts/booking";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
+  const { step, setStepPayment } = useBooking();
 
   const navigate = useNavigate();
 
   const [message, setMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  function backStep() {
+    if (step[2] === "current") {
+      setStepPayment(["finish", "current", "none"]);
+    } else if (step[1] === "current") {
+      setStepPayment(["current", "none", "none"]);
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,7 +71,9 @@ export default function CheckoutForm() {
       {/* Show any error or success messages */}
       {/* {message && <div id="payment-message">{message}</div>} */}
       <Flex w="740px" p="40px" justify="space-between">
-        <Button variant="ghost">Back</Button>
+        <Button variant="ghost" onClick={backStep}>
+          Back
+        </Button>
 
         <Button
           disabled={isProcessing || !stripe || !elements}
