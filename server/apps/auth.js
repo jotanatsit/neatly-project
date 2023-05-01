@@ -10,7 +10,8 @@ import jwt from "jsonwebtoken";
 
 const authRouter = Router();
 
-// create user data to database
+// ----------------------------------- register - create user data to database -----------------------------------------
+
 authRouter.post(
   "/register",
   profilePictureUpload,
@@ -40,16 +41,37 @@ authRouter.post(
     }
     user["profile_picture"] = profilePictureUrl[0]?.url;
 
+    // เข้ารหัส password ด้วย bcrypt
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
 
+    // แก้ไข format ของ id_number และ card_number
     user.id_number = user.id_number.split("-").join("");
     user.card_number = user.card_number.split(" ").join("");
+
+    // ต่อข้อมูลเกี่ยวกับ credit_card ให้เป็น string ก้อนเดียว - string - "cardNumber_cardOwner_expireDate_cvcCvv"
+    const string_credit_card =
+      user.card_number +
+      "_" +
+      user.card_owner +
+      "_" +
+      user.expire_date +
+      "_" +
+      user.cvc_cvv;
+
+    // เอาก้อน string มาเข้ารหัส jwt
+    const encrypted_credit_card = jwt.sign(
+      {
+        string_credit_card,
+      },
+      process.env.SECRET_KEY,
+      { noTimestamp: true }
+    );
 
     try {
       await pool.query(
         `insert into users (username, email, password, created_at, updated_at, last_logged_in)
-          values ($1, $2, $3, $4, $5, $6)`,
+            values ($1, $2, $3, $4, $5, $6)`,
         [
           user.username,
           user.email,
@@ -67,8 +89,8 @@ authRouter.post(
       );
 
       await pool.query(
-        `insert into users_profile (user_id, fullname, id_number, birth_date, country, profile_picture)
-          values ($1, $2, $3, $4, $5, $6)`,
+        `insert into users_profile (user_id, fullname, id_number, birth_date, country, profile_picture, credit_card)
+            values ($1, $2, $3, $4, $5, $6, $7)`,
         [
           lastest_user_id.rows[0].user_id,
           user.fullname,
@@ -76,18 +98,7 @@ authRouter.post(
           user.birth_date,
           user.country,
           user.profile_picture,
-        ]
-      );
-
-      await pool.query(
-        `insert into users_credit_card (user_id, card_number, card_owner, expire_date, cvc_cvv)
-          values ($1, $2, $3, $4, $5)`,
-        [
-          lastest_user_id.rows[0].user_id,
-          user.card_number,
-          user.card_owner,
-          user.expire_date,
-          user.cvc_cvv,
+          encrypted_credit_card,
         ]
       );
     } catch (error) {
@@ -117,6 +128,8 @@ authRouter.post(
     });
   }
 );
+
+// ------------------------------------------------------- login -------------------------------------------------------
 
 authRouter.post("/login", async (req, res) => {
   const userClient = {

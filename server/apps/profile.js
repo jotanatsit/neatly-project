@@ -6,17 +6,13 @@ import {
   // handleError,
   validateProfileData,
 } from "../middleware/validateProfileData.js";
+import jwt from "jsonwebtoken";
+import jwtDecode from "jwt-decode";
 
 const profileRouter = Router();
 
-// profileRouter.use((req, res, next) => {
-//   res.setHeader("Cache-Control", "no-cache, no-store");
-//   next();
-// });
+// ------------------------------------- get user profile data from database -------------------------------------------
 
-// profileRouter.disable("etag");
-
-// get user profile data from database
 profileRouter.get("/:id", async (req, res) => {
   const userId = req.params.id;
 
@@ -36,7 +32,8 @@ profileRouter.get("/:id", async (req, res) => {
   });
 });
 
-// update user profile data to database
+// ------------------------------------- update user profile data to database -------------------------------------------
+
 profileRouter.put(
   "/:id",
   profilePictureUpload,
@@ -51,12 +48,14 @@ profileRouter.put(
       updated_at: new Date(),
     };
 
+    // upload profile picture file to cloudinary
     const profilePictureUrl = await cloudinaryUpload(req.files);
     if (profilePictureUrl.message) {
       return res.json(profilePictureUrl);
     }
     updatedProfile["profile_picture"] = profilePictureUrl[0]?.url;
 
+    // แก้ไข format ของ id_number
     updatedProfile.id_number = updatedProfile.id_number?.split("-")?.join("");
 
     try {
@@ -97,21 +96,46 @@ profileRouter.put(
   }
 );
 
-// get payment method data from database
+// ------------------------------------- get payment method data from database -------------------------------------------
+
 profileRouter.get("/:id/payment-method", async (req, res) => {
   const userId = req.params.id;
 
-  const result = await pool.query(
-    "select card_number, card_owner, expire_date, cvc_cvv from users_credit_card where user_id=$1",
-    [userId]
+  let result;
+  try {
+    result = await pool.query(
+      "select credit_card from users_profile where user_id=$1",
+      [userId]
+    );
+  } catch (error) {
+    return res.json({ message: error.message });
+  }
+
+  // ถอดรหัส jwt - ตัวอย่างหลังถอดรหัส => {"string_credit_card":"cardNumber_cardOwner_expireDate_cvcCvv"}
+  const encrypted_credit_card = result.rows[0].credit_card;
+
+  const decrypted_credit_card = JSON.stringify(
+    jwtDecode(encrypted_credit_card, process.env.SECRET_KEY)
   );
 
+  // เอาข้อมูลที่ถอดรหัสแล้ว มาแยกเป็น Array - [cardNumber, cardOwner, expireDate, cvcCvv]
+  const split_credit_card = decrypted_credit_card.split('"')[3].split("_");
+
+  // เอาข้อมูลจาก Array มาเก็บเป็น Object
+  const credit_card = {
+    card_number: split_credit_card[0],
+    card_owner: split_credit_card[1],
+    expire_date: split_credit_card[2],
+    cvc_cvv: split_credit_card[3],
+  };
+
   return res.json({
-    data: result.rows[0],
+    data: credit_card,
   });
 });
 
-// update payment method data to database
+// ------------------------------------- update payment method data to database -------------------------------------------
+
 profileRouter.put(
   "/:id/payment-method",
   profilePictureUpload,
@@ -124,19 +148,33 @@ profileRouter.put(
       updated_at: new Date(),
     };
 
+    // แก้ไข format ของ card_number
     updatedCreditCard.card_number = updatedCreditCard.card_number
       ?.split(" ")
       ?.join("");
 
+    // เอาข้อมูลจาก req.body มาต่อเป็นก้อน string - "cardNumber_cardOwner_expireDate_cvcCvv"
+    const string_credit_card =
+      updatedCreditCard.card_number +
+      "_" +
+      updatedCreditCard.card_owner +
+      "_" +
+      updatedCreditCard.expire_date +
+      "_" +
+      updatedCreditCard.cvc_cvv;
+
+    // เอาก้อน string มาเข้ารหัส jwt
+    const encrypted_credit_card = jwt.sign(
+      {
+        string_credit_card,
+      },
+      process.env.SECRET_KEY,
+      { noTimestamp: true }
+    );
+
     await pool.query(
-      "update users_credit_card set card_number=$1, card_owner=$2, expire_date=$3, cvc_cvv=$4 where user_id=$5",
-      [
-        updatedCreditCard.card_number,
-        updatedCreditCard.card_owner,
-        updatedCreditCard.expire_date,
-        updatedCreditCard.cvc_cvv,
-        userId,
-      ]
+      "update users_profile set credit_card=$1 where user_id=$2",
+      [encrypted_credit_card, userId]
     );
 
     await pool.query("update users set updated_at=$1 where user_id=$2", [

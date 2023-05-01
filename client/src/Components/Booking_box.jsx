@@ -18,6 +18,7 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { CalendarIcon } from "@chakra-ui/icons";
+import axios from "axios";
 
 const Booking_box = () => {
   const navigate = useNavigate();
@@ -35,8 +36,23 @@ const Booking_box = () => {
     },
   ]);
 
-  const handleRoomsIncrement = () => {
-    setRooms(rooms + 1);
+  async function getMaximam() {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/rooms/room-type/max-guests`
+      );
+      // console.log(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleRoomsIncrement = async () => {
+    const maximum = await getMaximam();
+    if (rooms < maximum.rooms) {
+      setRooms(rooms + 1);
+    }
   };
 
   const handleRoomsDecrement = () => {
@@ -45,8 +61,11 @@ const Booking_box = () => {
     }
   };
 
-  const handleGuestsIncrement = () => {
-    setGuests(guests + 1);
+  const handleGuestsIncrement = async () => {
+    const maximum = await getMaximam();
+    if (guests < maximum.guests) {
+      setGuests(guests + 1);
+    }
   };
 
   const handleGuestsDecrement = () => {

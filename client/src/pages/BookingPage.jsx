@@ -68,8 +68,23 @@ const BookingPage = () => {
     getRoomData();
   }, [guests, rooms]);
 
-  const handleRoomsIncrement = () => {
-    setRooms(rooms + 1);
+  async function getMaximam() {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/rooms/room-type/max-guests`
+      );
+      // console.log(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleRoomsIncrement = async () => {
+    const maximum = await getMaximam();
+    if (rooms < maximum.rooms) {
+      setRooms(rooms + 1);
+    }
   };
 
   const handleRoomsDecrement = () => {
@@ -78,8 +93,11 @@ const BookingPage = () => {
     }
   };
 
-  const handleGuestsIncrement = () => {
-    setGuests(guests + 1);
+  const handleGuestsIncrement = async () => {
+    const maximum = await getMaximam();
+    if (guests < maximum.guests) {
+      setGuests(guests + 1);
+    }
   };
 
   const handleGuestsDecrement = () => {
