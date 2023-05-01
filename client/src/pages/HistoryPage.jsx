@@ -36,7 +36,6 @@ import { Navigation, Pagination } from "swiper";
 import "swiper/swiper-bundle.min.css";
 import moment from "moment";
 
-
 const HistoryPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
