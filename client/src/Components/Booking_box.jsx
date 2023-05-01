@@ -17,6 +17,7 @@ import { format, addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { CalendarIcon } from "@chakra-ui/icons";
 
 const Booking_box = () => {
   const navigate = useNavigate();
@@ -98,9 +99,17 @@ const Booking_box = () => {
                 borderColor="gray.400"
                 style={{ width: "250px" }}
               >
-                <Text textStyle="b1">
-                  {format(date[0].startDate, "MM/dd/yyyy")}
-                </Text>
+                <Box
+                  w="210px"
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text textStyle="b1">
+                    {format(date[0].startDate, "MM/dd/yyyy")}
+                  </Text>
+                  <CalendarIcon />
+                </Box>
               </MenuButton>
             </Flex>
             <Flex flexDirection="column">
@@ -119,9 +128,17 @@ const Booking_box = () => {
                 borderColor="gray.400"
                 style={{ width: "250px" }}
               >
-                <Text textStyle="b1">
-                  {format(date[0].endDate, "MM/dd/yyyy")}
-                </Text>
+                <Box
+                  w="210px"
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text textStyle="b1">
+                    {format(date[0].endDate, "MM/dd/yyyy")}
+                  </Text>
+                  <CalendarIcon />
+                </Box>
               </MenuButton>
             </Flex>
             <MenuList border="1px solid" position="absolute" right="-240px">

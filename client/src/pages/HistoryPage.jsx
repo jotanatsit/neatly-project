@@ -19,13 +19,23 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   AlertDialogCloseButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/authentication";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper";
+import "swiper/swiper-bundle.min.css";
 import moment from "moment";
+
 
 const HistoryPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,13 +67,13 @@ const HistoryPage = () => {
 
   async function deleteRoom() {
     try {
-      // await axios.delete(
-      //   `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[cancelIndex].booking_detail_id}`
-      // );
+      await axios.delete(
+        `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[cancelIndex].booking_detail_id}`
+      );
 
-      // const newRoomData = [...roomData];
-      // newRoomData.splice(cancelIndex, 1);
-      // setRoomData(newRoomData);
+      const newRoomData = [...roomData];
+      newRoomData.splice(cancelIndex, 1);
+      setRoomData(newRoomData);
 
       navigate("/cancel", { state: { cancelIndex, roomData } });
     } catch (error) {
@@ -76,7 +86,6 @@ const HistoryPage = () => {
       const response = await axios.get(
         `http://localhost:4000/rooms/room-type/${roomData[index].room_type_id}`
       );
-      console.log(index);
       setRoomDetail(response.data.data);
       onOpen2(true);
     } catch (error) {
@@ -386,7 +395,7 @@ const HistoryPage = () => {
                               ? item.booking_request[
                                   item.booking_request.length - 1
                                 ][1]
-                              : null}
+                              : "Can i have some chocolate?"}
                           </Text>
                         </AccordionPanel>
                       </AccordionItem>
@@ -439,7 +448,7 @@ const HistoryPage = () => {
                   </Box>
                 </Box>
               )}
-            
+
               <AlertDialog
                 motionPreset="slideInBottom"
                 leastDestructiveRef={cancelRef}
@@ -473,6 +482,140 @@ const HistoryPage = () => {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
+
+              <Modal isOpen={isOpen2} onClose={onClose2}>
+                <ModalOverlay />
+                <ModalContent h="840px" maxW="800px" style={{ left: "-6px" }}>
+                  <ModalHeader p={0}>
+                    <Flex w="800px" h="400px" justifyContent="center" mt={5}>
+                      <Box w="600px" borderRadius="10px" overflow="hidden">
+                        <Swiper
+                          modules={[Navigation, Pagination]}
+                          spaceBetween={1}
+                          slidesPerView={1}
+                          grabCursor={true}
+                          centeredSlides={true}
+                          initialSlide={0}
+                          loop={true}
+                          navigation={{
+                            nextEl: ".button-next",
+                            prevEl: ".button-prev",
+                            clickable: true,
+                          }}
+                          pagination={{
+                            dynamicBullets: true,
+                          }}
+                        >
+                          {roomDetail?.room_picture?.map((picture, index) => {
+                            return (
+                              <SwiperSlide key={index}>
+                                <Image
+                                  src={picture}
+                                  w="640px"
+                                  h="400px"
+                                  objectFit="cover"
+                                  borderRadius="10px"
+                                ></Image>
+                              </SwiperSlide>
+                            );
+                          })}
+
+                          <Flex>
+                            <Box>
+                              <Image
+                                w="50px"
+                                ml={5}
+                                src="/HomePage/icon/left-arrow.svg"
+                                className="button-prev swiper-button-prev"
+                              ></Image>
+                            </Box>
+                            <Box>
+                              <Image
+                                w="50px"
+                                mr={5}
+                                src="/HomePage/icon/right-arrow.svg"
+                                className="button-next swiper-button-next"
+                              ></Image>
+                            </Box>
+                          </Flex>
+                        </Swiper>
+                      </Box>
+                    </Flex>
+                  </ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody p={0}>
+                    <Flex w="800px" flexDirection="column" alignItems="center">
+                      <Box
+                        mt={10}
+                        w="640px"
+                        borderBottom="1px solid"
+                        borderColor="gray.200"
+                        pb={5}
+                      >
+                        <Box display="flex">
+                          <Box display="flex" flexDirection="row">
+                            <Box pr={2}>
+                              <Text
+                                textStyle="b1"
+                                color="gray.700"
+                                paddingRight="5px"
+                              >
+                                {roomDetail.amount_person} Person
+                              </Text>
+                            </Box>
+                            <Box
+                              borderX="1px solid"
+                              borderColor="gray.500"
+                              px={2}
+                            >
+                              <Text
+                                textStyle="b1"
+                                color="gray.700"
+                                paddingRight="5px"
+                              >
+                                {roomDetail.bed_type}
+                              </Text>
+                            </Box>
+                            <Box pl={2}>
+                              <Text
+                                textStyle="b1"
+                                color="gray.700"
+                                paddingRight="5px"
+                              >
+                                {roomDetail.room_size} sqm
+                              </Text>
+                            </Box>
+                          </Box>
+                        </Box>
+
+                        <Text mt={3} textStyle="b1" color="gray.700">
+                          {roomDetail.description}
+                        </Text>
+                      </Box>
+                      <Flex w="640px" flexDirection="column" mt={5}>
+                        <Text textStyle="b1" color="black">
+                          Room Amenities
+                        </Text>
+                        <Flex w="640px" mt={3} ml={5}>
+                          <Box w="47%">
+                            <ul>
+                              {roomDetail &&
+                                roomDetail.room_amenity &&
+                                roomDetail.room_amenity.map((item, index) => {
+                                  return (
+                                    <li key={index}>
+                                      {item.split("_").join(" ")}
+                                    </li>
+                                  );
+                                })}
+                            </ul>
+                          </Box>
+                        </Flex>
+                      </Flex>
+                    </Flex>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
             </Flex>
           );
         })}
