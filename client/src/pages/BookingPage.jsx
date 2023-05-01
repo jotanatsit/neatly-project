@@ -56,7 +56,7 @@ const BookingPage = () => {
     defaultRoom();
     try {
       const response = await axios.get(
-        `http://localhost:4000/search?check_in_date=${checkInDate}&check_out_date=${checkOutDate}&amount_guests=${guests}`
+        `http://localhost:4000/rooms/room-type/search?check_in_date=${checkInDate}&check_out_date=${checkOutDate}&amount_guests=${guests}`
       );
       setRoomData(response.data.data);
     } catch (error) {
@@ -67,6 +67,10 @@ const BookingPage = () => {
   useEffect(() => {
     getRoomData();
   }, [guests, rooms]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   async function getMaximam() {
     try {

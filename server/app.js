@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import cloudinary from "cloudinary";
 import roomRouter from "./apps/rooms.js";
 import bookingRouter from "./apps/booking.js";
-import searchRouter from "./apps/search.js";
 import paymentRouter from "./apps/stripe.js";
 
 async function init() {
@@ -35,7 +34,6 @@ async function init() {
   app.use("/auth", authRouter);
   app.use("/rooms", roomRouter);
   app.use("/profile", profileRouter);
-  app.use("/search", searchRouter);
   app.use("/booking", bookingRouter);
   app.use("/payment", paymentRouter);
 
