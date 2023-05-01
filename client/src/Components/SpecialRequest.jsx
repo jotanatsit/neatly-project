@@ -11,7 +11,7 @@ import { useBooking } from "../contexts/booking";
 import { useEffect } from "react";
 
 function SpecialRequest() {
-  const { bookingData, addBookingData } = useBooking();
+  const { bookingData, addBookingData, setBookingRequests } = useBooking();
 
   const formik = useFormik({
     initialValues: {
@@ -30,11 +30,20 @@ function SpecialRequest() {
     },
   });
 
+  const bookingRequests = Object.entries(formik.values).map(([key, value]) => [
+    key,
+    value,
+  ]);
+
   useEffect(() => {
     addBookingData({
       ...bookingData,
       ...formik.values,
     });
+  }, [formik.values]);
+
+  useEffect(() => {
+    setBookingRequests(bookingRequests);
   }, [formik.values]);
 
   return (

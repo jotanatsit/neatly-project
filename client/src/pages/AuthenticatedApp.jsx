@@ -9,7 +9,7 @@ import HistoryPage from "./HistoryPage";
 import CancelPage from "./CancelPage";
 import ChangeDatePage from "./ChangeDatePage";
 import Payment from "../Components/Payment";
-import ThankForBooking from "../Components/ThankForBooking";
+import ThankForBooking from "./ThankForBookingPage";
 import { useBooking } from "../contexts/booking";
 
 function AuthenticatedApp() {

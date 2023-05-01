@@ -1,7 +1,14 @@
 import { Flex, Text, UnorderedList, ListItem, Box } from "@chakra-ui/react";
 import { HiOutlineBriefcase } from "react-icons/hi2";
+import { useBooking } from "../contexts/booking";
+import changeFormatDate from "../utils/changeFormatDate";
 
 function PackageSummary() {
+  const { bookingData, bookingReq } = useBooking();
+
+  const checkInDate = changeFormatDate(bookingData?.check_in_date);
+  const checkOutDate = changeFormatDate(bookingData?.check_out_date);
+
   return (
     <Flex direction="column" w="358px" h="568px" gap="16px">
       <Box>
@@ -42,16 +49,66 @@ function PackageSummary() {
             </Box>
           </Flex>
           <Flex direction="column">
-            <Text>Th, 19 Oct 2022 - Fri, 20 Oct 2022</Text>
-            <Text>2 Guests</Text>
+            <Text textStyle="b1">
+              {checkInDate} - {checkOutDate}
+            </Text>
+            <Text textStyle="b1">{bookingData.amount_person} Guests</Text>
           </Flex>
           <Flex justify="space-between">
-            <Text>Superior Garden View Room</Text>
-            <Text>2,500.00</Text>
+            <Text textStyle="b1" color="green.300">
+              {bookingData.room_type_name}
+            </Text>
+            <Text textStyle="b1" fontWeight="600">
+              {(
+                bookingData.total_price_per_room * bookingData.amount_room
+              ).toLocaleString("th-TH", {
+                minimumFractionDigits: 2,
+              })}
+            </Text>
           </Flex>
-          <Flex justify="space-between">
-            <Text>Total</Text>
-            <Text>THB 2,500.00</Text>
+          {bookingReq?.map((arr, index) => {
+            if (arr[1] !== null && arr[1] !== "") {
+              return (
+                <Flex key={index} justify="space-between">
+                  <Text textStyle="b1" color="green.300">
+                    {(arr[0]?.charAt(0).toUpperCase() + arr[0]?.slice(1))
+                      .split("_")
+                      .join(" ")}
+                  </Text>
+                  <Text textStyle="b1" fontWeight="600">
+                    {arr[1].toLocaleString("th-TH", {
+                      minimumFractionDigits: 2,
+                    })}
+                  </Text>
+                </Flex>
+              );
+            }
+          })}
+          <Flex
+            justify="space-between"
+            align="baseline"
+            borderTop="1px solid"
+            borderTopColor="green.600"
+            padding="24px 0px 0px"
+          >
+            <Text textStyle="b1" color="green.300">
+              Total
+            </Text>
+            <Text textStyle="h5" fontWeight="600">
+              THB{" "}
+              {(bookingReq
+                ? bookingData.total_price_per_room * bookingData.amount_room +
+                  bookingReq?.reduce((sum, arr) => {
+                    if (typeof arr[1] === "number") {
+                      return sum + arr[1];
+                    }
+                    return sum;
+                  }, 0)
+                : bookingData.total_price_per_room * bookingData.amount_room
+              ).toLocaleString("th-TH", {
+                minimumFractionDigits: 2,
+              })}
+            </Text>
           </Flex>
         </Flex>
       </Box>
