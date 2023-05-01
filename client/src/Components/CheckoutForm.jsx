@@ -9,6 +9,8 @@ export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
+  const navigate = useNavigate();
+
   const [message, setMessage] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -27,13 +29,14 @@ export default function CheckoutForm() {
       confirmParams: {
         return_url: `${window.location.origin}/succeed`,
       },
-      //   redirect: "if_required",
+      redirect: "if_required",
     });
 
     if (error) {
       setMessage(error.message);
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
       setMessage("Payment status:" + paymentIntent.status);
+      navigate("/succeed");
     } else {
       setMessage("An unexpected error occured.");
     }

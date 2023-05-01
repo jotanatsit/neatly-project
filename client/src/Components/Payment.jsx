@@ -6,18 +6,11 @@ import { Elements } from "@stripe/react-stripe-js";
 import { Flex, Text, Button } from "@chakra-ui/react";
 import { useBooking } from "../contexts/booking";
 
-const formdata = {
-  roomId: "2",
-  roomType: "deluxe",
-  currency: "thb",
-  price: 2500,
-};
-
 const Payment = (props) => {
+  const booking = useBooking(); // ข้อมูลเป็น object ที่จะถูกส่งไป database
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
-  const { bookingData } = useBooking(); // ข้อมูลเป็น object ที่จะถูกส่งไป database
-  // console.log(bookingData);
+  console.log(booking.bookingData);
 
   const syncStripePromise = async () => {
     const result = await axios.get("http://localhost:4000/payment/config");
@@ -27,7 +20,7 @@ const Payment = (props) => {
   const syncClientSecret = async () => {
     const result = await axios.post(
       "http://localhost:4000/payment/create-payment-intent",
-      formdata,
+      booking.bookingData,
       {
         headers: {
           "Content-Type": "application/json",

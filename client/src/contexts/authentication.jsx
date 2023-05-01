@@ -31,6 +31,7 @@ function AuthProvider(props) {
   };
 
   const logout = () => {
+    localStorage.removeItem("username");
     localStorage.removeItem("token");
     setState({ ...state, user: null });
   };

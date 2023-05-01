@@ -10,7 +10,6 @@ import CancelPage from "./CancelPage";
 import ChangeDatePage from "./ChangeDatePage";
 import Payment from "../Components/Payment";
 import ThankForBooking from "../Components/ThankForBooking";
-import Completion from "../Components/Completion";
 import { useBooking } from "../contexts/booking";
 
 function AuthenticatedApp() {
@@ -32,7 +31,6 @@ function AuthenticatedApp() {
         <Route path="/changedate" element={<ChangeDatePage />} />
         <Route path="*" element={<HomePage />} />
         <Route path="/payment" element={<Payment />} />
-        <Route path="/completion" element={<Completion />} />
       </Routes>
     </div>
   );
