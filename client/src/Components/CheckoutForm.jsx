@@ -60,16 +60,7 @@ export default function CheckoutForm() {
       </button> */}
       {/* Show any error or success messages */}
       {/* {message && <div id="payment-message">{message}</div>} */}
-      <Flex
-        w="740px"
-        p="40px"
-        bg="white"
-        justify="space-between"
-        border="1px solid"
-        borderTop="none"
-        borderColor="gray.300"
-        borderBottomRadius="4px"
-      >
+      <Flex w="740px" p="40px" justify="space-between">
         <Button variant="ghost">Back</Button>
 
         <Button

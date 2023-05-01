@@ -46,10 +46,38 @@ const Payment = (props) => {
   useEffect(() => syncStripePromise, []);
   useEffect(() => syncClientSecret, []);
 
+  const appearance = {
+    theme: "stripe",
+    variables: {
+      borderRadius: "4px",
+      colorPrimary: "#E76B39",
+      boxShadow: "4px 4px 16px rgba(0, 0, 0, 0.08)",
+    },
+    rules: {
+      ".Tab": {
+        border: "1px solid #E4E6ED",
+        color: "#9AA1B9",
+      },
+      ".Tab:hover": {
+        border: "1px solid #E76B39",
+        color: "#9AA1B9",
+      },
+      ".Input": {
+        border: "1px solid #E4E6ED",
+      },
+      ".Input:focus": {
+        border: "1px solid #E76B39",
+        boxShadow: "none",
+      },
+    },
+  };
+
+  const options = { clientSecret, appearance };
+
   return (
     <>
       {stripePromise && clientSecret && (
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
+        <Elements stripe={stripePromise} options={options}>
           <CheckoutForm />
         </Elements>
       )}
