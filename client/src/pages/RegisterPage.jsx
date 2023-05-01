@@ -228,15 +228,13 @@ function RegisterPage() {
                     onChange={formik.handleChange}
                     value={formik.values.birth_date}
                     placeholder="Select your date of birth"
-                    // calendar แสดงปีปัจจุบัน 18 ปี
-                    max={
-                      new Date().getFullYear() -
-                      18 +
-                      "-" +
-                      ("0" + (new Date().getMonth() + 1)).slice(-2) +
-                      "-" +
-                      ("0" + new Date().getDate()).slice(-2)
-                    }
+                    max={new Date(
+                      new Date().getFullYear() - 17 - 1,
+                      new Date().getMonth(),
+                      new Date().getDate()
+                    )
+                      .toISOString()
+                      .slice(0, 10)}
                     width={320}
                     bg="#FFFFFF"
                     borderColor="gray.400"
