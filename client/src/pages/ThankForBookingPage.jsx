@@ -10,26 +10,10 @@ import changeFormatDate from "../utils/changeFormatDate";
 function ThankForBooking() {
   const navigate = useNavigate();
   const { bookingData, bookingReq } = useBooking();
-  const [cardNumber, setCardNumber] = useState("");
-  const userId = useAuth();
 
+  const userId = useAuth();
   const checkInDate = changeFormatDate(bookingData?.check_in_date);
   const checkOutDate = changeFormatDate(bookingData?.check_out_date);
-
-  async function getCardNumber() {
-    try {
-      const response = await axios.get(
-        `http://localhost:4000/profile/${userId.UserIdFromLocalStorage}/payment-method`
-      );
-      setCardNumber(response.data.data.card_number);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    getCardNumber();
-  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -87,7 +71,7 @@ function ThankForBooking() {
                   {checkInDate} - {checkOutDate}
                 </Text>
                 <Text textStyle="b1" color="white">
-                  {bookingData.amount_person} Guests
+                  {bookingData.amount_guests} Guests
                 </Text>
               </Flex>
               <Flex gap="24px">
@@ -115,12 +99,17 @@ function ThankForBooking() {
               color="green.300"
               textAlign="end"
             >
-              Payment success via Credit Card - *{cardNumber.slice(13)}
+              Payment success via Credit Card
             </Text>
             <Flex w="100%" justify="space-between">
-              <Text textStyle="b1" color="green.300" textAlign="start">
-                {bookingData.room_type_name}
-              </Text>
+              <Flex w="75%" justify="space-between">
+                <Text textStyle="b1" color="green.300" textAlign="start">
+                  {bookingData.room_type_name}
+                </Text>
+                <Text w="25%" textStyle="b1" color="green.300" textAlign="end">
+                  x {bookingData.amount_rooms}
+                </Text>
+              </Flex>
               <Text
                 textStyle="b1"
                 fontWeight="600"
@@ -128,7 +117,7 @@ function ThankForBooking() {
                 textAlign="end"
               >
                 {(
-                  bookingData.total_price_per_room * bookingData.amount_room
+                  bookingData.total_price_per_room * bookingData.amount_rooms
                 ).toLocaleString("th-TH", {
                   minimumFractionDigits: 2,
                 })}
@@ -138,20 +127,33 @@ function ThankForBooking() {
               if (arr[1] !== null && arr[1] !== "") {
                 return (
                   <Flex key={index} w="100%" justify="space-between">
-                    <Text textStyle="b1" color="green.300" textAlign="start">
-                      {(arr[0]?.charAt(0).toUpperCase() + arr[0]?.slice(1))
-                        .split("_")
-                        .join(" ")}
-                    </Text>
+                    <Flex w="75%" justify="space-between">
+                      <Text textStyle="b1" color="green.300" textAlign="start">
+                        {(arr[0]?.charAt(0).toUpperCase() + arr[0]?.slice(1))
+                          .split("_")
+                          .join(" ")}{" "}
+                      </Text>
+                      <Text
+                        w="25%"
+                        textStyle="b1"
+                        color="green.300"
+                        textAlign="end"
+                      >
+                        x {bookingData.amount_rooms}
+                      </Text>
+                    </Flex>
                     <Text
                       textStyle="b1"
                       fontWeight="600"
                       color="white"
                       textAlign="end"
                     >
-                      {arr[1].toLocaleString("th-TH", {
-                        minimumFractionDigits: 2,
-                      })}
+                      {(arr[1] * bookingData.amount_rooms).toLocaleString(
+                        "th-TH",
+                        {
+                          minimumFractionDigits: 2,
+                        }
+                      )}
                     </Text>
                   </Flex>
                 );
@@ -172,14 +174,15 @@ function ThankForBooking() {
               <Text textStyle="h5" color="white" textAlign="end">
                 THB{" "}
                 {(bookingReq
-                  ? bookingData.total_price_per_room * bookingData.amount_room +
+                  ? bookingData.total_price_per_room *
+                      bookingData.amount_rooms +
                     bookingReq?.reduce((sum, arr) => {
                       if (typeof arr[1] === "number") {
                         return sum + arr[1];
                       }
                       return sum;
                     }, 0)
-                  : bookingData.total_price_per_room * bookingData.amount_room
+                  : bookingData.total_price_per_room * bookingData.amount_rooms
                 ).toLocaleString("th-TH", {
                   minimumFractionDigits: 2,
                 })}

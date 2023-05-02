@@ -6,19 +6,19 @@ const BookingContext = React.createContext();
 
 function BookingProvider(props) {
   // location.state เป็น object ที่มี key-value ที่ส่งมาจากหน้า search booking หลังกดปุ่ม Book now
-  const location = useLocation();
-  const [bookingData, setBookingData] = useState(location.state);
+
+  const [bookingData, setBookingData] = useState({});
   const [step, setStep] = useState(["current", "none", "none"]);
   const [bookingReq, setBookingReq] = useState([]);
 
   // function สำหรับ reset object ให้เป็น initial value
   const resetBookingData = () => {
-    setBookingData(location.state);
+    setBookingData({});
   };
 
   // function สำหรับเพิ่มข้อมูลเข้าไปใน object
   const addBookingData = (data) => {
-    setBookingData({ ...location.state, ...data });
+    setBookingData({ ...data });
   };
 
   // function สำหรับการ reset step ให้เป็น initial value
@@ -36,6 +36,11 @@ function BookingProvider(props) {
     setBookingReq(req);
   };
 
+  // function สำหรับการ reset special request
+  const resetBookingRequests = () => {
+    setBookingReq([]);
+  };
+
   return (
     <BookingContext.Provider
       value={{
@@ -47,6 +52,7 @@ function BookingProvider(props) {
         resetStepPayment,
         bookingReq,
         setBookingRequests,
+        resetBookingRequests,
       }}
     >
       {props.children}

@@ -28,7 +28,6 @@ const BookingPage = () => {
 
   //ใช้ useLocation ในการเข้าถึงข้อมูล url booking เมื่อ log ก็เห็นข้อมูลใน console แล้วนำมาใส่ใน useState Date กับ Room and Guest
   const location = useLocation();
-  console.log(location);
 
   const [rooms, setRooms] = useState(location.state.rooms);
   const [guests, setGuests] = useState(location.state.guests);

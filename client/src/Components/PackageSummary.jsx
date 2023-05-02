@@ -52,15 +52,20 @@ function PackageSummary() {
             <Text textStyle="b1">
               {checkInDate} - {checkOutDate}
             </Text>
-            <Text textStyle="b1">{bookingData.amount_person} Guests</Text>
+            <Text textStyle="b1">{bookingData.amount_guests} Guests</Text>
           </Flex>
-          <Flex justify="space-between">
-            <Text textStyle="b1" color="green.300">
-              {bookingData.room_type_name}
-            </Text>
+          <Flex w="100%" justify="space-between">
+            <Flex w="75%" justify="space-between">
+              <Text textStyle="b1" color="green.300">
+                {bookingData.room_type_name}
+              </Text>
+              <Text w="25%" textStyle="b1" color="green.300" textAlign="end">
+                x {bookingData.amount_rooms}
+              </Text>
+            </Flex>
             <Text textStyle="b1" fontWeight="600">
               {(
-                bookingData.total_price_per_room * bookingData.amount_room
+                bookingData.total_price_per_room * bookingData.amount_rooms
               ).toLocaleString("th-TH", {
                 minimumFractionDigits: 2,
               })}
@@ -69,16 +74,29 @@ function PackageSummary() {
           {bookingReq?.map((arr, index) => {
             if (arr[1] !== null && arr[1] !== "") {
               return (
-                <Flex key={index} justify="space-between">
-                  <Text textStyle="b1" color="green.300">
-                    {(arr[0]?.charAt(0).toUpperCase() + arr[0]?.slice(1))
-                      .split("_")
-                      .join(" ")}
-                  </Text>
+                <Flex key={index} w="100%" justify="space-between">
+                  <Flex w="75%" justify="space-between">
+                    <Text textStyle="b1" color="green.300">
+                      {(arr[0]?.charAt(0).toUpperCase() + arr[0]?.slice(1))
+                        .split("_")
+                        .join(" ")}{" "}
+                    </Text>
+                    <Text
+                      w="25%"
+                      textStyle="b1"
+                      color="green.300"
+                      textAlign="end"
+                    >
+                      x {bookingData.amount_rooms}
+                    </Text>
+                  </Flex>
                   <Text textStyle="b1" fontWeight="600">
-                    {arr[1].toLocaleString("th-TH", {
-                      minimumFractionDigits: 2,
-                    })}
+                    {(arr[1] * bookingData.amount_rooms).toLocaleString(
+                      "th-TH",
+                      {
+                        minimumFractionDigits: 2,
+                      }
+                    )}
                   </Text>
                 </Flex>
               );
@@ -97,14 +115,14 @@ function PackageSummary() {
             <Text textStyle="h5" fontWeight="600">
               THB{" "}
               {(bookingReq
-                ? bookingData.total_price_per_room * bookingData.amount_room +
+                ? bookingData.total_price_per_room * bookingData.amount_rooms +
                   bookingReq?.reduce((sum, arr) => {
                     if (typeof arr[1] === "number") {
                       return sum + arr[1];
                     }
                     return sum;
                   }, 0)
-                : bookingData.total_price_per_room * bookingData.amount_room
+                : bookingData.total_price_per_room * bookingData.amount_rooms
               ).toLocaleString("th-TH", {
                 minimumFractionDigits: 2,
               })}
