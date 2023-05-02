@@ -17,19 +17,6 @@ const Payment = (props) => {
     setStripePromise(loadStripe(result.data.publishableKey));
   };
 
-  // const syncClientSecret = async () => {
-  //   const result = await axios.post(
-  //     "http://localhost:4000/payment/create-payment-intent",
-  //     booking.bookingData,
-  //     {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     }
-  //   );
-  //   setClientSecret(result.data.clientSecret);
-  // };
-
   const syncClientSecret = async () => {
     const result = await axios.post(
       "http://localhost:4000/payment/create-payment-intent",

@@ -4,8 +4,6 @@ import Nav_user from "../Components/Nav_user";
 import StepPayment from "../Components/StepPayment";
 import BasicInfoSummary from "../Components/BasicInfoSummary.jsx";
 import SpecialRequest from "../Components/SpecialRequest";
-import PaymentMethod from "../Components/PaymentMethod";
-import ThankForBooking from "./ThankForBookingPage";
 import PackageSummary from "../Components/PackageSummary.jsx";
 import Payment from "../Components/Payment";
 import { useBooking } from "../contexts/booking";

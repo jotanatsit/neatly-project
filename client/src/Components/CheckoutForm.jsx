@@ -39,23 +39,17 @@ export default function CheckoutForm() {
       confirmParams: {
         return_url: `${window.location.origin}/succeed`,
       },
-      redirect: "if_required",
+      // redirect: "if_required",
     });
 
     if (error) {
       setMessage(error.message);
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
       setMessage("Payment status:" + paymentIntent.status);
-      navigate("/succeed");
+      // navigate("/succeed");
     } else {
       setMessage("An unexpected error occured.");
     }
-
-    // if (error.type === "card_error" || error.type === "validation_error") {
-    //   setMessage(error.message);
-    // } else {
-    //   setMessage("An unexpected error occured.");
-    // }
 
     setIsProcessing(false);
   };
