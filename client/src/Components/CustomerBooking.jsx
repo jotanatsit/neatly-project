@@ -9,7 +9,6 @@ import axios from "axios";
 
 const CustomerBooking = () => {
   const [showDetail, setShowDetail] = useState(false);
-  const [selectedBookingId, setSelectedBookingId] = useState(null);
   const [user,setUser] = useState({})
 
   async function userBooking() {
@@ -28,16 +27,14 @@ const CustomerBooking = () => {
 
 
   // ฟังก์ชั่นเมื่อกดปุ่มดูรายละเอียดบนแต่ละการจอง
-  const handleViewDetail = (bookingId) => {
-    // setSelectedBookingId(bookingId);
+  const handleViewDetail = () => {
     setShowDetail(true);
   };
 
-  // แสดง Component `CustomerBookingDetail` หากผู้ใช้กดดูรายละเอียดการจอง
+  // แสดง Component `CustomerBookingDetail` หากกดดูรายละเอียดการจอง
   if (showDetail) {
     return (
       <CustomerBookingDetail
-        // bookingId={selectedBookingId}
         setShowDetail={setShowDetail}
       />
     );

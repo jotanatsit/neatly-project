@@ -83,7 +83,25 @@ const CancelPage = () => {
                     {roomDetail.room_type_name}
                   </Text>
                   <Text textStyle="b1" fontWeight="600" color="white">
-                    Th, 19 Oct 2022 - Fri, 20 Oct 2022
+                    {new Date(roomDetail.check_in_date).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        weekday: "short",
+                        year: "numeric",
+                        month: "long",
+                      }
+                    )}
+                    -{" "}
+                    {new Date(roomDetail.check_out_date).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        weekday: "short",
+                        year: "numeric",
+                        month: "long",
+                      }
+                    )}
                   </Text>
                   <Text textStyle="b1" fontWeight="400" color="white">
                     {roomDetail.amount_guests} Guests
@@ -97,10 +115,28 @@ const CancelPage = () => {
                   justifyContent="space-around"
                 >
                   <Text textStyle="b1" fontWeight="400" color="green.300">
-                    Booking date: Tue, 16 Oct 2022
+                    Booking date:{" "}
+                    {new Date(roomDetail.booking_date).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        weekday: "short",
+                        year: "numeric",
+                        month: "long",
+                      }
+                    )}
                   </Text>
                   <Text textStyle="b1" fontWeight="400" color="green.300">
-                    Cancellation date: Tue, 16 Oct 2022
+                    Cancellation date:{" "}
+                    {new Date(roomDetail.cancellation_date).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        weekday: "short",
+                        year: "numeric",
+                        month: "long",
+                      }
+                    )}
                   </Text>
                 </Box>
               </Box>
