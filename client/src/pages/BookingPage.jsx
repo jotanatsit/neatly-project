@@ -16,7 +16,6 @@ import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { Link } from "react-router-dom";
 import Footer from "../Components/Footer";
 import { useAuth } from "../contexts/authentication";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -37,18 +36,15 @@ const BookingPage = () => {
   const [checkInDate, setCheckInDate] = useState(date[0].startDate);
   const [checkOutDate, setCheckOutDate] = useState(date[0].endDate);
   const [roomData, setRoomData] = useState([]);
-  console.log(date);
-  console.log(guests);
-  console.log(rooms);
 
   // default search 0 rooms , 0 guest that it shows that has always 1 rooms , 2 guest
   function defaultRoom() {
     if (guests === 0 && rooms === 0) {
-      return setGuests(2), setRooms(1);
+      return setGuests(1), setRooms(1);
     } else if (rooms === 0) {
       return setRooms(1);
     } else if (guests === 0) {
-      return setGuests(2);
+      return setGuests(1);
     }
   }
 
@@ -272,7 +268,7 @@ const BookingPage = () => {
       {/* rooms */}
       <Flex
         w="1440px"
-        height="1895px"
+        height="2450px"
         flexDirection="column"
         alignItems="center"
         bg="bg"
@@ -281,10 +277,10 @@ const BookingPage = () => {
           return (
             <SearchRooms
               key={index}
-              // index={index}
               room_type_id={item.room_type_id}
               room={item}
               rooms={rooms}
+              guests={guests}
               checkInDate={checkInDate}
               checkOutDate={checkOutDate}
             />

@@ -25,6 +25,7 @@ roomRouter.get("/room-type/max-guests", async (req, res) => {
       SELECT room_type_id, COUNT(*) as count
       FROM rooms
       GROUP BY room_type_id
+      
     ) AS subquery;`);
   } catch {
     return res.json({
@@ -41,7 +42,7 @@ roomRouter.get("/room-type/max-guests", async (req, res) => {
   });
 });
 
-// ----
+// ---- get guest more than amount search ----
 
 roomRouter.get("/room-type/search", async (req, res) => {
   const check_in_date = new Date(req.query.check_in_date)
@@ -50,89 +51,86 @@ roomRouter.get("/room-type/search", async (req, res) => {
   const check_out_date = new Date(req.query.check_out_date)
     .toISOString()
     .slice(0, 10);
-  const amount_guests = req.query.amount_guests;
+  const amount_guests = parseInt(req.query.amount_guests);
 
   try {
-    // get booking data // assume: amount_guests = 2
-    const table1 = await pool.query(
-      `select booking.room_id, booking_details.check_in_date, booking_details.check_out_date, rooms.room_type_id ,rooms_type.amount_person
-        from booking
-        inner join booking_details
-        ON booking_details.booking_detail_id = booking.booking_detail_id
-        inner join rooms
-        ON booking.room_id = rooms.room_id
-        inner join rooms_type
-        ON rooms.room_type_id = rooms_type.room_type_id
-        where rooms_type.amount_person = $1`,
-      [amount_guests]
+    const max_guests_per_room = await pool.query(
+      `SELECT MAX(amount_person) as max_guests FROM rooms_type`
     );
+    const max_guests = max_guests_per_room.rows[0].max_guests;
 
-    // Unavailable rooms at check_date - array - [ 5, 10 ]
-    const unAvailableRooms = table1.rows
-      .filter((row) => {
-        return (
-          check_in_date < row.check_out_date &&
-          check_out_date > row.check_in_date
-        );
-      })
-      .map((row) => row.room_id);
-
-    const table2 = await pool.query(
-      `select rooms.room_id, rooms.room_type_id ,rooms_type.amount_person
-        from rooms
-        inner join rooms_type
-        ON rooms.room_type_id = rooms_type.room_type_id
-        where rooms_type.amount_person = $1`,
-      [amount_guests]
-    );
-
-    // All rooms in the same rooms_type - array - [ 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20 ]
-    const allRooms = table2.rows.map((room) => room.room_id);
-
-    // Available rooms at check_date - array - [ 6, 7, 8, 9, 11, 12, 17, 18, 19, 20 ]
-    const availableRooms = allRooms.filter(
-      (room) => !unAvailableRooms.includes(room)
-    );
-
-    // Turn available room_id to room_type_id - array - [ 2, 2, 2, 3, 3, 3, 5, 5, 6, 6 ]
-    const availableRoomType = table2.rows
-      .filter((room) => availableRooms.includes(room.room_id))
-      .map((room) => room.room_type_id);
-
-    // Count rooms reference room_type_id - array - [ [ 2, 3 ], [ 3, 3 ], [ 5, 2 ], [ 6, 2 ] ]
-    const roomsTypeForBooking = Object.entries(
-      availableRoomType.reduce((acc, val) => {
-        acc[val] = (acc[val] || 0) + 1;
-        return acc;
-      }, {})
-    ).map(([key, value]) => [parseInt(key), value]);
-
-    // Available rooms_type data for booking - array
     const roomsTypeData = [];
-    for (let i = 0; i < roomsTypeForBooking.length; i++) {
-      const results = await pool.query(
-        `SELECT 
-          rt.*, 
-          array_agg(rp.room_picture) as room_picture       
-        FROM rooms_type rt
-        LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
-        WHERE rt.room_type_id = $1
-        GROUP BY 
-          rt.room_type_id
-        ORDER BY 
-          rt.room_type_id ASC;`,
-        [roomsTypeForBooking[i][0]]
+
+    for (let guests = amount_guests; guests <= max_guests; guests++) {
+      const table1 = await pool.query(
+        `SELECT booking.room_id, booking_details.check_in_date, booking_details.check_out_date, rooms.room_type_id, rooms_type.amount_person
+         FROM booking
+         INNER JOIN booking_details ON booking_details.booking_detail_id = booking.booking_detail_id
+         INNER JOIN rooms ON booking.room_id = rooms.room_id
+         INNER JOIN rooms_type ON rooms.room_type_id = rooms_type.room_type_id
+         WHERE rooms_type.amount_person >= $1 AND rooms_type.amount_person <= $2
+         ORDER BY rooms_type.amount_person ASC`,
+        [guests, max_guests]
       );
 
-      results.rows[0] = {
-        ...results.rows[0],
-        available_room: roomsTypeForBooking[i][1],
-      };
+      const unAvailableRooms = table1.rows
+        .filter((row) => {
+          return (
+            check_in_date < row.check_out_date &&
+            check_out_date > row.check_in_date
+          );
+        })
+        .map((row) => row.room_id);
 
-      roomsTypeData.push(results.rows[0]);
+      const table2 = await pool.query(
+        `SELECT rooms.room_id, rooms.room_type_id, rooms_type.amount_person
+        FROM rooms
+        INNER JOIN rooms_type ON rooms.room_type_id = rooms_type.room_type_id
+        WHERE rooms_type.amount_person >= $1 AND rooms_type.amount_person <= $2
+        ORDER BY rooms_type.amount_person ASC`,
+        [guests, max_guests]
+      );
+
+      const allRooms = table2.rows.map((room) => room.room_id);
+
+      const availableRooms = allRooms.filter(
+        (room) => !unAvailableRooms.includes(room)
+      );
+
+      const availableRoomType = table2.rows
+        .filter((room) => availableRooms.includes(room.room_id))
+        .map((room) => room.room_type_id);
+
+      const roomsTypeForBooking = Object.entries(
+        availableRoomType.reduce((acc, val) => {
+          acc[val] = (acc[val] || 0) + 1;
+          return acc;
+        }, {})
+      ).map(([key, value]) => [parseInt(key), value]);
+
+      for (let i = 0; i < roomsTypeForBooking.length; i++) {
+        const results = await pool.query(
+          `SELECT 
+            rt.*, 
+            array_agg(rp.room_picture) as room_picture       
+           FROM rooms_type rt
+           LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
+           WHERE rt.room_type_id = $1
+           GROUP BY rt.room_type_id
+           ORDER BY rt.amount_person ASC`,
+          [roomsTypeForBooking[i][0]]
+        );
+
+        results.rows[0] = {
+          ...results.rows[0],
+          available_room: roomsTypeForBooking[i][1],
+        };
+
+        roomsTypeData.push(results.rows[0]);
+      }
+      roomsTypeData.sort((a, b) => a.amount_person - b.amount_person);
+      return res.status(200).json({ data: roomsTypeData });
     }
-
-    return res.status(200).json({ data: roomsTypeData });
   } catch (error) {
     return res.json({ message: error.message });
   }
@@ -164,8 +162,7 @@ roomRouter.get("/room-type/:id", async (req, res) => {
       GROUP BY
         rt.room_type_id,
         ra.room_amenity_id
-      ORDER BY
-        rt.room_type_id ASC;`,
+      `,
       [roomTypeId]
     );
   } catch {

@@ -18,7 +18,6 @@ import { useDisclosure } from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import "swiper/swiper-bundle.min.css";
-import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -28,7 +27,7 @@ function SearchRooms(props) {
   const rooms = props.rooms;
   const room = props.room;
   const room_type_id = props.room_type_id;
-  // const index = props.index;
+  const guests = props.guests;
   const startDate = props.checkInDate;
   const endDate = props.checkOutDate;
   const navigate = useNavigate();
@@ -52,8 +51,8 @@ function SearchRooms(props) {
         room_type_name: room.room_type_name,
         check_in_date: startDate,
         check_out_date: endDate,
-        amount_room: rooms,
-        amount_person: room.amount_person,
+        amount_rooms: rooms,
+        amount_guests: guests,
         total_price_per_room: netPrice,
       };
 
@@ -72,13 +71,11 @@ function SearchRooms(props) {
       );
 
       setRoomDetail(response.data.data);
-      console.log(response.data.data);
       onOpen2(true);
     } catch (error) {
       console.log(error);
     }
   }
-  console.log(room_type_id);
 
   return (
     <Flex
