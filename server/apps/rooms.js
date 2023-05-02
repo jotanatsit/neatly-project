@@ -42,7 +42,7 @@ roomRouter.get("/room-type/max-guests", async (req, res) => {
   });
 });
 
-// ---- get guest more than amount search ----
+// ------------------------- get room type by search (get guest more than amount search) ------------------------------
 
 roomRouter.get("/room-type/search", async (req, res) => {
   const check_in_date = new Date(req.query.check_in_date)
@@ -136,7 +136,82 @@ roomRouter.get("/room-type/search", async (req, res) => {
   }
 });
 
-// ------------------------------------------- create api get room type by type id -------------------------------------------
+// ------------------------------------------- get all rooms type -------------------------------------------
+
+roomRouter.get("/room-type", async (req, res) => {
+  let result;
+  let newResult = [];
+
+  try {
+    result = await pool.query(
+      `SELECT
+        rt.*,
+        ra.*,
+        array_agg(rp.room_picture) as room_picture
+      FROM rooms_type rt
+      LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
+      LEFT JOIN rooms_amenities ra ON ra.room_type_id = rt.room_type_id
+      GROUP BY
+        rt.room_type_id,
+        ra.room_amenity_id
+      ORDER BY 
+      rt.room_type_id ASC;
+      `
+    );
+  } catch {
+    return res.json({
+      message: "There is some error occured on the database",
+    });
+  }
+
+  const newArr = result?.rows ?? [];
+
+  for (let i = 0; i < newArr.length; i++) {
+    const temp = {
+      id: newArr?.[i].room_type_id,
+      safe_in_room: newArr?.[i].safe_in_room,
+      air_conditioning: newArr?.[i].air_conditioning,
+      high_speed_internet: newArr?.[i].high_speed_internet,
+      hairdryer: newArr?.[i].hairdryer,
+      shower: newArr?.[i].shower,
+      bathroom_amenities: newArr?.[i].bathroom_amenities,
+      lamp: newArr?.[i].lamp,
+      minibar: newArr?.[i].minibar,
+      telephone: newArr?.[i].telephone,
+      ironing_board: newArr?.[i].ironing_board,
+      floor_accessible: newArr?.[i].floor_accessible,
+      alarm_clock: newArr?.[i].alarm_clock,
+      bathrobe: newArr?.[i].bathrobe,
+    };
+
+    const amenityResult = [];
+    for (const key in temp) {
+      if (temp[key] === true) {
+        amenityResult.push(key);
+      }
+    }
+
+    newResult.push({
+      room_type_id: newArr?.[i].room_type_id,
+      room_type_name: newArr?.[i].room_type_name,
+      room_size: newArr?.[i].room_size,
+      bed_type: newArr?.[i].bed_type,
+      amount_person: newArr?.[i].amount_person,
+      description: newArr?.[i].description,
+      price: newArr?.[i].price,
+      promotion_price: newArr?.[i].promotion_price,
+      room_amenity_id: newArr?.[i].room_amenity_id,
+      room_amenity: amenityResult,
+      room_picture: newArr?.[i].room_picture,
+    });
+  }
+
+  return res.json({
+    data: newResult,
+  });
+});
+
+// ------------------------------------------- get room type by type id -------------------------------------------
 
 roomRouter.get("/room-type/:id", async (req, res) => {
   const roomTypeId = req.params.id;
@@ -212,6 +287,48 @@ roomRouter.get("/room-type/:id", async (req, res) => {
     room_amenity: amenityResult,
     room_picture: newArr.room_picture,
   };
+
+  return res.json({
+    data: newResult,
+  });
+});
+
+// ------------------------------------------- get all rooms -------------------------------------------
+
+roomRouter.get("/", async (req, res) => {
+  let result;
+  let newResult = [];
+
+  try {
+    result = await pool.query(
+      `SELECT
+        rt.*,
+        r.*
+      FROM rooms_type rt
+      LEFT JOIN rooms r ON r.room_type_id = rt.room_type_id
+      GROUP BY
+        r.room_id,
+        rt.room_type_id
+      ORDER BY 
+        r.room_id ASC;
+      `
+    );
+  } catch {
+    return res.json({
+      message: "There is some error occured on the database",
+    });
+  }
+
+  const newArr = result?.rows ?? [];
+
+  for (let i = 0; i < newArr.length; i++) {
+    newResult.push({
+      room_id: newArr?.[i].room_number,
+      room_type_name: newArr?.[i].room_type_name,
+      bed_type: newArr?.[i].bed_type,
+      room_type_id: newArr?.[i].room_status,
+    });
+  }
 
   return res.json({
     data: newResult,
