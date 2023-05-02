@@ -10,15 +10,21 @@ import axios from "axios";
 const CustomerBooking = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
+  const [user,setUser] = useState({})
 
-  function userBooking() {
+  async function userBooking() {
     try {
-      
+      const response = await axios.get(
+        `http://localhost:4000/booking/1`
+      );
+      console.log(response.data.data);
+      setUser(response.data.data);
     } catch (error) {
-      
     }
-    
   }
+  useEffect(() => {
+    userBooking();
+  }, []);
 
 
   // ฟังก์ชั่นเมื่อกดปุ่มดูรายละเอียดบนแต่ละการจอง

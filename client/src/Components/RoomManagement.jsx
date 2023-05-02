@@ -49,22 +49,22 @@ const RoomManagement = () => {
             h="72px"
           >
             <Box w="120px">
-              <Text Text textStyle="b1" color="black" ml={5}>
+              <Text  textStyle="b1" color="black" ml={5}>
                 0001
               </Text>
             </Box>
             <Box w="367px">
-              <Text Text textStyle="b1" color="black">
+              <Text textStyle="b1" color="black">
                 Superior Garden View
               </Text>
             </Box>
             <Box w="300px">
-              <Text Text textStyle="b1" color="black">
+              <Text  textStyle="b1" color="black">
                 Single Bed
               </Text>
             </Box>
             <Box w="293px">
-              <Text Text textStyle="b1" color="black">
+              <Text  textStyle="b1" color="black">
                 Occupied
               </Text>
             </Box>
