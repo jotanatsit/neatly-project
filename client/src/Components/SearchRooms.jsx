@@ -21,8 +21,10 @@ import "swiper/swiper-bundle.min.css";
 import { useAuth } from "../contexts/authentication";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useBooking } from "../contexts/booking";
 
 function SearchRooms(props) {
+  const { resetBookingData, addBookingData } = useBooking();
   const auth = useAuth();
   const rooms = props.rooms;
   const room = props.room;
@@ -55,7 +57,8 @@ function SearchRooms(props) {
         amount_guests: guests,
         total_price_per_room: netPrice,
       };
-
+      resetBookingData();
+      addBookingData(bookingData);
       // Navigate to /booking-summary and pass bookingData as state
       navigate("/booking-summary", { state: bookingData });
     } else {

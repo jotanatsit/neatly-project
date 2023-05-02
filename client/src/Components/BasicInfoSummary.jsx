@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/authentication.jsx";
 import axios from "axios";
 import React from "react";
+import { useBooking } from "../contexts/booking.jsx";
 
 function BasicInfoSummary() {
   const [userData, setUserData] = useState({});
+  const { resetBookingRequests } = useBooking();
   const userId = useAuth();
 
   async function getUserData() {
@@ -21,6 +23,10 @@ function BasicInfoSummary() {
   }
   useEffect(() => {
     getUserData();
+  }, []);
+
+  useEffect(() => {
+    resetBookingRequests();
   }, []);
 
   const formik = useFormik({

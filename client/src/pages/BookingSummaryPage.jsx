@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Flex, Text, Button } from "@chakra-ui/react";
 import Nav_user from "../Components/Nav_user";
 import StepPayment from "../Components/StepPayment";
@@ -12,9 +13,8 @@ function BookingSummary() {
   /* const [status, setStatus] = useState(["current", "none", "none"]); */
 
   // useBooking() เป็น context ที่เกี่ยวกับการเก็บข้อมูลการ Booking
-  const { resetBookingData, step, setStepPayment, resetStepPayment } =
-    useBooking();
-  useEffect(() => resetBookingData(), []);
+  const { step, setStepPayment, resetStepPayment } = useBooking();
+
   useEffect(() => resetStepPayment(), []);
 
   function nextStep() {
@@ -32,6 +32,10 @@ function BookingSummary() {
       setStepPayment(["current", "none", "none"]);
     }
   }
+
+  /*   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [step]); */
 
   return (
     <Flex direction="column" w="1440px" bgColor="bg" m="auto" h="100%">

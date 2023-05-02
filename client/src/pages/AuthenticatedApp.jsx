@@ -13,7 +13,8 @@ import ThankForBooking from "./ThankForBookingPage";
 import { useBooking } from "../contexts/booking";
 
 function AuthenticatedApp() {
-  let bookingData = useBooking();
+  let { bookingData } = useBooking();
+
   return (
     <div className="App">
       <Routes>
