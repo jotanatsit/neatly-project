@@ -1,21 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Flex, Text, Button } from "@chakra-ui/react";
 import Nav_user from "../Components/Nav_user";
 import { useBooking } from "../contexts/booking";
+import { useAuth } from "../contexts/authentication";
 import axios from "axios";
 import changeFormatDate from "../utils/changeFormatDate";
 
 function ThankForBooking() {
+  const navigate = useNavigate();
   const { bookingData, bookingReq } = useBooking();
+  const [cardNumber, setCardNumber] = useState("");
+  const userId = useAuth();
 
   const checkInDate = changeFormatDate(bookingData?.check_in_date);
   const checkOutDate = changeFormatDate(bookingData?.check_out_date);
 
-  const navigate = useNavigate();
+  async function getCardNumber() {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/profile/${userId.UserIdFromLocalStorage}/payment-method`
+      );
+      setCardNumber(response.data.data.card_number);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getCardNumber();
+  }, []);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [navigate]);
+
   return (
     <Flex direction="column" w="1440px" bgColor="bg" m="auto" h="100%">
       <Nav_user />
@@ -96,7 +115,7 @@ function ThankForBooking() {
               color="green.300"
               textAlign="end"
             >
-              Payment success via Credit Card - *888
+              Payment success via Credit Card - *{cardNumber.slice(13)}
             </Text>
             <Flex w="100%" justify="space-between">
               <Text textStyle="b1" color="green.300" textAlign="start">
