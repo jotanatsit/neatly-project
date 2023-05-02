@@ -149,6 +149,70 @@ bookingRouter.post("/", async (req, res) => {
   });
 });
 
+// ------------------------------------------- get all booking for admin -------------------------------------------
+
+bookingRouter.get("/", async (req, res) => {
+  const results = await pool.query(
+    `SELECT 
+        r.*,
+        rt.*,
+        b.*,
+        bd.*,
+        u.*,
+        array_agg(rp.room_picture) as room_picture       
+      FROM rooms_type rt
+      LEFT JOIN rooms r ON r.room_type_id = rt.room_type_id
+      LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
+      LEFT JOIN booking b ON b.room_id = r.room_id
+      LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
+      LEFT JOIN users u ON u.user_id = b.user_id
+      GROUP BY 
+        b.booking_id,
+        bd.booking_detail_id,
+        u.user_id,
+        rt.room_type_id,
+        r.room_id
+      ORDER BY 
+        bd.booking_detail_id DESC;`
+  );
+
+  const newArr = results.rows;
+  const newResults = [];
+
+  const unique_booking_detail_id = [];
+
+  // Object data that return to client
+  for (let i = 0; i < newArr.length; i++) {
+    if (
+      !unique_booking_detail_id.includes(newArr[i].booking_detail_id) &&
+      newArr[i].booking_detail_id !== null
+    ) {
+      newResults.push({
+        user_id: results.rows[i].user_id,
+        booking_detail_id: results.rows[i].booking_detail_id,
+        room_type_id: results.rows[i].room_type_id,
+        room_type_name: results.rows[i].room_type_name,
+        booking_date: results.rows[i].booking_date,
+        cancellation_date: results.rows[i].cancellation_date,
+        check_in_date: results.rows[i].check_in_date,
+        check_out_date: results.rows[i].check_out_date,
+        amount_guests: results.rows[i].amount_guests,
+        amount_rooms: results.rows[i].amount_rooms,
+        price: results.rows[i].price,
+        promotion_price: results.rows[i].promotion_price,
+        payment_type: results.rows[i].payment_type,
+        booking_status: results.rows[i].booking_status,
+        room_picture: results.rows[i].room_picture,
+      });
+      unique_booking_detail_id.push(newArr[i].booking_detail_id);
+    }
+  }
+
+  return res.json({
+    data: newResults,
+  });
+});
+
 // ------------------------------------------- get all user's booking -------------------------------------------
 
 bookingRouter.get("/:userId", async (req, res) => {
