@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Button, Flex, Text, Image, Box, Input } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Text,
+  Image,
+  Box,
+  Input,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+} from "@chakra-ui/react";
 import axios from "axios";
-import EditRoom from "./EditRoom";
+import { Search2Icon } from "@chakra-ui/icons";
 
 const RoomAndProperty = () => {
-  const [showDetail, setShowDetail] = useState(false);
-  const [selectedBookingId, setSelectedBookingId] = useState(null);
+  // const [showDetail, setShowDetail] = useState(false);
   const [roomType, setRoomType] = useState([]);
-  const [inputData, setInputData] = useState("");
+  const [price, setPrice] = useState("");
+  const [promoPrice, setPromoPrice] = useState("");
 
   async function typeRoom(data) {
     try {
@@ -36,16 +52,22 @@ const RoomAndProperty = () => {
 
   // ฟังก์ชั่นเมื่อกดปุ่มดูรายละเอียดบนแต่ละการจอง
   const handleViewDetail = (bookingId) => {
-    // setSelectedBookingId(bookingId);
     setShowDetail(true);
   };
 
   // แสดง Component `CustomerBookingDetail` กดดูรายละเอียดการจอง
-  if (showDetail) {
-    return (
-      <EditRoom bookingId={selectedBookingId} setShowDetail={setShowDetail} />
-    );
+  // if (showDetail) {
+  //   return (
+  //     <EditRoom b setShowDetail={setShowDetail} />
+  //   );
+  // }
+
+  function changePrice(e) {
+    if (e.key === "Enter") {
+    }
   }
+
+
   return (
     <Flex h="1024px" flexDirection="column">
       <Flex
@@ -57,15 +79,10 @@ const RoomAndProperty = () => {
         <Text ml={20} textStyle="h5">
           Room & Property
         </Text>
-        <Input
-          mr={20}
-          w="320px"
-          border="1px solid"
-          placeholder="Search..."
-          borderColor="gray.500"
-          value={inputData}
-          onChange={handleSearch}
-        ></Input>
+        <Box display="flex" w="320px" h="48px" border="1px solid" borderColor="gray.400" borderRadius={5} alignItems="center">
+          <Search2Icon boxSize={5} ml={3} color="#646D89" />
+          <Input mr={20} w="320px" placeholder="Search..." border="none" ></Input>
+        </Box>
       </Flex>
 
       <Flex bg="bg" h="1000px" justifyContent="center">
@@ -109,7 +126,7 @@ const RoomAndProperty = () => {
                 h="120px"
                 cursor="pointer"
                 // onClick={() => handleViewDetail(booking.id)}
-                onClick={() => handleViewDetail()}
+                // onClick={() => handleViewDetail()}
                 key={index}
               >
                 <Box w="153px" display="flex" justifyContent="center">
@@ -126,14 +143,50 @@ const RoomAndProperty = () => {
                   </Text>
                 </Box>
                 <Box w="136px">
-                  <Text textStyle="b1" color="black">
-                    {room.price}
-                  </Text>
+                  <Popover>
+                    <PopoverTrigger>
+                      <Text textStyle="b1" color="black">
+                        {room.price}
+                      </Text>
+                    </PopoverTrigger>
+                    <PopoverContent shadow="2xl">
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>Price</PopoverHeader>
+                      <PopoverBody>
+                        <Input
+                          border="1px solid"
+                          borderColor="gray.400"
+                          value={price}
+                          onChange={(e) => setPrice(e.target.value)}
+                          onKeyPress={changePrice}
+                        />
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
                 </Box>
                 <Box w="136px">
-                  <Text textStyle="b1" color="black">
-                    {room.promotion_price ? room.promotion_price : "-"}
-                  </Text>
+                  <Popover>
+                    <PopoverTrigger>
+                      <Text textStyle="b1" color="black">
+                        {room.promotion_price ? room.promotion_price : "-"}
+                      </Text>
+                    </PopoverTrigger>
+                    <PopoverContent shadow="2xl">
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>Promotoin Price</PopoverHeader>
+                      <PopoverBody>
+                        <Input
+                          border="1px solid"
+                          borderColor="gray.400"
+                          value={promoPrice}
+                          onChange={(e) => setPromoPrice(e.target.value)}
+                          // onKeyPress={changePrice}
+                        />
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
                 </Box>
                 <Box w="94px">
                   <Text textStyle="b1" color="black">

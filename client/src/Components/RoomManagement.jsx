@@ -6,23 +6,19 @@ import {
   Image,
   Box,
   Input,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { Search2Icon } from "@chakra-ui/icons";
 import axios from "axios";
 
 const RoomManagement = () => {
   const [room, setRoom] = useState([]);
-  const [inputData, setInputData] = useState("");
+  const [status, setStatus] = useState("");
 
   async function getAllRooms(data) {
     try {
@@ -35,17 +31,13 @@ const RoomManagement = () => {
   }
 
   useEffect(() => {
-    getAllRooms(inputData);
-  }, [inputData]);
+    getAllRooms();
+  }, []);
 
-  // function search input แล้วแสดงข้อมูลหน้า page admin
+  console.log(status);
 
-  function handleSearch(event) {
-    setInputData(event.target.value);
-    if (event.target.value === "") {
-      setRoom([]);
-      setInputData("");
-    }
+  async function updateStatus() {
+    await axios.put();
   }
 
   return (
@@ -59,15 +51,10 @@ const RoomManagement = () => {
         <Text ml={20} textStyle="h5">
           Room Management
         </Text>
-        <Input
-          mr={20}
-          w="320px"
-          border="1px solid"
-          placeholder="Search..."
-          borderColor="gray.500"
-          value={inputData}
-          onChange={handleSearch}
-        ></Input>
+        <Box display="flex" w="320px" h="48px" border="1px solid" borderColor="gray.400" borderRadius={5} alignItems="center">
+          <Search2Icon boxSize={5} ml={3} color="#646D89" />
+          <Input mr={20} w="320px" placeholder="Search..." border="none" ></Input>
+        </Box>
       </Flex>
 
       <Flex bg="bg" h="1000px" justifyContent="center">
@@ -78,6 +65,7 @@ const RoomManagement = () => {
             bg="gray.300"
             w="1080px"
             h="41px"
+            py={30}
           >
             <Box w="120px">
               <Text ml={5}>Room no.</Text>
@@ -119,23 +107,155 @@ const RoomManagement = () => {
                     {room.bed_type}
                   </Text>
                 </Box>
-                <Box w="293px">
-                  <Popover>
-                    <PopoverTrigger>
-                      <Text textStyle="b1" color="black" cursor="pointer">
-                        {room.room_type_id}
-                      </Text>
-                    </PopoverTrigger>
-                    <PopoverContent w={200}>
-                      <PopoverArrow />
-                      <PopoverCloseButton />
-                      <PopoverHeader>-</PopoverHeader>
-                      <PopoverBody>Vacant</PopoverBody>
-                      <PopoverBody>Dirty</PopoverBody>
-                      <PopoverBody>Out of Service</PopoverBody>
-                      <PopoverBody>Occupied</PopoverBody>
-                    </PopoverContent>
-                  </Popover>
+                <Box>
+                  <Menu>
+                    {room.room_type_id === "Vacant" ? (
+                      <MenuButton>
+                        <Box
+                          h="29px"
+                          bg="#E5FFFA"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          p="10px 10px"
+                          cursor="pointer"
+                          borderRadius={5}
+                        >
+                          <Text textStyle="b1" color="#006753">
+                            {room.room_type_id}
+                          </Text>
+                        </Box>
+                      </MenuButton>
+                    ) : room.room_type_id === "Dirty" ? (
+                      <MenuButton>
+                        <Box
+                          h="29px"
+                          bg="#FFE5E5"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          p="10px 10px"
+                          borderRadius={5}
+                        >
+                          <Text textStyle="b1" color="#A50606" cursor="pointer">
+                            {room.room_type_id}
+                          </Text>
+                        </Box>
+                      </MenuButton>
+                    ) : room.room_type_id === "Out of Service" ? (
+                      <MenuButton>
+                        <Box
+                          h="29px"
+                          bg="#F0F1F8"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          p="10px 10px"
+                          borderRadius={5}
+                        >
+                          <Text textStyle="b1" color="#6E7288" cursor="pointer">
+                            {room.room_type_id}
+                          </Text>
+                        </Box>
+                      </MenuButton>
+                    ) : room.room_type_id === "Occupied" ? (
+                      <MenuButton>
+                        <Box
+                          h="29px"
+                          bg="#E4ECFF"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          p="10px 10px"
+                          borderRadius={5}
+                        >
+                          <Text textStyle="b1" color="#084BAF" cursor="pointer">
+                            {room.room_type_id}
+                          </Text>
+                        </Box>
+                      </MenuButton>
+                    ) : null}
+
+                    <MenuList boxShadow="2xl">
+                      <MenuItem
+                        onClick={() => {
+                          setStatus("Vacant");
+                        }}
+                      >
+                        <Box
+                          h="29px"
+                          bg="#E5FFFA"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          p="10px 10px"
+                          cursor="pointer"
+                          borderRadius={5}
+                        >
+                          <Text textStyle="b1" color="#006753">
+                            Vacant
+                          </Text>
+                        </Box>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setStatus("Dirty");
+                        }}
+                      >
+                        <Box
+                          h="29px"
+                          bg="#FFE5E5"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          p="10px 10px"
+                          borderRadius={5}
+                        >
+                          <Text textStyle="b1" color="#A50606" cursor="pointer">
+                            Dirty
+                          </Text>
+                        </Box>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setStatus("Out of Service");
+                        }}
+                      >
+                        <Box
+                          h="29px"
+                          bg="#F0F1F8"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          p="10px 10px"
+                          borderRadius={5}
+                        >
+                          <Text textStyle="b1" color="#6E7288" cursor="pointer">
+                            Out of Service
+                          </Text>
+                        </Box>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setStatus("Occupied");
+                        }}
+                      >
+                        <Box
+                          h="29px"
+                          bg="#E4ECFF"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          p="10px 10px"
+                          borderRadius={5}
+                        >
+                          <Text textStyle="b1" color="#084BAF" cursor="pointer">
+                            Occupied
+                          </Text>
+                        </Box>
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
                 </Box>
               </Box>
             );

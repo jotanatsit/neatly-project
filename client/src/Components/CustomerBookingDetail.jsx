@@ -3,14 +3,15 @@ import { Button, Flex, Text, Image, Box, Input } from "@chakra-ui/react";
 import axios from "axios";
 
 const CustomerBookingDetail = (props) => {
+  const [userBooking, setUserBooking] = useState({});
 
-  const [userBooking,setUserBooking]=useState({})
- 
   async function customerDetail() {
     try {
-      const rs = await axios.get( `http://localhost:4000/booking/${props.userr}/${props.index}`);
-      console.log(rs.data.data);
-      setUserBooking(rs.data.data)
+      const rs = await axios.get(
+        `http://localhost:4000/booking/${props.userID}/${props.index}`
+      );
+      // console.log(rs.data.data);
+      setUserBooking(rs.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -19,9 +20,7 @@ const CustomerBookingDetail = (props) => {
     customerDetail();
   }, []);
 
-  console.log(props.userr);
-  console.log(props.index);
-  
+
 
   return (
     <Flex h="1569px" flexDirection="column">
@@ -59,19 +58,19 @@ const CustomerBookingDetail = (props) => {
             <Text textStyle="h5" color="gray.600">
               Guest(s)
             </Text>
-            <Text textStyle="b1">{userBooking.amount_guests}</Text>
+            <Text textStyle="b1" color="black">{userBooking.amount_guests}</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Room type
             </Text>
-            <Text textStyle="b1">{userBooking.room_type_name}</Text>
+            <Text textStyle="b1" color="black">{userBooking.room_type_name}</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Amount
             </Text>
-            <Text textStyle="b1">{userBooking.amount_rooms} room</Text>
+            <Text textStyle="b1" color="black">{userBooking.amount_rooms} room</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
@@ -83,25 +82,32 @@ const CustomerBookingDetail = (props) => {
             <Text textStyle="h5" color="gray.600">
               Check-in
             </Text>
-            <Text textStyle="b1">Th, 19 Oct 2022</Text>
+            <Text textStyle="b1" color="black">{userBooking.check_in_date}</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Check-out
             </Text>
-            <Text textStyle="b1">Fri, 20 Oct 2022</Text>
+            <Text textStyle="b1" color="black">{userBooking.check_out_date}</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Stay (total)
             </Text>
-            <Text textStyle="b1">1 night</Text>
+            <Text textStyle="b1" color="black">
+              {Math.ceil(
+                (new Date(userBooking.check_out_date) -
+                  new Date(userBooking.check_in_date)) /
+                  (1000 * 60 * 60 * 24)
+              )}{" "}
+              night
+            </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Booking date
             </Text>
-            <Text textStyle="b1">Tue, 16 Oct 2022</Text>
+            <Text textStyle="b1" color="black">{userBooking.booking_date}</Text>
           </Box>
           <Flex
             w="920px"
@@ -113,7 +119,7 @@ const CustomerBookingDetail = (props) => {
             alignItems="center"
           >
             <Box w="872px" h="40px" display="flex" justifyContent="flex-end">
-              <Text>Payment success via Credit Card - *888 THB 2,300.00</Text>
+              <Text>Payment success via Credit Card - *888 </Text>
             </Box>
             <Box w="872px" h="152px">
               <Box
@@ -122,8 +128,8 @@ const CustomerBookingDetail = (props) => {
                 display="flex"
                 justifyContent="space-between"
               >
-                <Text>Superior Garden View Room</Text>
-                <Text>2,500.00</Text>
+                <Text color="black">{userBooking.room_type_name}</Text>
+                <Text color="black">{userBooking.price}</Text>
               </Box>
               <Box
                 w="872px"

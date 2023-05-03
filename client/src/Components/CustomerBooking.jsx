@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Button, Flex, Text, Image, Box, Input } from "@chakra-ui/react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { useNavigate } from "react-router-dom";
 import CustomerBookingDetail from "./CustomerBookingDetail";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import { Search2Icon } from "@chakra-ui/icons";
 
 const CustomerBooking = () => {
   const [showDetail, setShowDetail] = useState(false);
@@ -43,7 +42,7 @@ const CustomerBooking = () => {
       <CustomerBookingDetail
         setShowDetail={setShowDetail}
         user={userBooking}
-        userr={user}
+        userID={user}
         index={roomIndex}
       />
     );
@@ -70,15 +69,10 @@ const CustomerBooking = () => {
         <Text ml={20} textStyle="h5">
           Customer Booking
         </Text>
-        <Input
-          mr={20}
-          w="320px"
-          border="1px solid"
-          placeholder="Search..."
-          borderColor="gray.500"
-          value={inputData}
-          onChange={handleSearch}
-        ></Input>
+        <Box display="flex" w="320px" h="48px" border="1px solid" borderColor="gray.400" borderRadius={5} alignItems="center">
+          <Search2Icon boxSize={5} ml={3} color="#646D89" />
+          <Input mr={20} w="320px" placeholder="Search..." border="none" ></Input>
+        </Box>
       </Flex>
 
       <Flex bg="bg" h="1000px" justifyContent="center">
@@ -89,6 +83,7 @@ const CustomerBooking = () => {
             bg="gray.300"
             w="1080px"
             h="41px"
+            py={30}
           >
             <Box w="180px">
               <Text textStyle="b2" fontWeight="500px" ml={5}>
@@ -123,6 +118,7 @@ const CustomerBooking = () => {
                   bg="white"
                   w="1080px"
                   h="72px"
+                  py={45}
                   cursor="pointer"
                   // onClick={() => handleViewDetail(booking.id)}
                   onClick={() =>
