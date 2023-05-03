@@ -10,7 +10,8 @@ import axios from "axios";
 const CustomerBooking = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [userBooking, setUserBooking] = useState([]);
-  const [roomIndex,setRoomIndex] = useState(null)
+  const [roomIndex, setRoomIndex] = useState(null);
+  const [user,setUser]=useState(null)
 
   async function userBookingRoom() {
     try {
@@ -24,16 +25,23 @@ const CustomerBooking = () => {
   }, []);
 
   // ฟังก์ชั่นเมื่อกดปุ่มดูรายละเอียดบนแต่ละการจอง
-  const handleViewDetail = (index) => {
-    setRoomIndex(index)
+  const handleViewDetail = (user,bookingDetail) => {
+    setUser(user)
+    setRoomIndex(bookingDetail);
     setShowDetail(true);
   };
-
   
 
   // แสดง Component `CustomerBookingDetail` หากกดดูรายละเอียดการจอง
   if (showDetail) {
-    return <CustomerBookingDetail setShowDetail={setShowDetail} user={userBooking} index={roomIndex} />;
+    return (
+      <CustomerBookingDetail
+        setShowDetail={setShowDetail}
+        user={userBooking}
+        userr={user}
+        index={roomIndex}
+      />
+    );
   }
 
   return (
@@ -94,7 +102,9 @@ const CustomerBooking = () => {
                   h="72px"
                   cursor="pointer"
                   // onClick={() => handleViewDetail(booking.id)}
-                  onClick={() => handleViewDetail(index)}
+                  onClick={() =>
+                    handleViewDetail(room.user_id,room.booking_detail_id)
+                  }
                   key={index}
                   borderBottom="1px solid"
                   borderColor="gray.300"
@@ -131,7 +141,7 @@ const CustomerBooking = () => {
                   </Box>
                   <Box w="186px">
                     <Text textStyle="b1" color="black">
-                    {room.check_out_date}
+                      {room.check_out_date}
                     </Text>
                   </Box>
                 </Box>

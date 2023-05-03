@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Button, Flex, Text, Image, Box, Input } from "@chakra-ui/react";
 import axios from "axios";
-import { useAuth } from "../contexts/authentication";
 
 const CustomerBookingDetail = (props) => {
-  const userId = useAuth();
+
+  const [userBooking,setUserBooking]=useState({})
+ 
   async function customerDetail() {
     try {
-      const rs = await axios.get( `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${props.user[props.index].booking_detail_id}`);
+      const rs = await axios.get( `http://localhost:4000/booking/${props.userr}/${props.index}`);
       console.log(rs.data.data);
+      setUserBooking(rs.data.data)
     } catch (error) {
       console.log(error);
     }
@@ -17,7 +19,8 @@ const CustomerBookingDetail = (props) => {
     customerDetail();
   }, []);
 
-  console.log(props.user[props.index].booking_detail_id);
+  console.log(props.userr);
+  console.log(props.index);
   
 
   return (
@@ -33,7 +36,7 @@ const CustomerBookingDetail = (props) => {
           Kate Cho
         </Text>
         <Text ml={5} textStyle="b1">
-          Premier Sea View
+          {userBooking.room_type_name}
         </Text>
       </Flex>
 
@@ -56,19 +59,19 @@ const CustomerBookingDetail = (props) => {
             <Text textStyle="h5" color="gray.600">
               Guest(s)
             </Text>
-            <Text textStyle="b1">2</Text>
+            <Text textStyle="b1">{userBooking.amount_guests}</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Room type
             </Text>
-            <Text textStyle="b1">Superior Garden View Room</Text>
+            <Text textStyle="b1">{userBooking.room_type_name}</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Amount
             </Text>
-            <Text textStyle="b1">1 room</Text>
+            <Text textStyle="b1">{userBooking.amount_rooms} room</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">

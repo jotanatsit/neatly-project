@@ -240,6 +240,7 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
     payment_type: newArr.payment_type,
     booking_status: newArr.booking_status,
     room_picture: newArr.room_picture,
+    
   };
 
   return res.json({

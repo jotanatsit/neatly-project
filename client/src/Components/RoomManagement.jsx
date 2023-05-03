@@ -1,5 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Button, Flex, Text, Image, Box, Input } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Text,
+  Image,
+  Box,
+  Input,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+} from "@chakra-ui/react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import axios from "axios";
@@ -10,7 +26,7 @@ const RoomManagement = () => {
   async function getAllRooms() {
     try {
       const rs = await axios.get(`http://localhost:4000/rooms`);
-      console.log(rs.data.data);
+      // console.log(rs.data.data);
       setRoom(rs.data.data);
     } catch (error) {}
   }
@@ -83,9 +99,22 @@ const RoomManagement = () => {
                   </Text>
                 </Box>
                 <Box w="293px">
-                  <Text textStyle="b1" color="black">
-                    {room.room_type_id}
-                  </Text>
+                  <Popover>
+                    <PopoverTrigger>
+                      <Text textStyle="b1" color="black" cursor="pointer">
+                        {room.room_type_id}
+                      </Text>
+                    </PopoverTrigger>
+                    <PopoverContent w={200}>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>-</PopoverHeader>
+                      <PopoverBody>Vacant</PopoverBody>
+                      <PopoverBody>Dirty</PopoverBody>
+                      <PopoverBody>Out of Service</PopoverBody>
+                      <PopoverBody>Occupied</PopoverBody>
+                    </PopoverContent>
+                  </Popover>
                 </Box>
               </Box>
             );
