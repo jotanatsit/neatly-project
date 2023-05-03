@@ -60,7 +60,7 @@ bookingRouter.get("/", async (req, res) => {
         payment_type: results.rows[i].payment_type,
         booking_status: results.rows[i].booking_status,
         room_picture: results.rows[i].room_picture,
-        fullname: results.rows[i].fullname
+        fullname: results.rows[i].fullname,
       });
       unique_booking_detail_id.push(newArr[i].booking_detail_id);
     }
@@ -156,6 +156,7 @@ bookingRouter.get("/:userId", async (req, res) => {
         payment_type: newArr[i].payment_type,
         booking_status: newArr[i].booking_status,
         room_picture: newArr[i].room_picture,
+        total_price_per_room: newArr[i].total_price_per_room,
       });
       unique_booking_detail_id.push(newArr[i].booking_detail_id);
     }
@@ -240,7 +241,6 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
     payment_type: newArr.payment_type,
     booking_status: newArr.booking_status,
     room_picture: newArr.room_picture,
-    
   };
 
   return res.json({

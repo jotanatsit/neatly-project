@@ -25,10 +25,6 @@ function ThankForBooking() {
   const checkInDate = changeFormatDate(new Date(bookingData?.check_in_date));
   const checkOutDate = changeFormatDate(new Date(bookingData?.check_out_date));
 
-  const totalPricePerRoom = bookingData.promotion_price
-    ? bookingData.promotion_price
-    : bookingData.price;
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -133,12 +129,11 @@ function ThankForBooking() {
                 color="white"
                 textAlign="end"
               >
-                {(totalPricePerRoom * bookingData.amount_rooms).toLocaleString(
-                  "th-TH",
-                  {
-                    minimumFractionDigits: 2,
-                  }
-                )}
+                {(
+                  bookingData.total_price_per_room * bookingData.amount_rooms
+                ).toLocaleString("th-TH", {
+                  minimumFractionDigits: 2,
+                })}
               </Text>
             </Flex>
             {bookingData.booking_request?.map((arr, index) => {
@@ -192,14 +187,15 @@ function ThankForBooking() {
               <Text textStyle="h5" color="white" textAlign="end">
                 THB{" "}
                 {(bookingData.booking_request
-                  ? totalPricePerRoom * bookingData.amount_rooms +
+                  ? bookingData.total_price_per_room *
+                      bookingData.amount_rooms +
                     bookingData.booking_request?.reduce((sum, arr) => {
                       if (typeof arr[1] === "number") {
                         return sum + arr[1] * bookingData.amount_rooms;
                       }
                       return sum;
                     }, 0)
-                  : totalPricePerRoom * bookingData.amount_rooms
+                  : bookingData.total_price_per_room * bookingData.amount_rooms
                 ).toLocaleString("th-TH", {
                   minimumFractionDigits: 2,
                 })}
