@@ -71,7 +71,8 @@ paymentRouter.post("/webhook", async (req, res) => {
     const checkOutData = data.object.metadata;
 
     console.log(`payment ID : ${paymentIntent.id}`);
-    console.log(checkOutData);
+    // console.log(data);
+    // console.log(checkOutData);
 
     const room_type_id = Number(checkOutData.room_type_id);
     const user_id = Number(checkOutData.user_id);

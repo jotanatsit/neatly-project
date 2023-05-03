@@ -17,8 +17,11 @@ function AuthenticatedApp() {
   let bookingData = useBooking();
   const auth = useAuth();
   if (auth.role === "admin") {
-    console.log("test");
-    return <Routes></Routes>;
+    return (
+      <Routes>
+        <Route path="/" element={<AdminPage />} />
+      </Routes>
+    );
   } else {
     return (
       <div className="App">

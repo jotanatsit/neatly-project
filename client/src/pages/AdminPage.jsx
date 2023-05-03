@@ -17,9 +17,10 @@ import CustomerBooking from "../Components/CustomerBooking";
 import CustomerBookingDetail from "../Components/CustomerBookingDetail";
 import RoomManagement from "../Components/RoomManagement";
 import RoomAndProperty from "../Components/RoomAndProperty";
-
+import { useAuth } from "../contexts/authentication";
 
 const AdminPage = () => {
+  const { logout } = useAuth();
   return (
     <Tabs variant="unstyled">
       <Flex w="1440px" m="auto">
@@ -83,10 +84,17 @@ const AdminPage = () => {
             borderTop="1px solid"
           >
             <Box display="flex" w="190px" ml={5}>
-              <Image src="/AdminPage/Vector7.svg"></Image>
-              <Text textStyle="b1" color="white" ml={5}>
-                Log Out
-              </Text>
+              <Button
+                variant="link"
+                onClick={() => {
+                  logout();
+                }}
+              >
+                <Image src="/AdminPage/Vector7.svg"></Image>
+                <Text textStyle="b1" color="white" ml={5}>
+                  Log Out
+                </Text>
+              </Button>
             </Box>
           </Box>
         </Flex>
