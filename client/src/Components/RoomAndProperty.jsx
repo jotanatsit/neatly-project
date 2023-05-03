@@ -24,7 +24,9 @@ const RoomAndProperty = () => {
   const [roomType, setRoomType] = useState([]);
   const [price, setPrice] = useState("");
   const [promoPrice, setPromoPrice] = useState("");
+  const [inputData, setInputData] = useState("");
 
+  console.log(price);
   async function typeRoom(data) {
     try {
       const rs = await axios.get(
@@ -67,7 +69,6 @@ const RoomAndProperty = () => {
     }
   }
 
-
   return (
     <Flex h="1024px" flexDirection="column">
       <Flex
@@ -79,9 +80,24 @@ const RoomAndProperty = () => {
         <Text ml={20} textStyle="h5">
           Room & Property
         </Text>
-        <Box display="flex" w="320px" h="48px" border="1px solid" borderColor="gray.400" borderRadius={5} alignItems="center">
+        <Box
+          display="flex"
+          w="320px"
+          h="48px"
+          border="1px solid"
+          borderColor="gray.400"
+          borderRadius={5}
+          alignItems="center"
+        >
           <Search2Icon boxSize={5} ml={3} color="#646D89" />
-          <Input mr={20} w="320px" placeholder="Search..." border="none" ></Input>
+          <Input
+            mr={20}
+            w="320px"
+            placeholder="Search..."
+            border="none"
+            value={inputData}
+            onChange={handleSearch}
+          ></Input>
         </Box>
       </Flex>
 
@@ -158,6 +174,7 @@ const RoomAndProperty = () => {
                           border="1px solid"
                           borderColor="gray.400"
                           value={price}
+                          type="number"
                           onChange={(e) => setPrice(e.target.value)}
                           onKeyPress={changePrice}
                         />
@@ -181,6 +198,7 @@ const RoomAndProperty = () => {
                           border="1px solid"
                           borderColor="gray.400"
                           value={promoPrice}
+                          type="number"
                           onChange={(e) => setPromoPrice(e.target.value)}
                           // onKeyPress={changePrice}
                         />

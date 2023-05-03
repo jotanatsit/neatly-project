@@ -69,9 +69,24 @@ const CustomerBooking = () => {
         <Text ml={20} textStyle="h5">
           Customer Booking
         </Text>
-        <Box display="flex" w="320px" h="48px" border="1px solid" borderColor="gray.400" borderRadius={5} alignItems="center">
+        <Box
+          display="flex"
+          w="320px"
+          h="48px"
+          border="1px solid"
+          borderColor="gray.400"
+          borderRadius={5}
+          alignItems="center"
+        >
           <Search2Icon boxSize={5} ml={3} color="#646D89" />
-          <Input mr={20} w="320px" placeholder="Search..." border="none" ></Input>
+          <Input
+            mr={20}
+            w="320px"
+            placeholder="Search..."
+            border="none"
+            value={inputData}
+            onChange={handleSearch}
+          ></Input>
         </Box>
       </Flex>
 

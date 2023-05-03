@@ -19,6 +19,7 @@ import axios from "axios";
 const RoomManagement = () => {
   const [room, setRoom] = useState([]);
   const [status, setStatus] = useState("");
+  const [inputData, setInputData] = useState("");
 
   async function getAllRooms(data) {
     try {
@@ -31,8 +32,8 @@ const RoomManagement = () => {
   }
 
   useEffect(() => {
-    getAllRooms();
-  }, []);
+    getAllRooms(inputData);
+  }, [inputData]);
 
   console.log(status);
 
