@@ -105,7 +105,6 @@ paymentRouter.post("/webhook", async (req, res) => {
       extra_pillows: checkOutData.extra_pillows,
       phone_chargers_and_adapters: checkOutData.phone_chargers_and_adapters,
       breakfast: checkOutData.breakfast,
-      additional_request: checkOutData.additional_request,
     };
 
     // แปลง value ของ booking_requests จาก 'string' ให้เป็น 'number' กับ 'null'
@@ -116,6 +115,9 @@ paymentRouter.post("/webhook", async (req, res) => {
         booking_requests[key] = Number(booking_requests[key]);
       }
     }
+
+    // add 'additional_request' to 'booking_requests'
+    booking_requests["additional_request"] = checkOutData.additional_request;
 
     // get all booking data in database where room_type_id
     const table1 = await pool.query(
@@ -128,6 +130,7 @@ paymentRouter.post("/webhook", async (req, res) => {
           where rooms.room_type_id=$1`,
       [room_type_id]
     );
+
     // Unavailable rooms for booking - array - [8]
     const unAvailableRooms = table1.rows
       .filter((row) => {
@@ -139,17 +142,21 @@ paymentRouter.post("/webhook", async (req, res) => {
         }
       })
       .map((row) => row.room_id);
+
     // get all rooms data in database where room_type_id
     const table2 = await pool.query(
       `select * from rooms where room_type_id=$1`,
       [room_type_id]
     );
+
     // All rooms in the same room type - array - [5, 6, 7, 8]
     const allRooms = table2.rows.map((room) => room.room_id);
+
     // Available rooms for booking - array - [5, 6, 7]
     const availableRooms = allRooms.filter(
       (room) => !unAvailableRooms.includes(room)
     );
+
     // create booking_details data
     await pool.query(
       `insert into booking_details (check_in_date, check_out_date, amount_guests, amount_rooms, total_price_per_room,
@@ -168,11 +175,13 @@ paymentRouter.post("/webhook", async (req, res) => {
         booking_details.cancellation_date,
       ]
     );
+
     // get payment_id from lastest booking
     const lastest_booking_detail = await pool.query(
       `select booking_detail_id from booking_details order by booking_detail_id desc limit $1`,
       [1]
     );
+
     // create booking data
     for (let i = 0; i < booking_details.amount_rooms; i++) {
       await pool.query(
@@ -185,6 +194,7 @@ paymentRouter.post("/webhook", async (req, res) => {
         ]
       );
     }
+
     // create booking_requests data
     await pool.query(
       `insert into booking_requests (booking_detail_id, early_check_in, late_check_out, non_smoking_room,
@@ -207,6 +217,7 @@ paymentRouter.post("/webhook", async (req, res) => {
         booking_requests.additional_request,
       ]
     );
+
     console.log("💰 Payment captured!");
     return res.status(200).json({
       message: "Booking has been created successfully",
