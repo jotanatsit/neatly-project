@@ -63,7 +63,7 @@ roomRouter.get("/room-type/search", async (req, res) => {
 
     for (let guests = amount_guests; guests <= max_guests; guests++) {
       const table1 = await pool.query(
-        `SELECT booking.room_id, booking_details.check_in_date, booking_details.check_out_date, rooms.room_type_id, rooms_type.amount_person
+        `SELECT booking.room_id, booking_details.check_in_date, booking_details.check_out_date, booking_details.booking_status, rooms.room_type_id, rooms_type.amount_person
          FROM booking
          INNER JOIN booking_details ON booking_details.booking_detail_id = booking.booking_detail_id
          INNER JOIN rooms ON booking.room_id = rooms.room_id
@@ -75,10 +75,12 @@ roomRouter.get("/room-type/search", async (req, res) => {
 
       const unAvailableRooms = table1.rows
         .filter((row) => {
-          return (
-            check_in_date < row.check_out_date &&
-            check_out_date > row.check_in_date
-          );
+          if (row.booking_status === "Complete") {
+            return (
+              check_in_date < row.check_out_date &&
+              check_out_date > row.check_in_date
+            );
+          }
         })
         .map((row) => row.room_id);
 

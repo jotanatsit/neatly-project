@@ -118,7 +118,7 @@ paymentRouter.post("/webhook", async (req, res) => {
 
     // get all booking data in database where room_type_id
     const table1 = await pool.query(
-      `select booking.room_id, booking_details.check_in_date, booking_details.check_out_date, rooms.room_type_id
+      `select booking.room_id, booking_details.check_in_date, booking_details.check_out_date, booking_details.booking_status, rooms.room_type_id
           from booking_details
           inner join booking
           ON booking_details.booking_detail_id = booking.booking_detail_id
@@ -130,10 +130,12 @@ paymentRouter.post("/webhook", async (req, res) => {
     // Unavailable rooms for booking - array - [8]
     const unAvailableRooms = table1.rows
       .filter((row) => {
-        return (
-          booking_details.check_in_date < row.check_out_date &&
-          booking_details.check_out_date > row.check_in_date
-        );
+        if (row.booking_status === "Complete") {
+          return (
+            booking_details.check_in_date < row.check_out_date &&
+            booking_details.check_out_date > row.check_in_date
+          );
+        }
       })
       .map((row) => row.room_id);
     // get all rooms data in database where room_type_id
