@@ -11,11 +11,11 @@ const bookingRouter = Router();
 bookingRouter.get("/", async (req, res) => {
   const results = await pool.query(
     `SELECT 
-        r.*,
-        rt.*,
         b.*,
         bd.*,
         u.*,
+        r.*,
+        rt.*,
         array_agg(rp.room_picture) as room_picture       
       FROM rooms_type rt
       LEFT JOIN rooms r ON r.room_type_id = rt.room_type_id
@@ -161,7 +161,6 @@ bookingRouter.get("/:userId", async (req, res) => {
       unique_booking_detail_id.push(newArr[i].booking_detail_id);
     }
   }
-  console.log(unique_booking_detail_id);
 
   return res.json({
     data: newResults,
@@ -179,6 +178,7 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
         bd.*,
         b.*,
         br.*,
+        u.*,
         r.*,
         rt.*,
         array_agg(rp.room_picture) as room_picture       
@@ -188,11 +188,13 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
       LEFT JOIN booking b ON b.room_id = r.room_id
       LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
       LEFT JOIN booking_requests br ON br.booking_detail_id = bd.booking_detail_id
-      WHERE b.user_id = $1 AND br.booking_detail_id = $2
+      LEFT JOIN users u ON u.user_id = b.user_id
+      WHERE u.user_id = $1 AND br.booking_detail_id = $2
       GROUP BY 
         b.booking_id,
         bd.booking_detail_id,
         br.booking_request_id,
+        u.user_id,
         rt.room_type_id,
         r.room_id`,
     [user_id, booking_detail_id]
@@ -241,6 +243,7 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
     payment_type: newArr.payment_type,
     booking_status: newArr.booking_status,
     room_picture: newArr.room_picture,
+    fullname: newArr.fullname,
   };
 
   return res.json({

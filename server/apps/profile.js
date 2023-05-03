@@ -17,15 +17,11 @@ profileRouter.get("/:id", async (req, res) => {
   const userId = req.params.id;
 
   const table1 = await pool.query(
-    "select fullname, id_number, birth_date, country, profile_picture from users_profile where user_id=$1",
+    "select fullname, id_number, birth_date, country, profile_picture, email from users where user_id=$1",
     [userId]
   );
 
-  const table2 = await pool.query("select email from users where user_id=$1", [
-    userId,
-  ]);
-
-  const result = { ...table1.rows[0], ...table2.rows[0] };
+  const result = table1.rows[0];
 
   return res.json({
     data: result,
@@ -40,7 +36,6 @@ profileRouter.put(
   // handleError,
   validateProfileData,
   async (req, res) => {
-    console.log("C");
     const userId = req.params.id;
 
     const updatedProfile = {
@@ -60,19 +55,17 @@ profileRouter.put(
 
     try {
       await pool.query(
-        "update users_profile set fullname=$1, id_number=$2, birth_date=$3, country=$4, profile_picture=$5 where user_id=$6",
+        "update users set email=$1, fullname=$2, id_number=$3, birth_date=$4, country=$5, profile_picture=$6, updated_at=$7 where user_id=$8",
         [
+          updatedProfile.email,
           updatedProfile.fullname,
           updatedProfile.id_number,
           updatedProfile.birth_date,
           updatedProfile.country,
           updatedProfile.profile_picture,
+          updatedProfile.updated_at,
           userId,
         ]
-      );
-      await pool.query(
-        "update users set email=$1, updated_at=$2 where user_id=$3",
-        [updatedProfile.email, updatedProfile.updated_at, userId]
       );
     } catch (error) {
       if (
@@ -104,7 +97,7 @@ profileRouter.get("/:id/payment-method", async (req, res) => {
   let result;
   try {
     result = await pool.query(
-      "select credit_card from users_profile where user_id=$1",
+      "select credit_card from users where user_id=$1",
       [userId]
     );
   } catch (error) {
@@ -173,14 +166,9 @@ profileRouter.put(
     );
 
     await pool.query(
-      "update users_profile set credit_card=$1 where user_id=$2",
-      [encrypted_credit_card, userId]
+      "update users set credit_card=$1, updated_at=$2 where user_id=$3",
+      [encrypted_credit_card, updatedCreditCard.updated_at, userId]
     );
-
-    await pool.query("update users set updated_at=$1 where user_id=$2", [
-      updatedCreditCard.updated_at,
-      userId,
-    ]);
 
     return res.json({
       message: "Credit card has been successfully updated",

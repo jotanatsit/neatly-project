@@ -70,8 +70,8 @@ authRouter.post(
 
     try {
       await pool.query(
-        `insert into users (username, email, password, created_at, updated_at, last_logged_in)
-            values ($1, $2, $3, $4, $5, $6)`,
+        `insert into users (username, email, password, created_at, updated_at, last_logged_in, fullname, id_number, birth_date, country, profile_picture, credit_card)
+            values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
         [
           user.username,
           user.email,
@@ -79,20 +79,6 @@ authRouter.post(
           user.created_at,
           user.updated_at,
           user.last_logged_in,
-        ]
-      );
-
-      // get user_id from lastest register
-      let lastest_user_id = await pool.query(
-        `select user_id from users order by user_id desc limit $1`,
-        [1]
-      );
-
-      await pool.query(
-        `insert into users_profile (user_id, fullname, id_number, birth_date, country, profile_picture, credit_card)
-            values ($1, $2, $3, $4, $5, $6, $7)`,
-        [
-          lastest_user_id.rows[0].user_id,
           user.fullname,
           user.id_number,
           user.birth_date,
@@ -184,11 +170,7 @@ authRouter.post("/login", async (req, res) => {
 
   try {
     const user = await pool.query(
-      `select *
-            from users
-            inner join users_profile
-            on users.user_id = users_profile.user_id
-            where users.username = $1 or users.email = $1`,
+      `select * from users where users.username = $1 or users.email = $1`,
       [userClient.username]
     );
 
