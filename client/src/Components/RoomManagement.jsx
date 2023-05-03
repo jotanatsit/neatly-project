@@ -5,8 +5,22 @@ import "react-date-range/dist/theme/default.css";
 import axios from "axios";
 
 const RoomManagement = () => {
+  const [room, setRoom] = useState([]);
+
+  async function getAllRooms() {
+    try {
+      const rs = await axios.get(`http://localhost:4000/rooms`);
+      console.log(rs.data.data);
+      setRoom(rs.data.data);
+    } catch (error) {}
+  }
+
+  useEffect(() => {
+    getAllRooms();
+  }, []);
+
   return (
-    <Flex h="1024px" flexDirection="column">
+    <Flex flexDirection="column">
       <Flex
         w="1200px"
         h="80px"
@@ -41,34 +55,41 @@ const RoomManagement = () => {
               <Text>Status</Text>
             </Box>
           </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            bg="white"
-            w="1080px"
-            h="72px"
-          >
-            <Box w="120px">
-              <Text  textStyle="b1" color="black" ml={5}>
-                0001
-              </Text>
-            </Box>
-            <Box w="367px">
-              <Text textStyle="b1" color="black">
-                Superior Garden View
-              </Text>
-            </Box>
-            <Box w="300px">
-              <Text  textStyle="b1" color="black">
-                Single Bed
-              </Text>
-            </Box>
-            <Box w="293px">
-              <Text  textStyle="b1" color="black">
-                Occupied
-              </Text>
-            </Box>
-          </Box>
+          {room.map((room, index) => {
+            return (
+              <Box
+                display="flex"
+                alignItems="center"
+                bg="white"
+                w="1080px"
+                h="72px"
+                borderBottom="1px solid"
+                borderColor="gray.300"
+                key={index}
+              >
+                <Box w="120px">
+                  <Text textStyle="b1" color="black" ml={5}>
+                    {room.room_id}
+                  </Text>
+                </Box>
+                <Box w="367px">
+                  <Text textStyle="b1" color="black">
+                    {room.room_type_name}
+                  </Text>
+                </Box>
+                <Box w="300px">
+                  <Text textStyle="b1" color="black">
+                    {room.bed_type}
+                  </Text>
+                </Box>
+                <Box w="293px">
+                  <Text textStyle="b1" color="black">
+                    {room.room_type_id}
+                  </Text>
+                </Box>
+              </Box>
+            );
+          })}
         </Box>
       </Flex>
     </Flex>

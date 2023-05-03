@@ -41,33 +41,53 @@ const AdminPage = () => {
             <Box w="240px" h="540px" display="flex" flexDirection="column">
               <Tab _selected={{ color: "white", bg: "green.500" }}>
                 <Box h="72px" display="flex" alignItems="center">
-                  <Image src="/AdminPage/Vector.svg"></Image>
-                  <Text textStyle="b1" color="white">
-                    Customer Booking
-                  </Text>
+                  <Box display="flex" w="190px">
+                    <Image src="/AdminPage/Vector.svg"></Image>
+                    <Text textStyle="b1" color="white" ml={5}>
+                      Customer Booking
+                    </Text>
+                  </Box>
                 </Box>
               </Tab>
               <Tab _selected={{ color: "white", bg: "green.400" }}>
-                <Box h="72px" display="flex" alignItems="center" justifyContent="space-evenly">
-                  <Image src="/AdminPage/Vector2.svg"></Image>
-                  <Text textStyle="b1" color="white">
-                    Room Management
-                  </Text>
+                <Box
+                  h="72px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-evenly"
+                >
+                  <Box display="flex" w="190px">
+                    <Image src="/AdminPage/Vector2.svg"></Image>
+                    <Text textStyle="b1" color="white" ml={5}>
+                      Room Management
+                    </Text>
+                  </Box>
                 </Box>
               </Tab>
               <Tab _selected={{ color: "white", bg: "green.400" }}>
                 <Box h="72px" display="flex" alignItems="center">
-                <Image src="/AdminPage/Vector4.svg"></Image>
-                  <Text textStyle="b1" color="white">
-                    Room & Property
-                  </Text>
+                  <Box display="flex" w="190px">
+                    <Image src="/AdminPage/Vector4.svg"></Image>
+                    <Text textStyle="b1" color="white" ml={5}>
+                      Room & Property
+                    </Text>
+                  </Box>
                 </Box>
               </Tab>
             </Box>
           </TabList>
-          <Box display="flex" >
-            <Image src="/AdminPage/Vector7.svg"></Image>
-            <Text color="white">logout</Text>
+          <Box
+            h="72px"
+            display="flex"
+            alignItems="center"
+            borderTop="1px solid"
+          >
+            <Box display="flex" w="190px" ml={5}>
+              <Image src="/AdminPage/Vector7.svg"></Image>
+              <Text color="white" ml={5}>
+                logout
+              </Text>
+            </Box>
           </Box>
         </Flex>
         <Flex>

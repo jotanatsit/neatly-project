@@ -60,6 +60,7 @@ bookingRouter.get("/", async (req, res) => {
         payment_type: results.rows[i].payment_type,
         booking_status: results.rows[i].booking_status,
         room_picture: results.rows[i].room_picture,
+        fullname: results.rows[i].fullname
       });
       unique_booking_detail_id.push(newArr[i].booking_detail_id);
     }

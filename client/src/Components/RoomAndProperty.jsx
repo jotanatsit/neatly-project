@@ -6,8 +6,20 @@ import EditRoom from "./EditRoom";
 const RoomAndProperty = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
+  const [roomType, setRoomType] = useState([]);
 
-  
+  async function typeRoom() {
+    try {
+      const rs = await axios.get(`http://localhost:4000/rooms/room-type`);
+      // console.log(rs.data.data);
+      setRoomType(rs.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    typeRoom();
+  }, []);
 
   // ฟังก์ชั่นเมื่อกดปุ่มดูรายละเอียดบนแต่ละการจอง
   const handleViewDetail = (bookingId) => {
@@ -66,55 +78,60 @@ const RoomAndProperty = () => {
               <Text>Room Size</Text>
             </Box>
           </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            bg="white"
-            w="1080px"
-            h="120px"
-            cursor="pointer"
-            // onClick={() => handleViewDetail(booking.id)}
-            onClick={() => handleViewDetail()}
-          >
-            <Box w="153px" display="flex" justifyContent="center">
-              <Image
-                src="/HomePage/room_5.svg"
-                w="120px"
-                h="72px"
-                objectFit="cover"
-              ></Image>
-            </Box>
-            <Box w="240px">
-              <Text textStyle="b1" color="black">
-                Superior Garden View
-              </Text>
-            </Box>
-            <Box w="136px">
-              <Text textStyle="b1" color="black">
-                3,000.00
-              </Text>
-            </Box>
-            <Box w="136px">
-              <Text textStyle="b1" color="black">
-                2,500.00
-              </Text>
-            </Box>
-            <Box w="94px">
-              <Text textStyle="b1" color="black">
-                2
-              </Text>
-            </Box>
-            <Box w="167px">
-              <Text textStyle="b1" color="black">
-                Double Bed
-              </Text>
-            </Box>
-            <Box w="128px">
-              <Text textStyle="b1" color="black">
-                32 sqm
-              </Text>
-            </Box>
-          </Box>
+          {roomType.map((room, index) => {
+            return (
+              <Box
+                display="flex"
+                alignItems="center"
+                bg="white"
+                w="1080px"
+                h="120px"
+                cursor="pointer"
+                // onClick={() => handleViewDetail(booking.id)}
+                onClick={() => handleViewDetail()}
+                key={index}
+              >
+                <Box w="153px" display="flex" justifyContent="center">
+                  <Image
+                    src={room.room_picture[0]}
+                    w="120px"
+                    h="72px"
+                    objectFit="cover"
+                  ></Image>
+                </Box>
+                <Box w="240px">
+                  <Text textStyle="b1" color="black">
+                    {room.room_type_name}
+                  </Text>
+                </Box>
+                <Box w="136px">
+                  <Text textStyle="b1" color="black">
+                    {room.price}
+                  </Text>
+                </Box>
+                <Box w="136px">
+                  <Text textStyle="b1" color="black">
+                    {room.promotion_price ? room.promotion_price : "-"}
+                  </Text>
+                </Box>
+                <Box w="94px">
+                  <Text textStyle="b1" color="black">
+                    {room.amount_person}
+                  </Text>
+                </Box>
+                <Box w="167px">
+                  <Text textStyle="b1" color="black">
+                    {room.bed_type}
+                  </Text>
+                </Box>
+                <Box w="128px">
+                  <Text textStyle="b1" color="black">
+                    {room.room_size}
+                  </Text>
+                </Box>
+              </Box>
+            );
+          })}
         </Box>
       </Flex>
     </Flex>

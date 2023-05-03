@@ -9,46 +9,44 @@ import axios from "axios";
 
 const CustomerBooking = () => {
   const [showDetail, setShowDetail] = useState(false);
-  const [user,setUser] = useState({})
+  const [userBooking, setUserBooking] = useState([]);
+  const [roomIndex,setRoomIndex] = useState(null)
 
-  async function userBooking() {
+  async function userBookingRoom() {
     try {
-      const response = await axios.get(
-        `http://localhost:4000/booking/1`
-      );
-      console.log(response.data.data);
-      setUser(response.data.data);
-    } catch (error) {
-    }
+      const response = await axios.get(`http://localhost:4000/booking`);
+      // console.log(response.data.data);
+      setUserBooking(response.data.data);
+    } catch (error) {}
   }
   useEffect(() => {
-    userBooking();
+    userBookingRoom();
   }, []);
 
-
   // ฟังก์ชั่นเมื่อกดปุ่มดูรายละเอียดบนแต่ละการจอง
-  const handleViewDetail = () => {
+  const handleViewDetail = (index) => {
+    setRoomIndex(index)
     setShowDetail(true);
   };
 
+  
+
   // แสดง Component `CustomerBookingDetail` หากกดดูรายละเอียดการจอง
   if (showDetail) {
-    return (
-      <CustomerBookingDetail
-        setShowDetail={setShowDetail}
-      />
-    );
+    return <CustomerBookingDetail setShowDetail={setShowDetail} user={userBooking} index={roomIndex} />;
   }
 
   return (
-    <Flex h="1024px" flexDirection="column">
+    <Flex flexDirection="column">
       <Flex
         w="1200px"
         h="80px"
         alignItems="center"
         justifyContent="space-between"
       >
-        <Text ml={20} textStyle="h5">Customer Booking</Text>
+        <Text ml={20} textStyle="h5">
+          Customer Booking
+        </Text>
         <Input mr={20} w="320px" border="1px solid"></Input>
       </Flex>
 
@@ -62,7 +60,9 @@ const CustomerBooking = () => {
             h="41px"
           >
             <Box w="180px">
-              <Text textStyle="b2" fontWeight="500px" ml={5}>Customer name</Text>
+              <Text textStyle="b2" fontWeight="500px" ml={5}>
+                Customer name
+              </Text>
             </Box>
             <Box w="96px">
               <Text>Guest(s)</Text>
@@ -83,38 +83,61 @@ const CustomerBooking = () => {
               <Text>Check-out</Text>
             </Box>
           </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            bg="white"
-            w="1080px"
-            h="72px"
-            cursor="pointer"
-            // onClick={() => handleViewDetail(booking.id)}
-            onClick={() => handleViewDetail()}
-          >
-            <Box w="180px">
-              <Text textStyle="b1" color="black"  ml={5}>Kate Cho</Text>
-            </Box>
-            <Box w="96px">
-              <Text textStyle="b1" color="black">2</Text>
-            </Box>
-            <Box w="200px">
-              <Text textStyle="b1" color="black">Superior Garden View</Text>
-            </Box>
-            <Box w="86px">
-              <Text textStyle="b1" color="black">1</Text>
-            </Box>
-            <Box w="167px">
-              <Text textStyle="b1" color="black">Single Bed</Text>
-            </Box>
-            <Box w="165px">
-              <Text textStyle="b1" color="black">Th, 19 Oct 2022</Text>
-            </Box>
-            <Box w="186px">
-              <Text textStyle="b1" color="black">Fri, 20 Oct 2022</Text>
-            </Box>
-          </Box>
+          {userBooking.map((room, index) => {
+            if (room.booking_status === "Complete") {
+              return (
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  bg="white"
+                  w="1080px"
+                  h="72px"
+                  cursor="pointer"
+                  // onClick={() => handleViewDetail(booking.id)}
+                  onClick={() => handleViewDetail(index)}
+                  key={index}
+                  borderBottom="1px solid"
+                  borderColor="gray.300"
+                >
+                  <Box w="180px">
+                    <Text textStyle="b1" color="black" ml={5}>
+                      {room.fullname}
+                    </Text>
+                  </Box>
+                  <Box w="96px">
+                    <Text textStyle="b1" color="black">
+                      {room.amount_guests}
+                    </Text>
+                  </Box>
+                  <Box w="200px">
+                    <Text textStyle="b1" color="black">
+                      {room.room_type_name}
+                    </Text>
+                  </Box>
+                  <Box w="86px">
+                    <Text textStyle="b1" color="black">
+                      {room.amount_rooms}
+                    </Text>
+                  </Box>
+                  <Box w="167px">
+                    <Text textStyle="b1" color="black">
+                      Single Bed
+                    </Text>
+                  </Box>
+                  <Box w="165px">
+                    <Text textStyle="b1" color="black">
+                      {room.check_in_date}
+                    </Text>
+                  </Box>
+                  <Box w="186px">
+                    <Text textStyle="b1" color="black">
+                    {room.check_out_date}
+                    </Text>
+                  </Box>
+                </Box>
+              );
+            }
+          })}
         </Box>
       </Flex>
     </Flex>
