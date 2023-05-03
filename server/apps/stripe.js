@@ -105,19 +105,19 @@ paymentRouter.post("/webhook", async (req, res) => {
       extra_pillows: checkOutData.extra_pillows,
       phone_chargers_and_adapters: checkOutData.phone_chargers_and_adapters,
       breakfast: checkOutData.breakfast,
+      additional_request: checkOutData.additional_request,
     };
 
     // แปลง value ของ booking_requests จาก 'string' ให้เป็น 'number' กับ 'null'
     for (let key in booking_requests) {
       if (booking_requests[key] === "") {
         booking_requests[key] = null;
+      } else if (key === "additional_request") {
+        booking_requests[key] = booking_requests[key];
       } else {
         booking_requests[key] = Number(booking_requests[key]);
       }
     }
-
-    // add 'additional_request' to 'booking_requests'
-    booking_requests["additional_request"] = checkOutData.additional_request;
 
     // get all booking data in database where room_type_id
     const table1 = await pool.query(
