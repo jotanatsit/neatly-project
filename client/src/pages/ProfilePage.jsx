@@ -282,6 +282,12 @@ function ProfilePage() {
                     value={formik.values.country}
                     placeholder="Select your country"
                     color={formik.values.country ? "gray.800" : "gray.500"}
+                    style={{
+                      paddingLeft: "15px",
+                      paddingTop: "9px",
+                      paddingBottom: "10px",
+                    }}
+                    fontSize="16px"
                   >
                     <OptionCountry />
                   </Select>
