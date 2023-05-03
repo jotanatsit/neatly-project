@@ -358,4 +358,30 @@ roomRouter.get("/", async (req, res) => {
   });
 });
 
+// api for change room status
+roomRouter.put("/:roomId", async (req, res) => {
+  const room_id = Number(req.params.roomId);
+
+  const room = {
+    status: req.body.room_status,
+  };
+
+  try {
+    await pool.query(
+      `update rooms
+      set room_status= $1
+      where room_id = $2`,
+      [room.status, room_id]
+    );
+
+    return res.json({
+      message: `Room status has been updated successfully`,
+    });
+  } catch (err) {
+    return res.json({
+      message: err.message,
+    });
+  }
+});
+
 export default roomRouter;

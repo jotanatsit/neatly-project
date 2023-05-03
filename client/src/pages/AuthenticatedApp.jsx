@@ -28,7 +28,7 @@ function AuthenticatedApp() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/booking" element={<BookingPage />} />
-          {bookingData && (
+          {Object.keys(bookingData).length > 0 && (
             <Route path="/booking-summary" element={<BookingSummary />} />
           )}
           <Route path="/succeed" element={<ThankForBooking />} />
