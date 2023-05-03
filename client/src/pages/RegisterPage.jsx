@@ -322,7 +322,7 @@ function RegisterPage() {
                     style={{
                       paddingLeft: "15px",
                       paddingTop: "9px",
-                      paddingBottom: "10px",
+                      paddingBottom: "12px",
                     }}
                     fontSize="16px"
                   >
