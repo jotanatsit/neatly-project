@@ -2,7 +2,7 @@ function OptionCountry() {
   return (
     <>
       <option value="Afghanistan">Afghanistan</option>
-      <option value="Åland Islands">Åland Islands</option>
+      <option value="Åland Islands">Aland Islands</option>
       <option value="Albania">Albania</option>
       <option value="Algeria">Algeria</option>
       <option value="American Samoa">American Samoa</option>

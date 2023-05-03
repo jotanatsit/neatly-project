@@ -319,6 +319,12 @@ function RegisterPage() {
                     colorScheme="gray.800"
                     // normally show color gray.500, if have event color show gray.800
                     color={formik.values.country ? "gray.800" : "gray.500"}
+                    style={{
+                      paddingLeft: "15px",
+                      paddingTop: "9px",
+                      paddingBottom: "10px",
+                    }}
+                    fontSize="16px"
                   >
                     <OptionCountry />
                   </Select>
