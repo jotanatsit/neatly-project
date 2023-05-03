@@ -84,7 +84,7 @@ const AdminPage = () => {
           >
             <Box display="flex" w="190px" ml={5}>
               <Image src="/AdminPage/Vector7.svg"></Image>
-              <Text Text textStyle="b1" color="white" ml={5}>
+              <Text textStyle="b1" color="white" ml={5}>
                 Log Out
               </Text>
             </Box>
