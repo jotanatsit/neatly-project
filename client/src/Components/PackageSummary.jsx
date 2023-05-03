@@ -72,7 +72,21 @@ function PackageSummary() {
             </Text>
           </Flex>
           {bookingReq?.map((arr, index) => {
-            if (arr[1] !== null && arr[1] !== "") {
+            if (arr[0] === "additional_request" && arr[1] !== "") {
+              return (
+                <Flex key={index} direction="column" gap="10px">
+                  <Text textStyle="b1" fontWeight="600">
+                    {arr[0]
+                      .split("_")
+                      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+                      .join(" ")}
+                  </Text>
+                  <Text textStyle="b1" color="green.300">
+                    {arr[1]}
+                  </Text>
+                </Flex>
+              );
+            } else if (arr[1] !== null && arr[1] !== "") {
               return (
                 <Flex key={index} w="100%" justify="space-between">
                   <Flex w="75%" justify="space-between">
@@ -87,16 +101,20 @@ function PackageSummary() {
                       color="green.300"
                       textAlign="end"
                     >
-                      x {bookingData.amount_rooms}
+                      {typeof arr[1] === "number"
+                        ? "x " + bookingData.amount_rooms
+                        : null}
                     </Text>
                   </Flex>
                   <Text textStyle="b1" fontWeight="600">
-                    {(arr[1] * bookingData.amount_rooms).toLocaleString(
-                      "th-TH",
-                      {
-                        minimumFractionDigits: 2,
-                      }
-                    )}
+                    {typeof arr[1] === "number"
+                      ? (arr[1] * bookingData.amount_rooms).toLocaleString(
+                          "th-TH",
+                          {
+                            minimumFractionDigits: 2,
+                          }
+                        )
+                      : arr[1]}
                   </Text>
                 </Flex>
               );
@@ -118,7 +136,7 @@ function PackageSummary() {
                 ? bookingData.total_price_per_room * bookingData.amount_rooms +
                   bookingReq?.reduce((sum, arr) => {
                     if (typeof arr[1] === "number") {
-                      return sum + arr[1];
+                      return sum + arr[1] * bookingData.amount_rooms;
                     }
                     return sum;
                   }, 0)
