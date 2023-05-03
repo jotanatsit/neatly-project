@@ -93,7 +93,7 @@ function PackageSummary() {
                     <Text textStyle="b1" color="green.300">
                       {(arr[0]?.charAt(0).toUpperCase() + arr[0]?.slice(1))
                         .split("_")
-                        .join(" ")}{" "}
+                        .join(" ")}
                     </Text>
                     <Text
                       w="25%"

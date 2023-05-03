@@ -14,7 +14,7 @@ import { useBooking } from "../contexts/booking";
 import AdminPage from "./AdminPage";
 import { useAuth } from "../contexts/authentication";
 function AuthenticatedApp() {
-  let bookingData = useBooking();
+  let { bookingData } = useBooking();
   const auth = useAuth();
   if (auth.role === "admin") {
     return (

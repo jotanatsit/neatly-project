@@ -2,22 +2,39 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Flex, Text, Button } from "@chakra-ui/react";
 import Nav_user from "../Components/Nav_user";
-import { useBooking } from "../contexts/booking";
 import { useAuth } from "../contexts/authentication";
 import axios from "axios";
 import changeFormatDate from "../utils/changeFormatDate";
 
 function ThankForBooking() {
-  const navigate = useNavigate();
-  const { bookingData, bookingReq } = useBooking();
-
   const userId = useAuth();
-  const checkInDate = changeFormatDate(bookingData?.check_in_date);
-  const checkOutDate = changeFormatDate(bookingData?.check_out_date);
+  const navigate = useNavigate();
+
+  const [bookingData, setBookingData] = useState({});
+
+  const getBookingData = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}`
+      );
+      setBookingData(res.data.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const checkInDate = changeFormatDate(new Date(bookingData?.check_in_date));
+  const checkOutDate = changeFormatDate(new Date(bookingData?.check_out_date));
+
+  const totalPricePerRoom = bookingData.promotion_price
+    ? bookingData.promotion_price
+    : bookingData.price;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [navigate]);
+  }, []);
+  useEffect(() => {
+    getBookingData();
+  }, []);
 
   return (
     <Flex direction="column" w="1440px" bgColor="bg" m="auto" h="100%">
@@ -116,14 +133,15 @@ function ThankForBooking() {
                 color="white"
                 textAlign="end"
               >
-                {(
-                  bookingData.total_price_per_room * bookingData.amount_rooms
-                ).toLocaleString("th-TH", {
-                  minimumFractionDigits: 2,
-                })}
+                {(totalPricePerRoom * bookingData.amount_rooms).toLocaleString(
+                  "th-TH",
+                  {
+                    minimumFractionDigits: 2,
+                  }
+                )}
               </Text>
             </Flex>
-            {bookingReq?.map((arr, index) => {
+            {bookingData.booking_request?.map((arr, index) => {
               if (arr[1] !== null && arr[1] !== "") {
                 return (
                   <Flex key={index} w="100%" justify="space-between">
@@ -131,7 +149,7 @@ function ThankForBooking() {
                       <Text textStyle="b1" color="green.300" textAlign="start">
                         {(arr[0]?.charAt(0).toUpperCase() + arr[0]?.slice(1))
                           .split("_")
-                          .join(" ")}{" "}
+                          .join(" ")}
                       </Text>
                       <Text
                         w="25%"
@@ -173,16 +191,15 @@ function ThankForBooking() {
               </Text>
               <Text textStyle="h5" color="white" textAlign="end">
                 THB{" "}
-                {(bookingReq
-                  ? bookingData.total_price_per_room *
-                      bookingData.amount_rooms +
-                    bookingReq?.reduce((sum, arr) => {
+                {(bookingData.booking_request
+                  ? totalPricePerRoom * bookingData.amount_rooms +
+                    bookingData.booking_request?.reduce((sum, arr) => {
                       if (typeof arr[1] === "number") {
-                        return sum + arr[1];
+                        return sum + arr[1] * bookingData.amount_rooms;
                       }
                       return sum;
                     }, 0)
-                  : bookingData.total_price_per_room * bookingData.amount_rooms
+                  : totalPricePerRoom * bookingData.amount_rooms
                 ).toLocaleString("th-TH", {
                   minimumFractionDigits: 2,
                 })}
