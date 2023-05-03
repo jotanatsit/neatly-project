@@ -50,15 +50,30 @@ function AuthProvider(props) {
   //     autoLogout();
   //   });
 
+  // access admin role
+  const role = localStorage
+    .getItem("username")
+    ?.split(",")[1]
+    ?.split(":")[1]
+    ?.split(`"`)[1];
+
   // access value of userId from storage
   const UserIdFromLocalStorage = Number(
     localStorage.getItem("username")?.split(",")[0]?.split(":")[1]
   );
+
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 
   return (
     <AuthContext.Provider
-      value={{ state, login, logout, UserIdFromLocalStorage, isAuthenticated }}
+      value={{
+        state,
+        login,
+        logout,
+        role,
+        UserIdFromLocalStorage,
+        isAuthenticated,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

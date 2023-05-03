@@ -132,60 +132,148 @@ authRouter.post(
 // ------------------------------------------------------- login -------------------------------------------------------
 
 authRouter.post("/login", async (req, res) => {
+  // filter for admin
+  if (req.body.username === "adminneatly") {
+    const adminUsername = req.body.username;
+
+    try {
+      const admin = await pool.query(
+        `select *
+              from admins
+              where admins.username = $1`,
+        [adminUsername]
+      );
+
+      const isValidPassword = await bcrypt.compare(
+        req.body.password,
+        admin.rows[0].password
+      );
+
+      if (!isValidPassword) {
+        return res.status(401).json({
+          message: "password not valid",
+        });
+      }
+
+      const token = jwt.sign(
+        {
+          id: admin.rows[0].user_id,
+          username: admin.rows[0].username,
+          role: admin.rows[0].role,
+        },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "1800000",
+        }
+      );
+      return res.json({
+        message: "login successfully",
+        token,
+      });
+    } catch (err) {
+      return res.status(400).json({
+        message: err.message,
+      });
+    }
+  }
+
+  // for user
   const userClient = {
     username: req.body.username,
   };
 
-  const user = await pool.query(
-    `select *
-          from users
-          inner join users_profile
-          on users.user_id = users_profile.user_id
-          where users.username = $1 or users.email = $2`,
-    [userClient.username, userClient.username]
-  );
+  try {
+    const user = await pool.query(
+      `select *
+            from users
+            inner join users_profile
+            on users.user_id = users_profile.user_id
+            where users.username = $1 or users.email = $1`,
+      [userClient.username]
+    );
 
-  if (!user.rows[0]) {
-    return res.status(404).json({
-      message: "user not found",
-    });
-  }
-
-  const isValidPassword = await bcrypt.compare(
-    req.body.password,
-    user.rows[0].password
-  );
-
-  if (!isValidPassword) {
-    return res.status(401).json({
-      message: "password not valid",
-    });
-  }
-
-  const token = jwt.sign(
-    {
-      id: user.rows[0].user_id,
-      username: user.rows[0].username,
-      fullname: user.rows[0].fullname,
-    },
-    process.env.SECRET_KEY,
-    {
-      expiresIn: "1800000",
+    if (!user.rows[0]) {
+      return res.status(404).json({
+        message: "user not found",
+      });
     }
-  );
 
-  // update user's last_logged_in
-  const last_logged_in = new Date();
-  const user_id = user.rows[0].user_id;
+    const isValidPassword = await bcrypt.compare(
+      req.body.password,
+      user.rows[0].password
+    );
 
-  await pool.query("update users set last_logged_in=$1 where user_id=$2", [
-    last_logged_in,
-    user_id,
-  ]);
+    if (!isValidPassword) {
+      return res.status(401).json({
+        message: "password not valid",
+      });
+    }
 
-  return res.json({
-    message: "login successfully",
-    token,
+    const token = jwt.sign(
+      {
+        id: user.rows[0].user_id,
+        username: user.rows[0].username,
+        fullname: user.rows[0].fullname,
+      },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "1800000",
+      }
+    );
+
+    // update user's last_logged_in
+    const last_logged_in = new Date();
+    const user_id = user.rows[0].user_id;
+
+    await pool.query("update users set last_logged_in=$1 where user_id=$2", [
+      last_logged_in,
+      user_id,
+    ]);
+
+    return res.json({
+      message: "login successfully",
+      token,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      message: err.message,
+    });
+  }
+});
+
+authRouter.post("/register/admin", async (req, res) => {
+  const admin = {
+    username: req.body.username,
+    password: req.body.password,
+    role: "admin",
+    created_at: new Date(),
+    updated_at: new Date(),
+    last_logged_in: new Date(),
+  };
+
+  // เข้ารหัส password ด้วย bcrypt
+  const salt = await bcrypt.genSalt(10);
+  admin.password = await bcrypt.hash(admin.password, salt);
+
+  try {
+    await pool.query(
+      `insert into admins (username, password, created_at, updated_at, last_logged_in, role)
+            values ($1, $2, $3, $4, $5, $6)`,
+      [
+        admin.username,
+        admin.password,
+        admin.created_at,
+        admin.updated_at,
+        admin.last_logged_in,
+        admin.role,
+      ]
+    );
+  } catch (error) {
+    return res.json({ message: error.message });
+  }
+
+  return res.status(200).json({
+    message: "Admin has been created successfully",
   });
 });
 
