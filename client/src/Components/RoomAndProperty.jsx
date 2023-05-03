@@ -7,10 +7,13 @@ const RoomAndProperty = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
   const [roomType, setRoomType] = useState([]);
+  const [inputData, setInputData] = useState("");
 
-  async function typeRoom() {
+  async function typeRoom(data) {
     try {
-      const rs = await axios.get(`http://localhost:4000/rooms/room-type`);
+      const rs = await axios.get(
+        `http://localhost:4000/rooms/room-type?keywords=${data}`
+      );
       // console.log(rs.data.data);
       setRoomType(rs.data.data);
     } catch (error) {
@@ -18,8 +21,18 @@ const RoomAndProperty = () => {
     }
   }
   useEffect(() => {
-    typeRoom();
-  }, []);
+    typeRoom(inputData);
+  }, [inputData]);
+
+  // function search input แล้วแสดงข้อมูลหน้า page admin
+
+  function handleSearch(event) {
+    setInputData(event.target.value);
+    if (event.target.value === "") {
+      setRoomType([]);
+      setInputData("");
+    }
+  }
 
   // ฟังก์ชั่นเมื่อกดปุ่มดูรายละเอียดบนแต่ละการจอง
   const handleViewDetail = (bookingId) => {
@@ -44,7 +57,15 @@ const RoomAndProperty = () => {
         <Text ml={20} textStyle="h5">
           Room & Property
         </Text>
-        <Input mr={20} w="320px" border="1px solid"></Input>
+        <Input
+          mr={20}
+          w="320px"
+          border="1px solid"
+          placeholder="Search..."
+          borderColor="gray.500"
+          value={inputData}
+          onChange={handleSearch}
+        ></Input>
       </Flex>
 
       <Flex bg="bg" h="1000px" justifyContent="center">

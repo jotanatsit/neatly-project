@@ -22,18 +22,31 @@ import axios from "axios";
 
 const RoomManagement = () => {
   const [room, setRoom] = useState([]);
+  const [inputData, setInputData] = useState("");
 
-  async function getAllRooms() {
+  async function getAllRooms(data) {
     try {
-      const rs = await axios.get(`http://localhost:4000/rooms`);
+      const rs = await axios.get(
+        `http://localhost:4000/rooms?keywords=${data}`
+      );
       // console.log(rs.data.data);
       setRoom(rs.data.data);
     } catch (error) {}
   }
 
   useEffect(() => {
-    getAllRooms();
-  }, []);
+    getAllRooms(inputData);
+  }, [inputData]);
+
+  // function search input แล้วแสดงข้อมูลหน้า page admin
+
+  function handleSearch(event) {
+    setInputData(event.target.value);
+    if (event.target.value === "") {
+      setRoom([]);
+      setInputData("");
+    }
+  }
 
   return (
     <Flex flexDirection="column">
@@ -46,7 +59,15 @@ const RoomManagement = () => {
         <Text ml={20} textStyle="h5">
           Room Management
         </Text>
-        <Input mr={20} w="320px" border="1px solid"></Input>
+        <Input
+          mr={20}
+          w="320px"
+          border="1px solid"
+          placeholder="Search..."
+          borderColor="gray.500"
+          value={inputData}
+          onChange={handleSearch}
+        ></Input>
       </Flex>
 
       <Flex bg="bg" h="1000px" justifyContent="center">

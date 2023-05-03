@@ -143,6 +143,13 @@ roomRouter.get("/room-type/search", async (req, res) => {
 roomRouter.get("/room-type", async (req, res) => {
   let result;
   let newResult = [];
+  let keywords = req.query.keywords;
+
+  if (keywords === undefined) {
+    return res.status(400).json({
+      message: "Please send keywords parameter in the URL endpoint",
+    });
+  }
 
   try {
     result = await pool.query(
@@ -153,6 +160,11 @@ roomRouter.get("/room-type", async (req, res) => {
       FROM rooms_type rt
       LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
       LEFT JOIN rooms_amenities ra ON ra.room_type_id = rt.room_type_id
+      WHERE rt.room_type_name ILIKE '%${keywords}%' OR rt.bed_type ILIKE '%${keywords}%'
+      OR CAST(rt.price AS TEXT) ILIKE '%${keywords}%'
+      OR CAST(rt.promotion_price AS TEXT) ILIKE '%${keywords}%'
+      OR CAST(rt.amount_person AS TEXT) ILIKE '%${keywords}%'
+      OR CAST(rt.room_size AS TEXT) ILIKE '%${keywords}%'
       GROUP BY
         rt.room_type_id,
         ra.room_amenity_id
@@ -300,6 +312,13 @@ roomRouter.get("/room-type/:id", async (req, res) => {
 roomRouter.get("/", async (req, res) => {
   let result;
   let newResult = [];
+  let keywords = req.query.keywords;
+
+  if (keywords === undefined) {
+    return res.status(400).json({
+      message: "Please send keywords parameter in the URL endpoint",
+    });
+  }
 
   try {
     result = await pool.query(
@@ -308,6 +327,8 @@ roomRouter.get("/", async (req, res) => {
         r.*
       FROM rooms_type rt
       LEFT JOIN rooms r ON r.room_type_id = rt.room_type_id
+      WHERE rt.room_type_name ILIKE '%${keywords}%' OR CAST(r.room_number AS TEXT) ILIKE '%${keywords}%'
+      OR rt.bed_type ILIKE '%${keywords}%' OR r.room_status ILIKE '%${keywords}%'
       GROUP BY
         r.room_id,
         rt.room_type_id

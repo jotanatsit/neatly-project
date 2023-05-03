@@ -11,26 +11,31 @@ const CustomerBooking = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [userBooking, setUserBooking] = useState([]);
   const [roomIndex, setRoomIndex] = useState(null);
-  const [user,setUser]=useState(null)
+  const [user, setUser] = useState(null);
+  const [inputData, setInputData] = useState("");
 
-  async function userBookingRoom() {
+  async function userBookingRoom(data) {
     try {
-      const response = await axios.get(`http://localhost:4000/booking`);
-      // console.log(response.data.data);
+      const response = await axios.get(
+        `http://localhost:4000/booking?keywords=${data}`
+      );
       setUserBooking(response.data.data);
     } catch (error) {}
   }
   useEffect(() => {
-    userBookingRoom();
+    userBookingRoom(inputData);
+  }, [inputData]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   // ฟังก์ชั่นเมื่อกดปุ่มดูรายละเอียดบนแต่ละการจอง
-  const handleViewDetail = (user,bookingDetail) => {
-    setUser(user)
+  const handleViewDetail = (user, bookingDetail) => {
+    setUser(user);
     setRoomIndex(bookingDetail);
     setShowDetail(true);
   };
-  
 
   // แสดง Component `CustomerBookingDetail` หากกดดูรายละเอียดการจอง
   if (showDetail) {
@@ -44,6 +49,16 @@ const CustomerBooking = () => {
     );
   }
 
+  // function search input แล้วแสดงข้อมูลหน้า page admin
+
+  function handleSearch(event) {
+    setInputData(event.target.value);
+    if (event.target.value === "") {
+      setUserBooking([]);
+      setInputData("");
+    }
+  }
+
   return (
     <Flex flexDirection="column">
       <Flex
@@ -55,7 +70,15 @@ const CustomerBooking = () => {
         <Text ml={20} textStyle="h5">
           Customer Booking
         </Text>
-        <Input mr={20} w="320px" border="1px solid"></Input>
+        <Input
+          mr={20}
+          w="320px"
+          border="1px solid"
+          placeholder="Search..."
+          borderColor="gray.500"
+          value={inputData}
+          onChange={handleSearch}
+        ></Input>
       </Flex>
 
       <Flex bg="bg" h="1000px" justifyContent="center">
@@ -103,7 +126,7 @@ const CustomerBooking = () => {
                   cursor="pointer"
                   // onClick={() => handleViewDetail(booking.id)}
                   onClick={() =>
-                    handleViewDetail(room.user_id,room.booking_detail_id)
+                    handleViewDetail(room.user_id, room.booking_detail_id)
                   }
                   key={index}
                   borderBottom="1px solid"

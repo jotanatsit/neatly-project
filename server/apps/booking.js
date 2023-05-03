@@ -9,6 +9,13 @@ const bookingRouter = Router();
 // ------------------------------------------- get all booking for admin -------------------------------------------
 
 bookingRouter.get("/", async (req, res) => {
+  let keywords = req.query.keywords;
+
+  if (keywords === undefined) {
+    return res.status(400).json({
+      message: "Please send keywords parameter in the URL endpoint",
+    });
+  }
   const results = await pool.query(
     `SELECT 
         b.*,
@@ -23,6 +30,12 @@ bookingRouter.get("/", async (req, res) => {
       LEFT JOIN booking b ON b.room_id = r.room_id
       LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
       LEFT JOIN users u ON u.user_id = b.user_id
+      WHERE rt.room_type_name ILIKE '%${keywords}%' OR u.fullname ILIKE '%${keywords}%' 
+      OR rt.bed_type ILIKE '%${keywords}%' OR CAST(bd.amount_guests AS TEXT) ILIKE '%${keywords}%'
+      OR CAST(bd.amount_rooms AS TEXT) ILIKE '%${keywords}%'
+      OR CAST(bd.check_in_date AS TEXT) ILIKE '%${keywords}%'
+      OR CAST(bd.check_out_date AS TEXT) ILIKE '%${keywords}%'
+
       GROUP BY 
         b.booking_id,
         bd.booking_detail_id,
