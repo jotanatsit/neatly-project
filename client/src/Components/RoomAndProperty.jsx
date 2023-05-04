@@ -57,10 +57,13 @@ const RoomAndProperty = () => {
   // function search input แล้วแสดงข้อมูลหน้า page admin
 
   function handleSearch(event) {
-    setInputData(event.target.value);
-    if (event.target.value === "") {
+    const input = event.target.value;
+    setInputData(input);
+    if (input === "") {
       setRoomType([]);
       setInputData("");
+    } else {
+      typeRoom(`%${input}%`);
     }
   }
 

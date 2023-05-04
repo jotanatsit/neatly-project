@@ -43,19 +43,22 @@ const RoomManagement = () => {
     getAllRooms(inputData);
   }, [inputData]);
 
-  console.log(status);
-
   function updateStatusArr(strStatus, index) {
     const newStatus = [...status]; // create a copy of the Status array
     newStatus[index] = strStatus; // modify the copy
     setStatus(newStatus); // update the state with the modified copy
   }
 
+  // function search input แล้วแสดงข้อมูลหน้า page admin
+
   function handleSearch(event) {
-    setInputData(event.target.value);
-    if (event.target.value === "") {
+    const input = event.target.value;
+    setInputData(input);
+    if (input === "") {
       setRoom([]);
       setInputData("");
+    } else {
+      getAllRooms(`%${input}%`);
     }
   }
 
