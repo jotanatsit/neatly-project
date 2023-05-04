@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Flex, Text, Button } from "@chakra-ui/react";
+import { Flex, Text, Button, Spinner } from "@chakra-ui/react";
 import { useBooking } from "../contexts/booking";
 
 export default function CheckoutForm() {
@@ -55,32 +55,45 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <PaymentElement id="payment-element" />
-      {/* <button disabled={isProcessing || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isProcessing ? "Processing ... " : "Confirm Booking"}
-        </span>
-      </button> */}
-      {/* Show any error or success messages */}
-      {/* {message && <div id="payment-message">{message}</div>} */}
-      <Flex w="740px" p="40px" justify="space-between">
-        <Button variant="ghost" onClick={backStep}>
-          Back
-        </Button>
-
-        <Button
-          disabled={isProcessing || !stripe || !elements}
-          type="submit"
-          id="submit"
-          variant="primary"
-        >
+    <Flex direction="column" align="center">
+      <form id="payment-form" onSubmit={handleSubmit}>
+        <PaymentElement id="payment-element" />
+        {/* <button disabled={isProcessing || !stripe || !elements} id="submit">
           <span id="button-text">
             {isProcessing ? "Processing ... " : "Confirm Booking"}
           </span>
-        </Button>
-      </Flex>
-      {message && <div id="payment-message">{message}</div>}
-    </form>
+        </button> */}
+        {/* Show any error or success messages */}
+        {/* {message && <div id="payment-message">{message}</div>} */}
+        <Flex w="740px" p="40px" justify="space-between">
+          <Button variant="ghost" onClick={backStep}>
+            Back
+          </Button>
+
+          <Button
+            disabled={isProcessing || !stripe || !elements}
+            type="submit"
+            id="submit"
+            variant="primary"
+          >
+            <span id="button-text">
+              {isProcessing ? "Processing ... " : "Confirm Booking"}
+            </span>
+          </Button>
+        </Flex>
+        {message && <div id="payment-message">{message}</div>}
+      </form>
+      {isProcessing ? (
+        <Flex m="40px">
+          <Spinner
+            color="orange.500"
+            thickness="5px"
+            emptyColor="gray.300"
+            h="120px"
+            w="120px"
+          />
+        </Flex>
+      ) : null}
+    </Flex>
   );
 }

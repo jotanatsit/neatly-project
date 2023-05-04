@@ -119,7 +119,7 @@ function SearchRooms(props) {
         >
           <Flex
             flexDirection="column"
-            w={314}
+            w="fit-content"
             h={178}
             justifyContent="space-between"
           >

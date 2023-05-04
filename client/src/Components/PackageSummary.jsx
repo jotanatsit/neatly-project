@@ -53,9 +53,9 @@ function PackageSummary() {
                 Check-out
               </Text>
               {lateCheckOut?.[1] === 0 ? (
-                <Text textStyle="b1">Before 11:00 AM</Text>
-              ) : (
                 <Text textStyle="b1">Before 12:00 PM</Text>
+              ) : (
+                <Text textStyle="b1">Before 11:00 AM</Text>
               )}
             </Box>
           </Flex>

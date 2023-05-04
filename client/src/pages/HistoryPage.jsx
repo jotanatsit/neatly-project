@@ -199,7 +199,10 @@ const HistoryPage = () => {
                             month: "long",
                           }
                         )}{" "}
-                        | After 2:00 PM
+                        |{" "}
+                        {item.booking_request[0]
+                          ? "After 1:00 PM"
+                          : "After 2:00 PM"}
                       </Text>
                     </Box>
                     <Box ml="40px">
@@ -216,7 +219,10 @@ const HistoryPage = () => {
                             month: "long",
                           }
                         )}{" "}
-                        | After 2:00 PM
+                        |{" "}
+                        {item.booking_request[1]
+                          ? "Before 12:00 PM"
+                          : "Before 11:00 AM"}
                       </Text>
                     </Box>
                   </Box>

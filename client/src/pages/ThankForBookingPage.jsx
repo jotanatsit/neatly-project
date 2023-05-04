@@ -16,6 +16,8 @@ function ThankForBooking() {
   const earlyCheckIn = bookingData.booking_request?.[0];
   const lateCheckOut = bookingData.booking_request?.[1];
 
+  console.log(bookingData);
+
   const getBookingData = async () => {
     try {
       const res = await axios.get(
@@ -110,11 +112,11 @@ function ThankForBooking() {
                   </Text>
                   {lateCheckOut?.[1] === 0 ? (
                     <Text textStyle="b1" color="white">
-                      Before 11:00 AM
+                      Before 12:00 PM
                     </Text>
                   ) : (
                     <Text textStyle="b1" color="white">
-                      Before 12:00 PM
+                      Before 11:00 AM
                     </Text>
                   )}
                 </Flex>
