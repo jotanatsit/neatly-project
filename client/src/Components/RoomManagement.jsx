@@ -18,7 +18,9 @@ import axios from "axios";
 
 const RoomManagement = () => {
   const [room, setRoom] = useState([]);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState([]);
+  const [roomId, setRoomId] = useState(null);
+  const [index, setIndex] = useState(null);
   const [inputData, setInputData] = useState("");
 
   async function getAllRooms(data) {
@@ -28,6 +30,12 @@ const RoomManagement = () => {
       );
       // console.log(rs.data.data);
       setRoom(rs.data.data);
+
+      const tempStatus = [];
+      for (let i = 0; i < rs.data.data.length; i++) {
+        tempStatus.push(rs.data.data[i].room_status);
+        setStatus(tempStatus);
+      }
     } catch (error) {}
   }
 
@@ -37,8 +45,10 @@ const RoomManagement = () => {
 
   console.log(status);
 
-  async function updateStatus() {
-    await axios.put();
+  function updateStatusArr(strStatus, index) {
+    const newStatus = [...status]; // create a copy of the Status array
+    newStatus[index] = strStatus; // modify the copy
+    setStatus(newStatus); // update the state with the modified copy
   }
 
   function handleSearch(event) {
@@ -48,6 +58,24 @@ const RoomManagement = () => {
       setInputData("");
     }
   }
+
+  async function updateStatus(room_id, index) {
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/rooms/${room_id}`,
+        {
+          room_status: status[index],
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    updateStatus(roomId, index);
+  }, [status]);
 
   return (
     <Flex flexDirection="column">
@@ -118,7 +146,7 @@ const RoomManagement = () => {
               >
                 <Box w="120px">
                   <Text textStyle="b1" color="black" ml={5}>
-                    {room.room_id}
+                    {room.room_number}
                   </Text>
                 </Box>
                 <Box w="367px">
@@ -133,7 +161,7 @@ const RoomManagement = () => {
                 </Box>
                 <Box>
                   <Menu>
-                    {room.room_type_id === "Vacant" ? (
+                    {status[index] === "Vacant" ? (
                       <MenuButton>
                         <Box
                           h="29px"
@@ -146,11 +174,11 @@ const RoomManagement = () => {
                           borderRadius={5}
                         >
                           <Text textStyle="b1" color="#006753">
-                            {room.room_type_id}
+                            {status[index]}
                           </Text>
                         </Box>
                       </MenuButton>
-                    ) : room.room_type_id === "Dirty" ? (
+                    ) : status[index] === "Dirty" ? (
                       <MenuButton>
                         <Box
                           h="29px"
@@ -162,11 +190,11 @@ const RoomManagement = () => {
                           borderRadius={5}
                         >
                           <Text textStyle="b1" color="#A50606" cursor="pointer">
-                            {room.room_type_id}
+                            {status[index]}
                           </Text>
                         </Box>
                       </MenuButton>
-                    ) : room.room_type_id === "Out of Service" ? (
+                    ) : status[index] === "Out of Service" ? (
                       <MenuButton>
                         <Box
                           h="29px"
@@ -178,11 +206,11 @@ const RoomManagement = () => {
                           borderRadius={5}
                         >
                           <Text textStyle="b1" color="#6E7288" cursor="pointer">
-                            {room.room_type_id}
+                            {status[index]}
                           </Text>
                         </Box>
                       </MenuButton>
-                    ) : room.room_type_id === "Occupied" ? (
+                    ) : status[index] === "Occupied" ? (
                       <MenuButton>
                         <Box
                           h="29px"
@@ -194,7 +222,7 @@ const RoomManagement = () => {
                           borderRadius={5}
                         >
                           <Text textStyle="b1" color="#084BAF" cursor="pointer">
-                            {room.room_type_id}
+                            {status[index]}
                           </Text>
                         </Box>
                       </MenuButton>
@@ -203,7 +231,9 @@ const RoomManagement = () => {
                     <MenuList boxShadow="2xl">
                       <MenuItem
                         onClick={() => {
-                          setStatus("Vacant");
+                          updateStatusArr("Vacant", index);
+                          setRoomId(room.room_id);
+                          setIndex(index);
                         }}
                       >
                         <Box
@@ -223,7 +253,9 @@ const RoomManagement = () => {
                       </MenuItem>
                       <MenuItem
                         onClick={() => {
-                          setStatus("Dirty");
+                          updateStatusArr("Dirty", index);
+                          setRoomId(room.room_id);
+                          setIndex(index);
                         }}
                       >
                         <Box
@@ -242,7 +274,9 @@ const RoomManagement = () => {
                       </MenuItem>
                       <MenuItem
                         onClick={() => {
-                          setStatus("Out of Service");
+                          updateStatusArr("Out of Service", index);
+                          setRoomId(room.room_id);
+                          setIndex(index);
                         }}
                       >
                         <Box
@@ -261,7 +295,9 @@ const RoomManagement = () => {
                       </MenuItem>
                       <MenuItem
                         onClick={() => {
-                          setStatus("Occupied");
+                          updateStatusArr("Occupied", index);
+                          setRoomId(room.room_id);
+                          setIndex(index);
                         }}
                       >
                         <Box

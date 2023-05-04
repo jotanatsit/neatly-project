@@ -384,10 +384,11 @@ roomRouter.get("/", async (req, res) => {
 
   for (let i = 0; i < newArr.length; i++) {
     newResult.push({
-      room_id: newArr?.[i].room_number,
+      room_id: newArr?.[i].room_id,
+      room_number: newArr?.[i].room_number,
       room_type_name: newArr?.[i].room_type_name,
       bed_type: newArr?.[i].bed_type,
-      room_type_id: newArr?.[i].room_status,
+      room_status: newArr?.[i].room_status,
     });
   }
 
@@ -396,9 +397,10 @@ roomRouter.get("/", async (req, res) => {
   });
 });
 
-// api for change room status
+// ------------------------------------------- api for change room status -------------------------------------------
+
 roomRouter.put("/:roomId", async (req, res) => {
-  const room_id = Number(req.params.roomId);
+  const room_number = Number(req.params.roomId);
 
   const room = {
     status: req.body.room_status,
@@ -409,7 +411,7 @@ roomRouter.put("/:roomId", async (req, res) => {
       `update rooms
       set room_status= $1
       where room_id = $2`,
-      [room.status, room_id]
+      [room.status, room_number]
     );
 
     return res.json({

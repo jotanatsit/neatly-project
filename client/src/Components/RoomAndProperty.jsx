@@ -77,10 +77,6 @@ const RoomAndProperty = () => {
   // }
 
   async function changePrice(roomTypeId, index) {
-    console.log(price[index]);
-    console.log(price);
-    console.log(promoPrice);
-    console.log(roomTypeId);
     try {
       const response = await axios.put(
         `http://localhost:4000/rooms/room-type/${roomTypeId}`,
