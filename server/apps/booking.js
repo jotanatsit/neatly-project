@@ -30,11 +30,13 @@ bookingRouter.get("/", async (req, res) => {
       LEFT JOIN booking b ON b.room_id = r.room_id
       LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
       LEFT JOIN users u ON u.user_id = b.user_id
-      WHERE rt.room_type_name ILIKE '%${keywords}%' OR u.fullname ILIKE '%${keywords}%' 
-      OR rt.bed_type ILIKE '%${keywords}%' OR CAST(bd.amount_guests AS TEXT) ILIKE '%${keywords}%'
-      OR CAST(bd.amount_rooms AS TEXT) ILIKE '%${keywords}%'
-      OR CAST(bd.check_in_date AS TEXT) ILIKE '%${keywords}%'
-      OR CAST(bd.check_out_date AS TEXT) ILIKE '%${keywords}%'
+      WHERE rt.room_type_name ILIKE $1 
+      OR u.fullname ILIKE $2 
+      OR rt.bed_type ILIKE $3 
+      OR CAST(bd.amount_guests AS TEXT) ILIKE $4
+      OR CAST(bd.amount_rooms AS TEXT) ILIKE $5
+      OR CAST(bd.check_in_date AS TEXT) ILIKE $6
+      OR CAST(bd.check_out_date AS TEXT) ILIKE $7
 
       GROUP BY 
         b.booking_id,
@@ -43,7 +45,16 @@ bookingRouter.get("/", async (req, res) => {
         rt.room_type_id,
         r.room_id
       ORDER BY 
-        bd.booking_detail_id DESC;`
+        bd.booking_detail_id DESC;`,
+    [
+      `%${keywords}%`,
+      `%${keywords}%`,
+      `%${keywords}%`,
+      `%${keywords}%`,
+      `%${keywords}%`,
+      `%${keywords}%`,
+      `%${keywords}%`,
+    ]
   );
 
   const newArr = results.rows;
