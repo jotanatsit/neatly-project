@@ -5,12 +5,16 @@ import Nav_user from "../Components/Nav_user";
 import { useAuth } from "../contexts/authentication";
 import axios from "axios";
 import changeFormatDate from "../utils/changeFormatDate";
+import { useBooking } from "../contexts/booking";
 
 function ThankForBooking() {
   const userId = useAuth();
   const navigate = useNavigate();
 
   const [bookingData, setBookingData] = useState({});
+
+  const earlyCheckIn = bookingData.booking_request?.[0];
+  const lateCheckOut = bookingData.booking_request?.[1];
 
   const getBookingData = async () => {
     try {
@@ -27,8 +31,6 @@ function ThankForBooking() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
-  useEffect(() => {
     getBookingData();
   }, []);
 
@@ -92,17 +94,29 @@ function ThankForBooking() {
                   <Text textStyle="b1" color="white" fontWeight="600">
                     Check-in
                   </Text>
-                  <Text textStyle="b1" color="white">
-                    After 2:00 PM
-                  </Text>
+                  {earlyCheckIn?.[1] === 0 ? (
+                    <Text textStyle="b1" color="white">
+                      After 1:00 PM
+                    </Text>
+                  ) : (
+                    <Text textStyle="b1" color="white">
+                      After 2:00 PM
+                    </Text>
+                  )}
                 </Flex>
                 <Flex direction="column" justify="space-between">
                   <Text textStyle="b1" color="white" fontWeight="600">
                     Check-out
                   </Text>
-                  <Text textStyle="b1" color="white">
-                    Before 12:00 PM
-                  </Text>
+                  {lateCheckOut?.[1] === 0 ? (
+                    <Text textStyle="b1" color="white">
+                      Before 11:00 AM
+                    </Text>
+                  ) : (
+                    <Text textStyle="b1" color="white">
+                      Before 12:00 PM
+                    </Text>
+                  )}
                 </Flex>
               </Flex>
             </Flex>
@@ -137,11 +151,25 @@ function ThankForBooking() {
               </Text>
             </Flex>
             {bookingData.booking_request?.map((arr, index) => {
-              if (arr[1] !== null && arr[1] !== "") {
+              if (arr[0] === "additional_request" && arr[1] !== "") {
+                return (
+                  <Flex key={index} direction="column" gap="10px">
+                    <Text textStyle="b1" fontWeight="600" color="white">
+                      {arr[0]
+                        .split("_")
+                        .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+                        .join(" ")}
+                    </Text>
+                    <Text textStyle="b1" color="green.300">
+                      {arr[1]}
+                    </Text>
+                  </Flex>
+                );
+              } else if (arr[1] !== null && arr[1] !== "") {
                 return (
                   <Flex key={index} w="100%" justify="space-between">
                     <Flex w="75%" justify="space-between">
-                      <Text textStyle="b1" color="green.300" textAlign="start">
+                      <Text textStyle="b1" color="green.300">
                         {(arr[0]?.charAt(0).toUpperCase() + arr[0]?.slice(1))
                           .split("_")
                           .join(" ")}
@@ -152,21 +180,20 @@ function ThankForBooking() {
                         color="green.300"
                         textAlign="end"
                       >
-                        x {bookingData.amount_rooms}
+                        {typeof arr[1] === "number"
+                          ? "x " + bookingData.amount_rooms
+                          : null}
                       </Text>
                     </Flex>
-                    <Text
-                      textStyle="b1"
-                      fontWeight="600"
-                      color="white"
-                      textAlign="end"
-                    >
-                      {(arr[1] * bookingData.amount_rooms).toLocaleString(
-                        "th-TH",
-                        {
-                          minimumFractionDigits: 2,
-                        }
-                      )}
+                    <Text textStyle="b1" fontWeight="600" color="white">
+                      {typeof arr[1] === "number"
+                        ? (arr[1] * bookingData.amount_rooms).toLocaleString(
+                            "th-TH",
+                            {
+                              minimumFractionDigits: 2,
+                            }
+                          )
+                        : arr[1]}
                     </Text>
                   </Flex>
                 );

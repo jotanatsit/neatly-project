@@ -38,7 +38,6 @@ const Payment = (props) => {
     variables: {
       borderRadius: "4px",
       colorPrimary: "#E76B39",
-      boxShadow: "4px 4px 16px rgba(0, 0, 0, 0.08)",
     },
     rules: {
       ".Tab": {
@@ -51,6 +50,9 @@ const Payment = (props) => {
       },
       ".Input": {
         border: "1px solid #E4E6ED",
+      },
+      ".Input::placeholder": {
+        color: "#9AA1B9",
       },
       ".Input:focus": {
         border: "1px solid #E76B39",

@@ -2,9 +2,12 @@ import { Flex, Text, UnorderedList, ListItem, Box } from "@chakra-ui/react";
 import { HiOutlineBriefcase } from "react-icons/hi2";
 import { useBooking } from "../contexts/booking";
 import changeFormatDate from "../utils/changeFormatDate";
+import { useState } from "react";
 
 function PackageSummary() {
   const { bookingData, bookingReq } = useBooking();
+  const earlyCheckIn = bookingReq[0];
+  const lateCheckOut = bookingReq[1];
 
   const checkInDate = changeFormatDate(bookingData?.check_in_date);
   const checkOutDate = changeFormatDate(bookingData?.check_out_date);
@@ -39,13 +42,21 @@ function PackageSummary() {
               <Text textStyle="b1" fontWeight="600">
                 Check-in
               </Text>
-              <Text textStyle="b1">After 2:00 PM</Text>
+              {earlyCheckIn?.[1] === 0 ? (
+                <Text textStyle="b1">After 1:00 PM</Text>
+              ) : (
+                <Text textStyle="b1">After 2:00 PM</Text>
+              )}
             </Box>
             <Box>
               <Text textStyle="b1" fontWeight="600">
                 Check-out
               </Text>
-              <Text textStyle="b1">Before 12:00 PM</Text>
+              {lateCheckOut?.[1] === 0 ? (
+                <Text textStyle="b1">Before 11:00 AM</Text>
+              ) : (
+                <Text textStyle="b1">Before 12:00 PM</Text>
+              )}
             </Box>
           </Flex>
           <Flex direction="column">
