@@ -22,11 +22,10 @@ import { Search2Icon } from "@chakra-ui/icons";
 const RoomAndProperty = () => {
   // const [showDetail, setShowDetail] = useState(false);
   const [roomType, setRoomType] = useState([]);
-  const [price, setPrice] = useState("");
-  const [promoPrice, setPromoPrice] = useState("");
+  const [price, setPrice] = useState([]);
+  const [promoPrice, setPromoPrice] = useState([]);
   const [inputData, setInputData] = useState("");
 
-  console.log(price);
   async function typeRoom(data) {
     try {
       const rs = await axios.get(
@@ -34,10 +33,23 @@ const RoomAndProperty = () => {
       );
       // console.log(rs.data.data);
       setRoomType(rs.data.data);
+
+      const tempPrice = [];
+      for (let i = 0; i < rs.data.data.length; i++) {
+        tempPrice.push(rs.data.data[i].price);
+        setPrice(tempPrice);
+      }
+      const tempPromoPrice = [];
+      for (let i = 0; i < rs.data.data.length; i++) {
+        tempPromoPrice.push(rs.data.data[i].promotion_price);
+        setPromoPrice(tempPromoPrice);
+      }
     } catch (error) {
       console.log(error);
     }
   }
+  console.log(price);
+
   useEffect(() => {
     typeRoom(inputData);
   }, [inputData]);
@@ -64,8 +76,22 @@ const RoomAndProperty = () => {
   //   );
   // }
 
-  function changePrice(e) {
-    if (e.key === "Enter") {
+  async function changePrice(roomTypeId, index) {
+    console.log(price[index]);
+    console.log(price);
+    console.log(promoPrice);
+    console.log(roomTypeId);
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/rooms/room-type/${roomTypeId}`,
+        {
+          price: price[index],
+          promotion_price: promoPrice[index],
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -162,7 +188,7 @@ const RoomAndProperty = () => {
                   <Popover>
                     <PopoverTrigger>
                       <Text textStyle="b1" color="black">
-                        {room.price}
+                        {price[index]}
                       </Text>
                     </PopoverTrigger>
                     <PopoverContent shadow="2xl">
@@ -173,10 +199,19 @@ const RoomAndProperty = () => {
                         <Input
                           border="1px solid"
                           borderColor="gray.400"
-                          value={price}
+                          value={price[index]}
                           type="number"
-                          onChange={(e) => setPrice(e.target.value)}
-                          onKeyPress={changePrice}
+                          onChange={(e) => {
+                            const newPrice = [...price]; // create a copy of the price array
+                            newPrice[index] = e.target.value; // modify the copy
+                            setPrice(newPrice); // update the state with the modified copy
+                          }}
+                          onKeyPress={(event) => {
+                            // เช็คว่า key ที่กดเป็น enter และเช็คว่ามีข้อความด้านในไหม
+                            if (event.key === "Enter") {
+                              changePrice(room.room_type_id, index);
+                            }
+                          }}
                         />
                       </PopoverBody>
                     </PopoverContent>
@@ -186,7 +221,7 @@ const RoomAndProperty = () => {
                   <Popover>
                     <PopoverTrigger>
                       <Text textStyle="b1" color="black">
-                        {room.promotion_price ? room.promotion_price : "-"}
+                        {promoPrice[index] ? promoPrice[index] : "-"}
                       </Text>
                     </PopoverTrigger>
                     <PopoverContent shadow="2xl">
@@ -197,10 +232,19 @@ const RoomAndProperty = () => {
                         <Input
                           border="1px solid"
                           borderColor="gray.400"
-                          value={promoPrice}
+                          value={promoPrice[index]}
                           type="number"
-                          onChange={(e) => setPromoPrice(e.target.value)}
-                          // onKeyPress={changePrice}
+                          onChange={(e) => {
+                            const newPromoPrice = [...promoPrice]; // create a copy of the promoPrice array
+                            newPromoPrice[index] = e.target.value; // modify the copy
+                            setPromoPrice(newPromoPrice); // update the state with the modified copy
+                          }}
+                          onKeyPress={(event) => {
+                            // เช็คว่า key ที่กดเป็น enter และเช็คว่ามีข้อความด้านในไหม
+                            if (event.key === "Enter") {
+                              changePrice(room.room_type_id, index);
+                            }
+                          }}
                         />
                       </PopoverBody>
                     </PopoverContent>

@@ -240,7 +240,7 @@ roomRouter.get("/room-type/:id", async (req, res) => {
 
   if (!roomTypeId) {
     return res.status(401).json({
-      message: "Please specified post id in order to get the post",
+      message: "Please specified room type id in order to get a room type",
     });
   }
 
@@ -312,6 +312,35 @@ roomRouter.get("/room-type/:id", async (req, res) => {
 
   return res.json({
     data: newResult,
+  });
+});
+
+// ------------------------------ edit price and promotion_price by room type id --------------------------------
+
+roomRouter.put("/room-type/:id", async (req, res) => {
+  const roomTypeId = req.params.id;
+  let price = req.body.price;
+  let promotionPrice = req.body.promotion_price;
+
+  console.log(req.body);
+
+  if (promotionPrice === 0) {
+    promotionPrice = null;
+  }
+
+  if (!roomTypeId) {
+    return res.status(401).json({
+      message: "Please specified room type id in order to update a room type",
+    });
+  }
+
+  await pool.query(
+    "update rooms_type set price=$1, promotion_price=$2 where room_type_id=$3",
+    [price, promotionPrice, roomTypeId]
+  );
+
+  return res.json({
+    message: "Room type has been successfully updated",
   });
 });
 
