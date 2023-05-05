@@ -72,7 +72,6 @@ const RoomManagement = () => {
           room_status: status[index],
         }
       );
-      // console.log(response.data);
     } catch (error) {
       console.log(error);
     }

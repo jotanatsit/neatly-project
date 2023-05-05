@@ -47,7 +47,7 @@ function PaymentMethodPage() {
           `http://localhost:4000/profile/${userId.UserIdFromLocalStorage}/payment-method`,
           formData
         );
-        console.log(response.data);
+
         alert(response.data.message);
         navigate("/payment-method");
       } catch (error) {

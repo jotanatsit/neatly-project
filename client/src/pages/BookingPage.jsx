@@ -72,7 +72,7 @@ const BookingPage = () => {
       const response = await axios.get(
         `http://localhost:4000/rooms/room-type/max-guests`
       );
-      // console.log(response.data.data);
+
       return response.data.data;
     } catch (error) {
       console.log(error);

@@ -16,8 +16,6 @@ function ThankForBooking() {
   const earlyCheckIn = bookingData.booking_request?.[0];
   const lateCheckOut = bookingData.booking_request?.[1];
 
-  console.log(bookingData);
-
   const getBookingData = async () => {
     try {
       const res = await axios.get(

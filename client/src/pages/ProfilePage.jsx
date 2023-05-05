@@ -66,7 +66,7 @@ function ProfilePage() {
             },
           }
         );
-        console.log(response.data);
+
         alert(response.data.message);
         navigate("/");
       } catch (error) {

@@ -168,7 +168,7 @@ const CustomerBooking = () => {
                   </Box>
                   <Box w="167px">
                     <Text textStyle="b1" color="black">
-                      Single Bed
+                      {room.bed_type[0].toUpperCase() + room.bed_type.slice(1)}
                     </Text>
                   </Box>
                   <Box w="165px">

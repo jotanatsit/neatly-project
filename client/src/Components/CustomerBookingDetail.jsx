@@ -10,7 +10,6 @@ const CustomerBookingDetail = (props) => {
       const rs = await axios.get(
         `http://localhost:4000/booking/${props.userID}/${props.index}`
       );
-      console.log(rs.data.data);
       setUserBooking(rs.data.data);
     } catch (error) {
       console.log(error);
@@ -21,7 +20,7 @@ const CustomerBookingDetail = (props) => {
   }, []);
 
   return (
-    <Flex h="1569px" flexDirection="column">
+    <Flex h="auto" flexDirection="column">
       <Flex w="1200px" h="80px" alignItems="center">
         <Image
           ml={20}
@@ -29,33 +28,31 @@ const CustomerBookingDetail = (props) => {
           onClick={() => props.setShowDetail(false)}
           cursor="pointer"
         ></Image>
-        <Text ml={5} textStyle="h5" color="black">
-          {userBooking.fullname}
+        <Text ml={5} textStyle="h5">
+          {userBooking.username}
         </Text>
-        <Text ml={5} textStyle="b1" color="black">
+        <Text ml={5} textStyle="b1" fontWeight="400">
           {userBooking.room_type_name}
         </Text>
       </Flex>
 
-      <Flex bg="bg" h="1489px" justifyContent="center">
+      <Flex bg="bg" height="auto" justifyContent="center" pb={20}>
         <Box
           w="1080px"
-          h="1388px"
           bg="white"
+          pb={20}
           display="flex"
           flexDirection="column"
           mt={55}
         >
           <Box w="880px" h="58px" mt={10} ml={20}>
-            <Text textStyle="h5" color="gray.600">
+            <Text textStyle="h5" color="gray.600" mb={2}>
               Customer name
             </Text>
-            <Text textStyle="b1" color="black">
-              {userBooking.room_type_name}
-            </Text>
+            <Text textStyle="b1">{userBooking.fullname}</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
-            <Text textStyle="h5" color="gray.600">
+            <Text textStyle="h5" color="gray.600" mb={2}>
               Guest(s)
             </Text>
             <Text textStyle="b1" color="black">
@@ -63,7 +60,7 @@ const CustomerBookingDetail = (props) => {
             </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
-            <Text textStyle="h5" color="gray.600">
+            <Text textStyle="h5" color="gray.600" mb={2}>
               Room type
             </Text>
             <Text textStyle="b1" color="black">
@@ -71,7 +68,7 @@ const CustomerBookingDetail = (props) => {
             </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
-            <Text textStyle="h5" color="gray.600">
+            <Text textStyle="h5" color="gray.600" mb={2}>
               Amount
             </Text>
             <Text textStyle="b1" color="black">
@@ -79,42 +76,29 @@ const CustomerBookingDetail = (props) => {
             </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
-            <Text textStyle="h5" color="gray.600">
+            <Text textStyle="h5" color="gray.600" mb={2}>
               Bed type
             </Text>
-            <Text textStyle="b1">Single bed</Text>
+            <Text textStyle="b1">{userBooking.bed_type}</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
-            <Text textStyle="h5" color="gray.600">
+            <Text textStyle="h5" color="gray.600" mb={2}>
               Check-in
             </Text>
             <Text textStyle="b1" color="black">
-              {new Date(userBooking.check_in_date).toLocaleDateString("en-US", {
-                day: "numeric",
-                weekday: "short",
-                year: "numeric",
-                month: "long",
-              })}
+              {userBooking.check_in_date}
             </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
-            <Text textStyle="h5" color="gray.600">
+            <Text textStyle="h5" color="gray.600" mb={2}>
               Check-out
             </Text>
             <Text textStyle="b1" color="black">
-              {new Date(userBooking.check_out_date).toLocaleDateString(
-                "en-US",
-                {
-                  day: "numeric",
-                  weekday: "short",
-                  year: "numeric",
-                  month: "long",
-                }
-              )}
+              {userBooking.check_out_date}
             </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
-            <Text textStyle="h5" color="gray.600">
+            <Text textStyle="h5" color="gray.600" mb={2}>
               Stay (total)
             </Text>
             <Text textStyle="b1" color="black">
@@ -127,40 +111,37 @@ const CustomerBookingDetail = (props) => {
             </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
-            <Text textStyle="h5" color="gray.600">
+            <Text textStyle="h5" color="gray.600" mb={2}>
               Booking date
             </Text>
             <Text textStyle="b1" color="black">
-              {new Date(userBooking.booking_date).toLocaleDateString("en-US", {
-                day: "numeric",
-                weekday: "short",
-                year: "numeric",
-                month: "long",
-              })}
+              {userBooking.booking_date}
             </Text>
           </Box>
           <Flex
             w="920px"
-            h="278px"
+            h="auto"
             bg="gray.100"
             mt={10}
             ml={20}
             flexDirection="column"
             alignItems="center"
           >
-            <Box w="872px" h="40px" display="flex" justifyContent="flex-end">
-              <Text>Payment success via {userBooking.payment_type}</Text>
+            <Box
+              w="872px"
+              h="40px"
+              display="flex"
+              justifyContent="flex-end"
+              mt={5}
+            >
+              <Text textStyle="b1" fontWeight="400" color="gray.600">
+                Payment success via
+              </Text>
+              <Text ml={2} textStyle="b1" fontWeight="600" color="gray.600">
+                {userBooking.payment_type}
+              </Text>
             </Box>
-            <Box w="872px" h="152px">
-              <Box
-                w="872px"
-                h="48px"
-                display="flex"
-                justifyContent="space-between"
-              >
-                <Text color="black">{userBooking.room_type_name}</Text>
-                <Text color="black">{userBooking.price}</Text>
-              </Box>
+            <Box w="872px" h="auto">
               <Box
                 w="872px"
                 h="48px"
@@ -168,41 +149,112 @@ const CustomerBookingDetail = (props) => {
                 justifyContent="space-between"
               >
                 <Text textStyle="b1" color="black">
-                  Superior Garden View Room
+                  {userBooking.room_type_name}
                 </Text>
-                <Text textStyle="b1" color="black" fontWeight="600">
-                  2,500.00
-                </Text>
+                <Box display="flex">
+                  {" "}
+                  <Text w="25%" textStyle="b1" color="gray.600" mr={1}>
+                    {"x " + userBooking.amount_rooms}
+                  </Text>
+                  <Box w="136px" display="flex" justifyContent="flex-end">
+                    <Text color="black" textStyle="b1">
+                      THB{" "}
+                      {userBooking.price?.toLocaleString("th-TH", {
+                        minimumFractionDigits: 2,
+                      })}
+                    </Text>
+                  </Box>
+                </Box>
               </Box>
+
+              {userBooking.booking_request?.map((arr) => {
+                if (typeof arr[1] === "number") {
+                  return (
+                    <Box
+                      w="872px"
+                      h="48px"
+                      display="flex"
+                      justifyContent="space-between"
+                    >
+                      <Text textStyle="b1" color="black">
+                        {arr[0].split("_").join(" ")}
+                      </Text>
+                      <Box display="flex" w="200px" justifyContent="flex-end">
+                        <Text w="25%" textStyle="b1" color="gray.600" mr={1}>
+                          {typeof arr[1] === "number"
+                            ? "x " + userBooking.amount_rooms
+                            : null}
+                        </Text>
+                        <Box w="110px" display="flex" justifyContent="flex-end">
+                          <Text textStyle="b1" color="black">
+                            THB{" "}
+                            {arr[1]?.toLocaleString("th-TH", {
+                              minimumFractionDigits: 2,
+                            })}
+                          </Text>
+                        </Box>
+                      </Box>
+                    </Box>
+                  );
+                }
+              })}
             </Box>
             <Box
               w="872px"
-              h="54px"
+              h="65px"
               display="flex"
               justifyContent="space-between"
               alignItems="end"
               borderTop="1px solid"
+              mb={10}
             >
               <Text textStyle="b1" color="black">
                 Total
               </Text>
-              <Text textStyle="b1" color="black" fontWeight="600">
-                THB 2,300.00
+              <Text textStyle="h5" color="black" fontWeight="600">
+                {" "}
+                THB{" "}
+                {(
+                  (Number(userBooking.price) +
+                    Number(userBooking.booking_request_price)) *
+                  Number(userBooking.amount_rooms)
+                )?.toLocaleString("th-TH", {
+                  minimumFractionDigits: 2,
+                })}
               </Text>
             </Box>
           </Flex>
 
           <Flex
             w="920px"
-            h="88px"
+            h="100px"
             flexDirection="column"
             justifyContent="space-evenly"
             bg="gray.300"
             mt={10}
             ml={20}
+            pr={5}
           >
-            <Text ml={5}>Additional Request</Text>
-            <Text ml={5}>Can i have some chocolate?</Text>
+            <Flex
+              ml={5}
+              borderBottom="1px"
+              borderColor="white"
+              pb={2}
+              textStyle="b1"
+            >
+              Additional Request
+            </Flex>
+            <Text textStyle="b1" fontWeight="400" color="gray.700" ml={5}>
+              {" "}
+              {userBooking.booking_request?.length > 0 &&
+              typeof userBooking.booking_request[
+                userBooking.booking_request?.length - 1
+              ][1] === "string"
+                ? userBooking.booking_request[
+                    userBooking.booking_request?.length - 1
+                  ][1]
+                : "-"}
+            </Text>
           </Flex>
         </Box>
       </Flex>

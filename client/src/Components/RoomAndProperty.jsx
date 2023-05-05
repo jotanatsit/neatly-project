@@ -44,7 +44,7 @@ const RoomAndProperty = () => {
       const rs = await axios.get(
         `http://localhost:4000/rooms/room-type?keywords=${data}`
       );
-      // console.log(rs.data.data);
+
       setRoomType(rs.data.data);
 
       const tempPrice = [];
@@ -61,7 +61,6 @@ const RoomAndProperty = () => {
       console.log(error);
     }
   }
-  console.log(price);
 
   useEffect(() => {
     typeRoom(inputData);
@@ -142,205 +141,206 @@ const RoomAndProperty = () => {
         </Box>
       </Flex>
 
-      
-        <Box w="1080px" display="flex" flexDirection="column" mt={55}>
-          <Box
-            display="flex"
-            alignItems="center"
-            bg="gray.300"
-            w="1080px"
-            h="41px"
-            py={30}
-          >
-            <Box w="153px">
-              <Text ml={5} textStyle="b2">
-                Image
-              </Text>
-            </Box>
-            <Box w="240px">
-              <Text ml={5} textStyle="b2">
-                Room type
-              </Text>
-            </Box>
-            <Box w="136px">
-              <Text ml={5} textStyle="b2">
-                Price
-              </Text>
-            </Box>
-            <Box w="136px">
-              <Text ml={5} textStyle="b2">
-                Promotion Price
-              </Text>
-            </Box>
-            <Box w="94px">
-              <Text ml={5} textStyle="b2">
-                Guest(s)
-              </Text>
-            </Box>
-            <Box w="167px">
-              <Text ml={5} textStyle="b2">
-                Bed Type
-              </Text>
-            </Box>
-            <Box w="128px">
-              <Text ml={5} textStyle="b2">
-                Room Size
-              </Text>
-            </Box>
+      <Box w="1080px" display="flex" flexDirection="column" mt={55}>
+        <Box
+          display="flex"
+          alignItems="center"
+          bg="gray.300"
+          w="1080px"
+          h="41px"
+          py={30}
+        >
+          <Box w="153px">
+            <Text ml={5} textStyle="b2">
+              Image
+            </Text>
           </Box>
-          {roomType.map((room, index) => {
-            return (
-              <Box
-                display="flex"
-                alignItems="center"
-                bg="white"
-                w="1080px"
-                h="120px"
-                cursor="pointer"
-                // onClick={() => handleViewDetail(booking.id)}
-                // onClick={() => handleViewDetail()}
-                key={index}
-                borderBottom="1px solid"
-                borderColor="gray.300"
-              >
-                <Box w="153px" display="flex" justifyContent="center">
-                  <Image
-                    src={room.room_picture[0]}
-                    w="120px"
-                    h="72px"
-                    objectFit="cover"
-                  ></Image>
-                </Box>
-                <Box w="240px">
-                  <Text textStyle="b1" color="black" ml={5}>
-                    {room.room_type_name}
-                  </Text>
-                </Box>
-                <Box>
-                  <Box
-                    w="136px"
-                    onClick={() => showPrice(index)}
-                    position="relative"
-                  >
-                    <Text textStyle="b1" color="black" ml={5}>
-                      {price[index].toLocaleString("th-TH", {
-                        minimumFractionDigits: 2,
-                      })}
-                    </Text>
-                  </Box>
-                  {showChangePrice === index ? (
-                    <Box
-                      w="136px"
-                      border="1px solid"
-                      borderColor="gray.300"
-                      boxShadow="2xl"
-                      position="absolute"
-                      borderRadius="10px"
-                      onblur={() => setShowChangePrice(null)}
-                      bg="white"
-                    >
-                      <Text p={1} textStyle="b1" color="black" ml={1}>
-                        Change Price
-                      </Text>
-                      <Box p={1}>
-                        <Input
-                          border="1px solid"
-                          borderColor="gray.400"
-                          value={price[index]}
-                          type="number"
-                          color="black"
-                          onChange={(e) => {
-                            const newPrice = [...price]; // create a copy of the price array
-                            newPrice[index] = e.target.value.toLocaleString("th-TH", {
-                              minimumFractionDigits: 2,
-                            }); // modify the copy
-                            setPrice(newPrice); // update the state with the modified copy
-                          }}
-                          onKeyPress={(event) => {
-                            // เช็คว่า key ที่กดเป็น enter และเช็คว่ามีข้อความด้านในไหม
-                            if (event.key === "Enter") {
-                              changePrice(room.room_type_id, index);
-                            }
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                  ) : null}
-                </Box>
-
-                <Box>
-                  <Box
-                    w="136px"
-                    onClick={() => showPromoPrice(index)}
-                    position="relative"
-                  >
-                    <Text textStyle="b1" color="black" ml={5}>
-                      {promoPrice[index] && promoPrice[index] > 0 ? (
-                        promoPrice[index].toLocaleString("th-TH", {
-                          minimumFractionDigits: 2,
-                        })
-                      ) : (
-                        <Text ml={4}>-</Text>
-                      )}
-                    </Text>
-                  </Box>
-                  {showChangePromoPrice === index ? (
-                    <Box
-                      w="200px"
-                      border="1px solid"
-                      borderColor="gray.300"
-                      boxShadow="2xl"
-                      position="absolute"
-                      borderRadius="10px"
-                      bg="white"
-                    >
-                      <Text p={1} ml={1} textStyle="b1" color="black">
-                        Change PromotionPrice
-                      </Text>
-                      <Box p={1}>
-                        <Input
-                          border="1px solid"
-                          borderColor="gray.400"
-                          value={promoPrice[index]}
-                          type="number"
-                          color="black"
-                          onChange={(e) => {
-                            const newPromoPrice = [...promoPrice]; // create a copy of the promoPrice array
-                            newPromoPrice[index] = e.target.value; // modify the copy
-                            setPromoPrice(newPromoPrice); // update the state with the modified copy
-                          }}
-                          onKeyPress={(event) => {
-                            // เช็คว่า key ที่กดเป็น enter และเช็คว่ามีข้อความด้านในไหม
-                            if (event.key === "Enter") {
-                              changePrice(room.room_type_id, index);
-                            }
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                  ) : null}
-                </Box>
-
-                <Box w="94px">
-                  <Text textStyle="b1" color="black" ml={5}>
-                    {room.amount_person}
-                  </Text>
-                </Box>
-                <Box w="167px">
-                  <Text textStyle="b1" color="black" ml={5}>
-                    {room.bed_type[0].toUpperCase() + room.bed_type.slice(1)}
-                  </Text>
-                </Box>
-                <Box w="128px">
-                  <Text textStyle="b1" color="black" ml={5}>
-                    {room.room_size}
-                  </Text>
-                </Box>
-              </Box>
-            );
-          })}
+          <Box w="240px">
+            <Text ml={5} textStyle="b2">
+              Room type
+            </Text>
+          </Box>
+          <Box w="136px">
+            <Text ml={5} textStyle="b2">
+              Price
+            </Text>
+          </Box>
+          <Box w="136px">
+            <Text ml={5} textStyle="b2">
+              Promotion Price
+            </Text>
+          </Box>
+          <Box w="94px">
+            <Text ml={5} textStyle="b2">
+              Guest(s)
+            </Text>
+          </Box>
+          <Box w="167px">
+            <Text ml={5} textStyle="b2">
+              Bed Type
+            </Text>
+          </Box>
+          <Box w="128px">
+            <Text ml={5} textStyle="b2">
+              Room Size
+            </Text>
+          </Box>
         </Box>
-     
+        {roomType.map((room, index) => {
+          return (
+            <Box
+              display="flex"
+              alignItems="center"
+              bg="white"
+              w="1080px"
+              h="120px"
+              cursor="pointer"
+              // onClick={() => handleViewDetail(booking.id)}
+              // onClick={() => handleViewDetail()}
+              key={index}
+              borderBottom="1px solid"
+              borderColor="gray.300"
+            >
+              <Box w="153px" display="flex" justifyContent="center">
+                <Image
+                  src={room.room_picture[0]}
+                  w="120px"
+                  h="72px"
+                  objectFit="cover"
+                ></Image>
+              </Box>
+              <Box w="240px">
+                <Text textStyle="b1" color="black" ml={5}>
+                  {room.room_type_name}
+                </Text>
+              </Box>
+              <Box>
+                <Box
+                  w="136px"
+                  onClick={() => showPrice(index)}
+                  position="relative"
+                >
+                  <Text textStyle="b1" color="black" ml={5}>
+                    {price[index].toLocaleString("th-TH", {
+                      minimumFractionDigits: 2,
+                    })}
+                  </Text>
+                </Box>
+                {showChangePrice === index ? (
+                  <Box
+                    w="136px"
+                    border="1px solid"
+                    borderColor="gray.300"
+                    boxShadow="2xl"
+                    position="absolute"
+                    borderRadius="10px"
+                    onblur={() => setShowChangePrice(null)}
+                    bg="white"
+                  >
+                    <Text p={1} textStyle="b1" color="black" ml={1}>
+                      Change Price
+                    </Text>
+                    <Box p={1}>
+                      <Input
+                        border="1px solid"
+                        borderColor="gray.400"
+                        value={price[index]}
+                        type="number"
+                        color="black"
+                        onChange={(e) => {
+                          const newPrice = [...price]; // create a copy of the price array
+                          newPrice[index] = e.target.value.toLocaleString(
+                            "th-TH",
+                            {
+                              minimumFractionDigits: 2,
+                            }
+                          ); // modify the copy
+                          setPrice(newPrice); // update the state with the modified copy
+                        }}
+                        onKeyPress={(event) => {
+                          // เช็คว่า key ที่กดเป็น enter และเช็คว่ามีข้อความด้านในไหม
+                          if (event.key === "Enter") {
+                            changePrice(room.room_type_id, index);
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                ) : null}
+              </Box>
+
+              <Box>
+                <Box
+                  w="136px"
+                  onClick={() => showPromoPrice(index)}
+                  position="relative"
+                >
+                  <Text textStyle="b1" color="black" ml={5}>
+                    {promoPrice[index] && promoPrice[index] > 0 ? (
+                      promoPrice[index].toLocaleString("th-TH", {
+                        minimumFractionDigits: 2,
+                      })
+                    ) : (
+                      <Text ml={4}>-</Text>
+                    )}
+                  </Text>
+                </Box>
+                {showChangePromoPrice === index ? (
+                  <Box
+                    w="200px"
+                    border="1px solid"
+                    borderColor="gray.300"
+                    boxShadow="2xl"
+                    position="absolute"
+                    borderRadius="10px"
+                    bg="white"
+                  >
+                    <Text p={1} ml={1} textStyle="b1" color="black">
+                      Change PromotionPrice
+                    </Text>
+                    <Box p={1}>
+                      <Input
+                        border="1px solid"
+                        borderColor="gray.400"
+                        value={promoPrice[index]}
+                        type="number"
+                        color="black"
+                        onChange={(e) => {
+                          const newPromoPrice = [...promoPrice]; // create a copy of the promoPrice array
+                          newPromoPrice[index] = e.target.value; // modify the copy
+                          setPromoPrice(newPromoPrice); // update the state with the modified copy
+                        }}
+                        onKeyPress={(event) => {
+                          // เช็คว่า key ที่กดเป็น enter และเช็คว่ามีข้อความด้านในไหม
+                          if (event.key === "Enter") {
+                            changePrice(room.room_type_id, index);
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                ) : null}
+              </Box>
+
+              <Box w="94px">
+                <Text textStyle="b1" color="black" ml={5}>
+                  {room.amount_person}
+                </Text>
+              </Box>
+              <Box w="167px">
+                <Text textStyle="b1" color="black" ml={5}>
+                  {room.bed_type[0].toUpperCase() + room.bed_type.slice(1)}
+                </Text>
+              </Box>
+              <Box w="128px">
+                <Text textStyle="b1" color="black" ml={5}>
+                  {room.room_size}
+                </Text>
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
     </Flex>
   );
 };

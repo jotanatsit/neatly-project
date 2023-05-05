@@ -44,8 +44,7 @@ bookingRouter.get("/", async (req, res) => {
         u.user_id,
         rt.room_type_id,
         r.room_id
-      ORDER BY 
-        bd.booking_detail_id DESC;`,
+      ORDER BY bd.check_in_date ASC;`,
     [
       `%${keywords}%`,
       `%${keywords}%`,
@@ -73,6 +72,7 @@ bookingRouter.get("/", async (req, res) => {
         booking_detail_id: results.rows[i].booking_detail_id,
         room_type_id: results.rows[i].room_type_id,
         room_type_name: results.rows[i].room_type_name,
+        bed_type: results.rows[i].bed_type,
         booking_date: results.rows[i].booking_date,
         cancellation_date: results.rows[i].cancellation_date,
         check_in_date: results.rows[i].check_in_date,
@@ -201,7 +201,7 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
     `SELECT 
         bd.*,
         b.*,
-        br.*,
+        br.*,  
         u.*,
         r.*,
         rt.*,
@@ -245,29 +245,62 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
   // Sum value of key in booking_requests - return total price of booking_requests - number
   let totalRequestPrice = 0;
   for (const key in bookingRequest) {
-    if (bookingRequest[key] !== null) {
+    if (
+      bookingRequest[key] !== null &&
+      typeof bookingRequest[key] !== "string"
+    ) {
       totalRequestPrice = totalRequestPrice + bookingRequest[key];
     }
   }
+
+  const bookingRequestArr = [];
+  for (const key in bookingRequest) {
+    if (bookingRequest[key] !== null) {
+      bookingRequestArr.push([key, bookingRequest[key]]);
+    }
+  }
+  console.log(bookingRequestArr);
 
   // Object data that return to client
   const newResults = {
     booking_detail_id: newArr.booking_detail_id,
     room_type_id: newArr.room_type_id,
     room_type_name: newArr.room_type_name,
-    booking_date: newArr.booking_date,
+    booking_date: newArr.booking_date.toLocaleDateString("en-US", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
+    bed_type: newArr.bed_type[0].toUpperCase() + newArr.bed_type.slice(1),
     cancellation_date: newArr.cancellation_date,
-    check_in_date: newArr.check_in_date,
-    check_out_date: newArr.check_out_date,
+    check_in_date: new Date(newArr.check_in_date).toLocaleDateString("en-US", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
+    check_out_date: new Date(newArr.check_out_date).toLocaleDateString(
+      "en-US",
+      {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }
+    ),
     amount_guests: newArr.amount_guests,
     amount_rooms: newArr.amount_rooms,
     price: newArr.price,
     promotion_price: newArr.promotion_price,
+    booking_request: bookingRequestArr,
     booking_request_price: totalRequestPrice,
-    payment_type: newArr.payment_type,
+    payment_type:
+      newArr.payment_type[0].toUpperCase() + newArr.payment_type.slice(1),
     booking_status: newArr.booking_status,
     room_picture: newArr.room_picture,
     fullname: newArr.fullname,
+    username: newArr.username,
   };
 
   return res.json({

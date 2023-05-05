@@ -76,7 +76,7 @@ function RegisterPage() {
             },
           }
         );
-        console.log(response.data);
+
         alert(response.data.message);
         navigate("/login");
       } catch (error) {
