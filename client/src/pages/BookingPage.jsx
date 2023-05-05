@@ -149,7 +149,7 @@ const BookingPage = () => {
                   style={{ width: "250px" }}
                 >
                   <Text textStyle="b1">
-                    {format(checkInDate, "MM/dd/yyyy")}
+                    {format(checkInDate, "eee, dd MMM yyyy")}
                   </Text>
                 </MenuButton>
               </Flex>
@@ -170,7 +170,7 @@ const BookingPage = () => {
                   style={{ width: "250px" }}
                 >
                   <Text textStyle="b1">
-                    {format(checkOutDate, "MM/dd/yyyy")}
+                    {format(checkOutDate, "eee, dd MMM yyyy")}
                   </Text>
                 </MenuButton>
               </Flex>

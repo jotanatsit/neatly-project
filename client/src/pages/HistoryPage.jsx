@@ -111,7 +111,7 @@ const HistoryPage = () => {
         <Text textStyle="h2" color="black" ml="150px" my="50px">
           Booking History
         </Text>
-        {roomData?.map((item, index) => {
+        {roomData?.map((room, index) => {
           return (
             <Flex
               w="1120px"
@@ -125,7 +125,7 @@ const HistoryPage = () => {
             >
               <Box display="flex" flexDirection="row">
                 <Image
-                  src={item.room_picture[0]}
+                  src={room.room_picture[0]}
                   w="310px"
                   h="210px"
                   objectFit="cover"
@@ -134,13 +134,13 @@ const HistoryPage = () => {
                 <Flex w="769px" flexDirection="column" ml="40px">
                   <Box display="flex" justifyContent="space-between">
                     <Text textStyle="h4" color="black">
-                      {item.room_type_name}
+                      {room.room_type_name}
                     </Text>
-                    {item.cancellation_date === null ? (
+                    {room.cancellation_date === null ? (
                       <Box>
                         <Text textStyle="b1" color="gray.600">
                           Booking date:{" "}
-                          {new Date(item.booking_date).toLocaleDateString(
+                          {new Date(room.booking_date).toLocaleDateString(
                             "en-US",
                             {
                               day: "numeric",
@@ -159,7 +159,7 @@ const HistoryPage = () => {
                       >
                         <Text textStyle="b1" color="gray.600">
                           Booking date:{" "}
-                          {new Date(item.booking_date).toLocaleDateString(
+                          {new Date(room.booking_date).toLocaleDateString(
                             "en-US",
                             {
                               day: "numeric",
@@ -171,7 +171,7 @@ const HistoryPage = () => {
                         </Text>
                         <Text textStyle="b1" color="gray.600">
                           Cancellation date:
-                          {new Date(item.cancellation_date).toLocaleDateString(
+                          {new Date(room.cancellation_date).toLocaleDateString(
                             "en-US",
                             {
                               day: "numeric",
@@ -190,7 +190,7 @@ const HistoryPage = () => {
                         Check-in
                       </Text>
                       <Text textStyle="b1">
-                        {new Date(item.check_in_date).toLocaleDateString(
+                        {new Date(room.check_in_date).toLocaleDateString(
                           "en-US",
                           {
                             day: "numeric",
@@ -200,7 +200,7 @@ const HistoryPage = () => {
                           }
                         )}{" "}
                         |{" "}
-                        {item.booking_request[0]
+                        {room.booking_request[0]
                           ? "After 1:00 PM"
                           : "After 2:00 PM"}
                       </Text>
@@ -210,7 +210,7 @@ const HistoryPage = () => {
                         Check-out
                       </Text>
                       <Text textStyle="b1">
-                        {new Date(item.check_out_date).toLocaleDateString(
+                        {new Date(room.check_out_date).toLocaleDateString(
                           "en-US",
                           {
                             day: "numeric",
@@ -220,7 +220,7 @@ const HistoryPage = () => {
                           }
                         )}{" "}
                         |{" "}
-                        {item.booking_request[1]
+                        {room.booking_request[1]
                           ? "Before 12:00 PM"
                           : "Before 11:00 AM"}
                       </Text>
@@ -244,10 +244,10 @@ const HistoryPage = () => {
                               fontWeight="400"
                               color="gray.700"
                             >
-                              {item.amount_guests} Guests (
+                              {room.amount_guests} Guests (
                               {Math.ceil(
-                                (new Date(item.check_out_date) -
-                                  new Date(item.check_in_date)) /
+                                (new Date(room.check_out_date) -
+                                  new Date(room.check_in_date)) /
                                   (1000 * 60 * 60 * 24)
                               )}{" "}
                               Night)
@@ -258,10 +258,10 @@ const HistoryPage = () => {
                                 fontWeight="400"
                                 color="gray.700"
                               >
-                                {item.amount_guests} Guests (
+                                {room.amount_guests} Guests (
                                 {Math.ceil(
-                                  (new Date(item.check_out_date) -
-                                    new Date(item.check_in_date)) /
+                                  (new Date(room.check_out_date) -
+                                    new Date(room.check_in_date)) /
                                     (1000 * 60 * 60 * 24)
                                 )}{" "}
                                 Night) Payment success via
@@ -272,68 +272,80 @@ const HistoryPage = () => {
                                 fontWeight="600"
                                 color="gray.700"
                               >
-                                {item.payment_type}
+                                {room.payment_type}
                               </Text>
                             </Box>
                           </Box>
                         </AccordionPanel>
                         <AccordionPanel pb={4}>
                           <Box display="flex" justifyContent="space-between">
-                            <Text
-                              textStyle="b1"
-                              fontWeight="400"
-                              color="gray.700"
-                            >
-                              {item.room_type_name}
-                            </Text>
-
-                            {item.promotion_price ? (
+                            <Flex w="100%" justify="space-between">
+                              <Flex w="75%" justify="space-between">
+                                <Text textStyle="b1" color="gray.700">
+                                  {room.room_type_name}
+                                </Text>
+                                <Text
+                                  w="25%"
+                                  textStyle="b1"
+                                  fontWeight="600"
+                                  color="gray.700"
+                                  textAlign="end"
+                                >
+                                  x {room.amount_rooms}
+                                </Text>
+                              </Flex>
                               <Text
                                 textStyle="b1"
                                 fontWeight="600"
                                 color="gray.900"
                               >
-                                {item.promotion_price}{" "}
+                                {room.total_price_per_room.toLocaleString(
+                                  "th-TH",
+                                  {
+                                    minimumFractionDigits: 2,
+                                  }
+                                )}
                               </Text>
-                            ) : (
-                              <Text
-                                textStyle="b1"
-                                fontWeight="600"
-                                color="gray.900"
-                              >
-                                {item.price.toLocaleString("th-TH", {
-                                  minimumFractionDigits: 2,
-                                })}
-                              </Text>
-                            )}
+                            </Flex>
                           </Box>
                         </AccordionPanel>
 
-                        {item.booking_request.map((item, index) => {
-                          if (typeof item[1] === "number") {
+                        {room.booking_request.map((arr, index) => {
+                          if (typeof arr[1] === "number") {
                             return (
                               <AccordionPanel pb={4} key={index}>
-                                <Box
-                                  display="flex"
-                                  justifyContent="space-between"
-                                >
-                                  <Text
-                                    textStyle="b1"
-                                    fontWeight="400"
-                                    color="gray.700"
-                                  >
-                                    {item[0].split("_").join(" ")}
-                                  </Text>
+                                <Flex w="100%" justify="space-between">
+                                  <Flex w="75%" justify="space-between">
+                                    <Text textStyle="b1" color="gray.700">
+                                      {arr[0]
+                                        .split("_")
+                                        .map(
+                                          (s) =>
+                                            s.charAt(0).toUpperCase() +
+                                            s.slice(1)
+                                        )
+                                        .join(" ")}
+                                    </Text>
+                                    <Text
+                                      w="25%"
+                                      textStyle="b1"
+                                      fontWeight="600"
+                                      color="gray.700"
+                                      textAlign="end"
+                                    >
+                                      x {room.amount_rooms}
+                                    </Text>
+                                  </Flex>
                                   <Text
                                     textStyle="b1"
                                     fontWeight="600"
                                     color="gray.900"
                                   >
-                                    {item[1].toLocaleString("th-TH", {
+                                    {arr[1].toLocaleString("th-TH", {
                                       minimumFractionDigits: 2,
                                     })}
                                   </Text>
-                                </Box>
+                                </Flex>
                               </AccordionPanel>
                             );
                           }
@@ -361,10 +373,12 @@ const HistoryPage = () => {
                             >
                               THB{" "}
                               {(
-                                item.price +
-                                item.booking_request.reduce((sum, current) => {
+                                (room?.promotion_price
+                                  ? room?.promotion_price * room.amount_rooms
+                                  : room.price * room.amount_rooms) +
+                                room.booking_request.reduce((sum, current) => {
                                   if (typeof current[1] === "number") {
-                                    return sum + current[1];
+                                    return sum + current[1] * room.amount_rooms;
                                   }
                                   return sum;
                                 }, 0)
@@ -397,14 +411,14 @@ const HistoryPage = () => {
                             color="gray.700"
                             mt={1}
                           >
-                            {item.booking_request.length > 0 &&
-                            typeof item.booking_request[
-                              item.booking_request.length - 1
+                            {room.booking_request.length > 0 &&
+                            typeof room.booking_request[
+                              room.booking_request.length - 1
                             ][1] === "string"
-                              ? item.booking_request[
-                                  item.booking_request.length - 1
+                              ? room.booking_request[
+                                  room.booking_request.length - 1
                                 ][1]
-                              : "Can i have some chocolate?"}
+                              : "-"}
                           </Text>
                         </AccordionPanel>
                       </AccordionItem>
@@ -412,11 +426,11 @@ const HistoryPage = () => {
                   </Box>
                 </Flex>
               </Box>
-              {item.booking_status === "Cancel" ||
-              moment().isAfter(moment(item.check_out_date)) ? null : (
+              {room.booking_status === "Cancel" ||
+              moment().isAfter(moment(room.check_out_date)) ? null : (
                 <Box w="1120px" display="flex" mt="20px">
                   <Box w="50%">
-                    {moment(item.check_in_date)
+                    {moment(room.check_in_date)
                       .subtract(1, "days")
                       .isAfter(moment()) ? (
                       <Button
@@ -443,7 +457,7 @@ const HistoryPage = () => {
                     >
                       Room Detail
                     </Button>
-                    {moment(item.check_in_date)
+                    {moment(room.check_in_date)
                       .subtract(3, "days")
                       .isAfter(moment()) ? (
                       <Button

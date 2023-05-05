@@ -125,7 +125,7 @@ const Booking_box = () => {
                   alignItems="center"
                 >
                   <Text textStyle="b1">
-                    {format(date[0].startDate, "MM/dd/yyyy")}
+                    {format(date[0].startDate, "eee, dd MMM yyyy")}
                   </Text>
                   <CalendarIcon />
                 </Box>
@@ -154,13 +154,13 @@ const Booking_box = () => {
                   alignItems="center"
                 >
                   <Text textStyle="b1">
-                    {format(date[0].endDate, "MM/dd/yyyy")}
+                    {format(date[0].endDate, "eee, dd MMM yyyy")}
                   </Text>
                   <CalendarIcon />
                 </Box>
               </MenuButton>
             </Flex>
-            <MenuList  position="absolute" right="-240px">
+            <MenuList position="absolute" right="-240px">
               <DateRange
                 editableDateInputs={true}
                 onChange={(item) => setDate([item.selection])}
@@ -168,6 +168,7 @@ const Booking_box = () => {
                 ranges={date}
                 style={{ width: "500px" }}
                 minDate={addDays(new Date(), 0)}
+                dateDisplayFormat="eee, dd MMM yyyy"
               />
             </MenuList>
           </Menu>
