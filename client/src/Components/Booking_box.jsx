@@ -160,7 +160,7 @@ const Booking_box = () => {
                 </Box>
               </MenuButton>
             </Flex>
-            <MenuList border="1px solid" position="absolute" right="-240px">
+            <MenuList  position="absolute" right="-240px">
               <DateRange
                 editableDateInputs={true}
                 onChange={(item) => setDate([item.selection])}

@@ -24,7 +24,7 @@ const AdminPage = () => {
   return (
     <Tabs variant="unstyled">
       <Flex w="1440px" m="auto">
-        <Flex w="240px" h="1024px" bg="green.800" flexDirection="column">
+        <Flex w="240px" h="100vh" bg="green.800" flexDirection="column">
           <Box
             w="240px"
             h="152px"
@@ -82,6 +82,7 @@ const AdminPage = () => {
             display="flex"
             alignItems="center"
             borderTop="1px solid"
+            borderColor="green.700"
           >
             <Box display="flex" w="190px" ml={5}>
               <Button

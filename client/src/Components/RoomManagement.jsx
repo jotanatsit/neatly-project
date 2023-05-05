@@ -43,6 +43,8 @@ const RoomManagement = () => {
     getAllRooms(inputData);
   }, [inputData]);
 
+  // console.log(status);
+
   function updateStatusArr(strStatus, index) {
     const newStatus = [...status]; // create a copy of the Status array
     newStatus[index] = strStatus; // modify the copy
@@ -70,7 +72,7 @@ const RoomManagement = () => {
           room_status: status[index],
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -88,7 +90,7 @@ const RoomManagement = () => {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Text ml={20} textStyle="h5">
+        <Text ml={20} textStyle="h5" color="black">
           Room Management
         </Text>
         <Box
@@ -112,7 +114,7 @@ const RoomManagement = () => {
         </Box>
       </Flex>
 
-      <Flex bg="bg" h="1000px" justifyContent="center">
+      <Flex bg="bg" h="889px" overflow="auto" justifyContent="center">
         <Box w="1080px" display="flex" flexDirection="column" mt={55}>
           <Box
             display="flex"
@@ -123,16 +125,24 @@ const RoomManagement = () => {
             py={30}
           >
             <Box w="120px">
-              <Text ml={5}>Room no.</Text>
+              <Text ml={5} textStyle="b2">
+                Room no.
+              </Text>
             </Box>
             <Box w="367px">
-              <Text>Room type</Text>
+              <Text ml={5} textStyle="b2">
+                Room type
+              </Text>
             </Box>
             <Box w="300px">
-              <Text>Bed Type</Text>
+              <Text ml={5} textStyle="b2">
+                Bed Type
+              </Text>
             </Box>
             <Box w="293px">
-              <Text>Status</Text>
+              <Text ml={5} textStyle="b2">
+                Status
+              </Text>
             </Box>
           </Box>
           {room.map((room, index) => {
@@ -146,19 +156,20 @@ const RoomManagement = () => {
                 borderBottom="1px solid"
                 borderColor="gray.300"
                 key={index}
+                py={43}
               >
-                <Box w="120px">
+                <Box w="120px" border>
                   <Text textStyle="b1" color="black" ml={5}>
                     {room.room_number}
                   </Text>
                 </Box>
                 <Box w="367px">
-                  <Text textStyle="b1" color="black">
+                  <Text textStyle="b1" color="black" ml={5}>
                     {room.room_type_name}
                   </Text>
                 </Box>
                 <Box w="300px">
-                  <Text textStyle="b1" color="black">
+                  <Text textStyle="b1" color="black" ml={5}>
                     {room.bed_type[0].toUpperCase() + room.bed_type.slice(1)}
                   </Text>
                 </Box>

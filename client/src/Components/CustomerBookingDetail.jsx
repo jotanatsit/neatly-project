@@ -10,7 +10,7 @@ const CustomerBookingDetail = (props) => {
       const rs = await axios.get(
         `http://localhost:4000/booking/${props.userID}/${props.index}`
       );
-      // console.log(rs.data.data);
+      console.log(rs.data.data);
       setUserBooking(rs.data.data);
     } catch (error) {
       console.log(error);
@@ -19,8 +19,6 @@ const CustomerBookingDetail = (props) => {
   useEffect(() => {
     customerDetail();
   }, []);
-
-
 
   return (
     <Flex h="1569px" flexDirection="column">
@@ -31,10 +29,10 @@ const CustomerBookingDetail = (props) => {
           onClick={() => props.setShowDetail(false)}
           cursor="pointer"
         ></Image>
-        <Text ml={5} textStyle="h5">
-          Kate Cho
+        <Text ml={5} textStyle="h5" color="black">
+          {userBooking.fullname}
         </Text>
-        <Text ml={5} textStyle="b1">
+        <Text ml={5} textStyle="b1" color="black">
           {userBooking.room_type_name}
         </Text>
       </Flex>
@@ -52,25 +50,33 @@ const CustomerBookingDetail = (props) => {
             <Text textStyle="h5" color="gray.600">
               Customer name
             </Text>
-            <Text textStyle="b1">Kate Cho</Text>
+            <Text textStyle="b1" color="black">
+              {userBooking.room_type_name}
+            </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Guest(s)
             </Text>
-            <Text textStyle="b1" color="black">{userBooking.amount_guests}</Text>
+            <Text textStyle="b1" color="black">
+              {userBooking.amount_guests}
+            </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Room type
             </Text>
-            <Text textStyle="b1" color="black">{userBooking.room_type_name}</Text>
+            <Text textStyle="b1" color="black">
+              {userBooking.room_type_name}
+            </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Amount
             </Text>
-            <Text textStyle="b1" color="black">{userBooking.amount_rooms} room</Text>
+            <Text textStyle="b1" color="black">
+              {userBooking.amount_rooms} room
+            </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
@@ -82,13 +88,30 @@ const CustomerBookingDetail = (props) => {
             <Text textStyle="h5" color="gray.600">
               Check-in
             </Text>
-            <Text textStyle="b1" color="black">{userBooking.check_in_date}</Text>
+            <Text textStyle="b1" color="black">
+              {new Date(userBooking.check_in_date).toLocaleDateString("en-US", {
+                day: "numeric",
+                weekday: "short",
+                year: "numeric",
+                month: "long",
+              })}
+            </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
               Check-out
             </Text>
-            <Text textStyle="b1" color="black">{userBooking.check_out_date}</Text>
+            <Text textStyle="b1" color="black">
+              {new Date(userBooking.check_out_date).toLocaleDateString(
+                "en-US",
+                {
+                  day: "numeric",
+                  weekday: "short",
+                  year: "numeric",
+                  month: "long",
+                }
+              )}
+            </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600">
@@ -107,7 +130,14 @@ const CustomerBookingDetail = (props) => {
             <Text textStyle="h5" color="gray.600">
               Booking date
             </Text>
-            <Text textStyle="b1" color="black">{userBooking.booking_date}</Text>
+            <Text textStyle="b1" color="black">
+              {new Date(userBooking.booking_date).toLocaleDateString("en-US", {
+                day: "numeric",
+                weekday: "short",
+                year: "numeric",
+                month: "long",
+              })}
+            </Text>
           </Box>
           <Flex
             w="920px"
@@ -119,7 +149,7 @@ const CustomerBookingDetail = (props) => {
             alignItems="center"
           >
             <Box w="872px" h="40px" display="flex" justifyContent="flex-end">
-              <Text>Payment success via Credit Card - *888 </Text>
+              <Text>Payment success via {userBooking.payment_type}</Text>
             </Box>
             <Box w="872px" h="152px">
               <Box
@@ -137,17 +167,12 @@ const CustomerBookingDetail = (props) => {
                 display="flex"
                 justifyContent="space-between"
               >
-                <Text>Superior Garden View Room</Text>
-                <Text>2,500.00</Text>
-              </Box>
-              <Box
-                w="872px"
-                h="48px"
-                display="flex"
-                justifyContent="space-between"
-              >
-                <Text>Superior Garden View Room</Text>
-                <Text>2,500.00</Text>
+                <Text textStyle="b1" color="black">
+                  Superior Garden View Room
+                </Text>
+                <Text textStyle="b1" color="black" fontWeight="600">
+                  2,500.00
+                </Text>
               </Box>
             </Box>
             <Box
@@ -158,8 +183,12 @@ const CustomerBookingDetail = (props) => {
               alignItems="end"
               borderTop="1px solid"
             >
-              <Text>Total</Text>
-              <Text>THB 2,300.00</Text>
+              <Text textStyle="b1" color="black">
+                Total
+              </Text>
+              <Text textStyle="b1" color="black" fontWeight="600">
+                THB 2,300.00
+              </Text>
             </Box>
           </Flex>
 

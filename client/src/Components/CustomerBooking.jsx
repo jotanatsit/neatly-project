@@ -69,7 +69,7 @@ const CustomerBooking = () => {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Text ml={20} textStyle="h5">
+        <Text ml={20} textStyle="h5" color="black">
           Customer Booking
         </Text>
         <Box
@@ -93,7 +93,7 @@ const CustomerBooking = () => {
         </Box>
       </Flex>
 
-      <Flex bg="bg" h="1000px" justifyContent="center">
+      <Flex bg="bg" h="889px" overflow="auto" justifyContent="center">
         <Box w="1080px" display="flex" flexDirection="column" mt={55}>
           <Box
             display="flex"
@@ -104,26 +104,26 @@ const CustomerBooking = () => {
             py={30}
           >
             <Box w="180px">
-              <Text textStyle="b2" fontWeight="500px" ml={5}>
+              <Text textStyle="b2" ml={5}>
                 Customer name
               </Text>
             </Box>
-            <Box w="96px">
+            <Box w="96px" textStyle="b2">
               <Text>Guest(s)</Text>
             </Box>
-            <Box w="200px">
+            <Box w="200px" textStyle="b2">
               <Text>Room type</Text>
             </Box>
-            <Box w="86px">
+            <Box w="86px" textStyle="b2">
               <Text>Amount</Text>
             </Box>
-            <Box w="167px">
+            <Box w="167px" textStyle="b2">
               <Text>Bed Type</Text>
             </Box>
-            <Box w="165px">
+            <Box w="165px" textStyle="b2">
               <Text>Check-in</Text>
             </Box>
-            <Box w="186px">
+            <Box w="186px" textStyle="b2">
               <Text>Check-out</Text>
             </Box>
           </Box>
