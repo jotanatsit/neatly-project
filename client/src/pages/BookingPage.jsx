@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Nav_nonuser from "../Components/Nav_nonuser";
 import Nav_user from "../Components/Nav_user";
-import { format } from "date-fns";
+import { format,addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -174,7 +174,7 @@ const BookingPage = () => {
                   </Text>
                 </MenuButton>
               </Flex>
-              <MenuList border="1px solid" position="absolute" right="-240px">
+              <MenuList position="absolute" right="-240px" shadow="dark-lg">
                 <DateRange
                   editableDateInputs={true}
                   onChange={(item) => {
@@ -185,6 +185,9 @@ const BookingPage = () => {
                   moveRangeOnFirstSelection={false}
                   ranges={date}
                   style={{ width: "500px" }}
+                  minDate={addDays(new Date(), 0)}
+                  dateDisplayFormat="eee, dd MMM yyyy"
+                  rangeColors={['#E76B39', '#E76B39', '#E76B39']}
                 />
               </MenuList>
             </Menu>
@@ -212,7 +215,7 @@ const BookingPage = () => {
                   </Text>
                 </MenuButton>
               </Flex>
-              <MenuList w="250px" maxH="96px">
+              <MenuList w="250px" maxH="96px" shadow="dark-lg">
                 <Flex className="input-box">
                   <Box ml={4}>Rooms</Box>
                   <Flex

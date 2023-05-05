@@ -201,17 +201,20 @@ function SearchRooms(props) {
                 Available {room.available_room} rooms
               </Text>
             </Flex>
-            <Flex justifyContent="flex-end">
-              <Button
-                onClick={() => {
-                  getRoomdetail(room_type_id);
-                }}
-                bg="none"
-                color="orange.600"
-                p="16px 32px"
-              >
-                Room Detail
-              </Button>
+            <Flex justifyContent="flex-end" alignItems="center" >
+              <Box w="111px" h="24px">
+                <Text
+                  onClick={() => {
+                    getRoomdetail(room_type_id);
+                  }}
+                  color="orange.500"
+                  textStyle="b1"
+                  fontWeight="600"
+                  cursor="pointer"
+                >
+                  Room Detail
+                </Text>
+              </Box>
 
               {rooms <= room.available_room ? (
                 <Button variant="primary" p="16px 32px" onClick={handleBooking}>

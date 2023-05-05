@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Button,
   Flex,
@@ -12,9 +12,7 @@ import {
   Tab,
   TabPanel,
 } from "@chakra-ui/react";
-import { BrowserRouter, Route } from "react-router-dom";
 import CustomerBooking from "../Components/CustomerBooking";
-import CustomerBookingDetail from "../Components/CustomerBookingDetail";
 import RoomManagement from "../Components/RoomManagement";
 import RoomAndProperty from "../Components/RoomAndProperty";
 import { useAuth } from "../contexts/authentication";

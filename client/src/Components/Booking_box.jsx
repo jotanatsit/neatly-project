@@ -160,7 +160,7 @@ const Booking_box = () => {
                 </Box>
               </MenuButton>
             </Flex>
-            <MenuList position="absolute" right="-240px">
+            <MenuList position="absolute" right="-240px" shadow="dark-lg">
               <DateRange
                 editableDateInputs={true}
                 onChange={(item) => setDate([item.selection])}
@@ -169,6 +169,7 @@ const Booking_box = () => {
                 style={{ width: "500px" }}
                 minDate={addDays(new Date(), 0)}
                 dateDisplayFormat="eee, dd MMM yyyy"
+                rangeColors={['#E76B39', '#E76B39', '#E76B39']}
               />
             </MenuList>
           </Menu>

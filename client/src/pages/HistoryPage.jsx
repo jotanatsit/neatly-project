@@ -447,7 +447,7 @@ const HistoryPage = () => {
                   <Flex w="50%" justifyContent="flex-end" alignItems="center">
                     <Button
                       variant="ghost"
-                      color="orange.600"
+                      color="orange.500"
                       onClick={() => {
                         getRoomdetail(index);
                       }}

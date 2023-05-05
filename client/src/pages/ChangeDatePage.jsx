@@ -9,11 +9,6 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   AlertDialog,
   AlertDialogBody,
   AlertDialogFooter,
@@ -26,13 +21,11 @@ import { CalendarIcon } from "@chakra-ui/icons";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { format } from "date-fns";
-import { Link } from "react-router-dom";
+import { format, addDays } from "date-fns";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/authentication";
 import { useDisclosure } from "@chakra-ui/react";
-import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
 const ChangeDatePage = () => {
@@ -255,6 +248,9 @@ const ChangeDatePage = () => {
                         moveRangeOnFirstSelection={false}
                         ranges={date}
                         style={{ width: "500px" }}
+                        minDate={addDays(new Date(), 0)}
+                        dateDisplayFormat="eee, dd MMM yyyy"
+                        rangeColors={["#E76B39", "#E76B39", "#E76B39"]}
                       />
                     </MenuList>
                   </Menu>

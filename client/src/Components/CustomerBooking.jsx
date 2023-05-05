@@ -60,6 +60,7 @@ const CustomerBooking = () => {
       userBookingRoom(`%${input}%`);
     }
   }
+ 
 
   return (
     <Flex flexDirection="column">
@@ -104,27 +105,27 @@ const CustomerBooking = () => {
             py={30}
           >
             <Box w="180px">
-              <Text textStyle="b2" ml={5}>
+              <Text textStyle="b2" textAlign="center">
                 Customer name
               </Text>
             </Box>
             <Box w="96px" textStyle="b2">
-              <Text>Guest(s)</Text>
+              <Text textAlign="center">Guest(s)</Text>
             </Box>
             <Box w="200px" textStyle="b2">
-              <Text>Room type</Text>
+              <Text textAlign="center">Room type</Text>
             </Box>
             <Box w="86px" textStyle="b2">
-              <Text>Amount</Text>
+              <Text textAlign="center">Amount</Text>
             </Box>
             <Box w="167px" textStyle="b2">
-              <Text>Bed Type</Text>
+              <Text textAlign="center">Bed Type</Text>
             </Box>
             <Box w="165px" textStyle="b2">
-              <Text>Check-in</Text>
+              <Text textAlign="center">Check-in</Text>
             </Box>
             <Box w="186px" textStyle="b2">
-              <Text>Check-out</Text>
+              <Text textAlign="center">Check-out</Text>
             </Box>
           </Box>
           {userBooking.map((room, index) => {
@@ -147,37 +148,37 @@ const CustomerBooking = () => {
                   borderColor="gray.300"
                 >
                   <Box w="180px">
-                    <Text textStyle="b1" color="black" ml={5}>
+                    <Text textStyle="b1" color="black" textAlign="center">
                       {room.fullname}
                     </Text>
                   </Box>
                   <Box w="96px">
-                    <Text textStyle="b1" color="black">
+                    <Text textStyle="b1" color="black" textAlign="center">
                       {room.amount_guests}
                     </Text>
                   </Box>
                   <Box w="200px">
-                    <Text textStyle="b1" color="black">
+                    <Text textStyle="b1" color="black" textAlign="center">
                       {room.room_type_name}
                     </Text>
                   </Box>
                   <Box w="86px">
-                    <Text textStyle="b1" color="black">
+                    <Text textStyle="b1" color="black" textAlign="center">
                       {room.amount_rooms}
                     </Text>
                   </Box>
                   <Box w="167px">
-                    <Text textStyle="b1" color="black">
+                    <Text textStyle="b1" color="black" textAlign="center">
                       {room.bed_type[0].toUpperCase() + room.bed_type.slice(1)}
                     </Text>
                   </Box>
                   <Box w="165px">
-                    <Text textStyle="b1" color="black">
+                    <Text textStyle="b1" color="black" textAlign="center">
                       {room.check_in_date}
                     </Text>
                   </Box>
                   <Box w="186px">
-                    <Text textStyle="b1" color="black">
+                    <Text textStyle="b1" color="black" textAlign="center">
                       {room.check_out_date}
                     </Text>
                   </Box>

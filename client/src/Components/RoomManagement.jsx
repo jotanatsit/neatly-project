@@ -124,22 +124,22 @@ const RoomManagement = () => {
             py={30}
           >
             <Box w="120px">
-              <Text ml={5} textStyle="b2">
+              <Text textAlign="center" textStyle="b2">
                 Room no.
               </Text>
             </Box>
             <Box w="367px">
-              <Text ml={5} textStyle="b2">
+              <Text textAlign="center" textStyle="b2">
                 Room type
               </Text>
             </Box>
             <Box w="300px">
-              <Text ml={5} textStyle="b2">
+              <Text textAlign="center" textStyle="b2">
                 Bed Type
               </Text>
             </Box>
             <Box w="293px">
-              <Text ml={5} textStyle="b2">
+              <Text textAlign="center" textStyle="b2">
                 Status
               </Text>
             </Box>
@@ -158,24 +158,24 @@ const RoomManagement = () => {
                 py={43}
               >
                 <Box w="120px" border>
-                  <Text textStyle="b1" color="black" ml={5}>
+                  <Text textStyle="b1" color="black" textAlign="center">
                     {room.room_number}
                   </Text>
                 </Box>
                 <Box w="367px">
-                  <Text textStyle="b1" color="black" ml={5}>
+                  <Text textStyle="b1" color="black" textAlign="center">
                     {room.room_type_name}
                   </Text>
                 </Box>
                 <Box w="300px">
-                  <Text textStyle="b1" color="black" ml={5}>
+                  <Text textStyle="b1" color="black" textAlign="center">
                     {room.bed_type[0].toUpperCase() + room.bed_type.slice(1)}
                   </Text>
                 </Box>
                 <Box>
                   <Menu>
                     {status[index] === "Vacant" ? (
-                      <MenuButton>
+                      <MenuButton ml={110}>
                         <Box
                           h="29px"
                           bg="#E5FFFA"
