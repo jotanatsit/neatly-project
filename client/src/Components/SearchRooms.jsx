@@ -392,7 +392,24 @@ function SearchRooms(props) {
                     <ul>
                       {roomDetail &&
                         roomDetail.room_amenity &&
-                        roomDetail.room_amenity.map((item, index) => {
+                        roomDetail.room_amenity
+                          .slice(0, 7)
+                          .map((item, index) => {
+                            return (
+                              <li key={index}>
+                                <Text textStyle="b1" color="gray.700">
+                                  {item.split("_").join(" ")}
+                                </Text>
+                              </li>
+                            );
+                          })}
+                    </ul>
+                  </Box>
+                  <Box w="47%">
+                    <ul>
+                      {roomDetail &&
+                        roomDetail.room_amenity &&
+                        roomDetail.room_amenity.slice(7).map((item, index) => {
                           return (
                             <li key={index}>
                               <Text textStyle="b1" color="gray.700">

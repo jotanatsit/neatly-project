@@ -259,7 +259,17 @@ const RoomDetailPage = () => {
             </Text>
             <Flex>
               <UnorderedList mt="24px" w="300px">
-                {room.room_amenity?.map((amenity, index) => {
+                {room.room_amenity?.slice(0, 7).map((amenity, index) => {
+                  return (
+                    <ListItem key={index} color="gray.700" textStyle="b1">
+                      {amenity.split("_").join(" ").charAt(0).toUpperCase() +
+                        amenity.split("_").join(" ").slice(1)}
+                    </ListItem>
+                  );
+                })}
+              </UnorderedList>
+              <UnorderedList mt="24px" w="300px">
+                {room.room_amenity?.slice(7).map((amenity, index) => {
                   return (
                     <ListItem key={index} color="gray.700" textStyle="b1">
                       {amenity.split("_").join(" ").charAt(0).toUpperCase() +
