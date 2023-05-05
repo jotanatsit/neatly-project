@@ -8,8 +8,11 @@ import {
 } from "../middleware/validateProfileData.js";
 import jwt from "jsonwebtoken";
 import jwtDecode from "jwt-decode";
+import { protect } from "../middleware/protect.js";
 
 const profileRouter = Router();
+
+profileRouter.use(protect);
 
 // ------------------------------------- get user profile data from database -------------------------------------------
 
