@@ -75,9 +75,7 @@ function PackageSummary() {
               </Text>
             </Flex>
             <Text textStyle="b1" fontWeight="600">
-              {(
-                bookingData.total_price_per_room * bookingData.amount_rooms
-              ).toLocaleString("th-TH", {
+              {bookingData.total_price_per_room.toLocaleString("th-TH", {
                 minimumFractionDigits: 2,
               })}
             </Text>
@@ -119,12 +117,9 @@ function PackageSummary() {
                   </Flex>
                   <Text textStyle="b1" fontWeight="600">
                     {typeof arr[1] === "number"
-                      ? (arr[1] * bookingData.amount_rooms).toLocaleString(
-                          "th-TH",
-                          {
-                            minimumFractionDigits: 2,
-                          }
-                        )
+                      ? arr[1].toLocaleString("th-TH", {
+                          minimumFractionDigits: 2,
+                        })
                       : arr[1]}
                   </Text>
                 </Flex>

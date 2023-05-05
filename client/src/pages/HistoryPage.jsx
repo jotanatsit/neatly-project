@@ -299,11 +299,12 @@ const HistoryPage = () => {
                                 fontWeight="600"
                                 color="gray.900"
                               >
-                                {(
-                                  room.total_price_per_room * room.amount_rooms
-                                ).toLocaleString("th-TH", {
-                                  minimumFractionDigits: 2,
-                                })}
+                                {room.total_price_per_room.toLocaleString(
+                                  "th-TH",
+                                  {
+                                    minimumFractionDigits: 2,
+                                  }
+                                )}
                               </Text>
                             </Flex>
                           </Box>
@@ -340,9 +341,7 @@ const HistoryPage = () => {
                                     fontWeight="600"
                                     color="gray.900"
                                   >
-                                    {(
-                                      arr[1] * room.amount_rooms
-                                    ).toLocaleString("th-TH", {
+                                    {arr[1].toLocaleString("th-TH", {
                                       minimumFractionDigits: 2,
                                     })}
                                   </Text>
