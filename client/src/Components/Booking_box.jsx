@@ -110,8 +110,7 @@ const Booking_box = () => {
                 as={Button}
                 iconSpacing="10"
                 cursor="pointer"
-                _hover={{ bg: "none" }}
-                _focus={{ bg: "none" }}
+                _active="none"
                 color="gray.600"
                 bg="white"
                 border="1px solid"
@@ -131,6 +130,7 @@ const Booking_box = () => {
                 </Box>
               </MenuButton>
             </Flex>
+            <Text mb={4} textStyle="b1" color="black">-</Text>
             <Flex flexDirection="column">
               <Text textStyle="b1">
                 <label>Check Out</label>
@@ -139,8 +139,7 @@ const Booking_box = () => {
                 as={Button}
                 iconSpacing="10"
                 cursor="pointer"
-                _hover={{ bg: "none" }}
-                _focus={{ bg: "none" }}
+                _active="none"
                 color="gray.600"
                 bg="white"
                 border="1px solid"
@@ -160,7 +159,7 @@ const Booking_box = () => {
                 </Box>
               </MenuButton>
             </Flex>
-            <MenuList position="absolute" right="-240px" shadow="dark-lg">
+            <MenuList position="absolute" right="-225px" shadow="dark-lg">
               <DateRange
                 editableDateInputs={true}
                 onChange={(item) => setDate([item.selection])}
@@ -184,8 +183,7 @@ const Booking_box = () => {
                 rightIcon={<ChevronDownIcon />}
                 iconSpacing="10"
                 cursor="pointer"
-                _hover={{ bg: "none" }}
-                _focus={{ bg: "none" }}
+                _active="none"
                 color="gray.600"
                 bg="white"
                 border="1px solid"
@@ -197,7 +195,7 @@ const Booking_box = () => {
                 </Text>
               </MenuButton>
             </Flex>
-            <MenuList w="250px" maxH="96px">
+            <MenuList w="250px" maxH="96px" shadow="dark-lg">
               <Flex className="input-box">
                 <Box ml={4}>Rooms</Box>
                 <Flex

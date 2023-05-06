@@ -192,7 +192,7 @@ const RoomManagement = () => {
                         </Box>
                       </MenuButton>
                     ) : status[index] === "Dirty" ? (
-                      <MenuButton>
+                      <MenuButton ml={110}>
                         <Box
                           h="29px"
                           bg="#FFE5E5"
@@ -208,7 +208,7 @@ const RoomManagement = () => {
                         </Box>
                       </MenuButton>
                     ) : status[index] === "Out of Service" ? (
-                      <MenuButton>
+                      <MenuButton ml={110}>
                         <Box
                           h="29px"
                           bg="#F0F1F8"
@@ -224,7 +224,7 @@ const RoomManagement = () => {
                         </Box>
                       </MenuButton>
                     ) : status[index] === "Occupied" ? (
-                      <MenuButton>
+                      <MenuButton ml={110}>
                         <Box
                           h="29px"
                           bg="#E4ECFF"

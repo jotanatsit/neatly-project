@@ -27,6 +27,7 @@ import axios from "axios";
 import { useAuth } from "../contexts/authentication";
 import { useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ChangeDatePage = () => {
   const navigate = useNavigate();
@@ -188,8 +189,7 @@ const ChangeDatePage = () => {
                         as={Button}
                         iconSpacing="10"
                         cursor="pointer"
-                        _hover={{ bg: "none" }}
-                        _focus={{ bg: "none" }}
+                        _active="none"
                         color="gray.600"
                         bg="white"
                         border="1px solid"
@@ -204,7 +204,7 @@ const ChangeDatePage = () => {
                           alignItems="center"
                         >
                           <Text textStyle="b1">
-                            {format(date[0].startDate, "MM/dd/yyyy")}
+                            {format(date[0].startDate, "eee, dd MMM yyyy")}
                           </Text>
                           <CalendarIcon />
                         </Box>
@@ -219,8 +219,7 @@ const ChangeDatePage = () => {
                         as={Button}
                         iconSpacing="10"
                         cursor="pointer"
-                        _hover={{ bg: "none" }}
-                        _focus={{ bg: "none" }}
+                        _active="none"
                         color="gray.600"
                         bg="white"
                         border="1px solid"
@@ -235,13 +234,13 @@ const ChangeDatePage = () => {
                           alignItems="center"
                         >
                           <Text textStyle="b1">
-                            {format(date[0].endDate, "MM/dd/yyyy")}
+                            {format(date[0].endDate, "eee, dd MMM yyyy")}
                           </Text>
                           <CalendarIcon />
                         </Box>
                       </MenuButton>
                     </Flex>
-                    <MenuList position="absolute" right="-240px">
+                    <MenuList position="absolute" right="-230px">
                       <DateRange
                         editableDateInputs={true}
                         onChange={(item) => setDate([item.selection])}
@@ -264,9 +263,11 @@ const ChangeDatePage = () => {
             justifyContent="space-between"
             mt="20px"
           >
-            <Button variant="ghost" color="orange.600">
-              Cancel Booking
-            </Button>
+            <Link to="/history">
+              <Button variant="ghost" color="orange.600">
+                Cancel 
+              </Button>
+            </Link>
             <Box>
               <Button variant="primary" p="25px 25px" onClick={onOpen}>
                 Change Date

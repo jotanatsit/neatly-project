@@ -79,7 +79,7 @@ const CustomerBookingDetail = (props) => {
             <Text textStyle="h5" color="gray.600" mb={2}>
               Bed type
             </Text>
-            <Text textStyle="b1">{userBooking.bed_type}</Text>
+            <Text textStyle="b1" color="black">{userBooking.bed_type}</Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
             <Text textStyle="h5" color="gray.600" mb={2}>

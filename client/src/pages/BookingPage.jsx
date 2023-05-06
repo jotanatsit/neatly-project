@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Nav_nonuser from "../Components/Nav_nonuser";
 import Nav_user from "../Components/Nav_user";
-import { format,addDays } from "date-fns";
+import { format, addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -125,7 +125,7 @@ const BookingPage = () => {
           position="relative"
         >
           <Flex
-            w="1000px"
+            w="1030px"
             h="76px"
             flexDirection="row"
             justifyContent="space-between"
@@ -140,19 +140,21 @@ const BookingPage = () => {
                   as={Button}
                   iconSpacing="10"
                   cursor="pointer"
-                  _hover={{ bg: "none" }}
-                  _focus={{ bg: "none" }}
+                  _active="none"
                   color="gray.600"
                   bg="white"
                   border="1px solid"
                   borderColor="gray.400"
-                  style={{ width: "250px" }}
+                  style={{ width: "240px" }}
                 >
                   <Text textStyle="b1">
                     {format(checkInDate, "eee, dd MMM yyyy")}
                   </Text>
                 </MenuButton>
               </Flex>
+              <Text textStyle="b1" color="black" mb={5}>
+                -
+              </Text>
               <Flex flexDirection="column">
                 <Text textStyle="b1">
                   <label>Check Out</label>
@@ -161,20 +163,19 @@ const BookingPage = () => {
                   as={Button}
                   iconSpacing="10"
                   cursor="pointer"
-                  _hover={{ bg: "none" }}
-                  _focus={{ bg: "none" }}
+                  _active="none"
                   color="gray.600"
                   bg="white"
                   border="1px solid"
                   borderColor="gray.400"
-                  style={{ width: "250px" }}
+                  style={{ width: "240px" }}
                 >
                   <Text textStyle="b1">
                     {format(checkOutDate, "eee, dd MMM yyyy")}
                   </Text>
                 </MenuButton>
               </Flex>
-              <MenuList position="absolute" right="-240px" shadow="dark-lg">
+              <MenuList position="absolute" right="-210px" shadow="dark-lg">
                 <DateRange
                   editableDateInputs={true}
                   onChange={(item) => {
@@ -187,7 +188,7 @@ const BookingPage = () => {
                   style={{ width: "500px" }}
                   minDate={addDays(new Date(), 0)}
                   dateDisplayFormat="eee, dd MMM yyyy"
-                  rangeColors={['#E76B39', '#E76B39', '#E76B39']}
+                  rangeColors={["#E76B39", "#E76B39", "#E76B39"]}
                 />
               </MenuList>
             </Menu>
@@ -202,8 +203,7 @@ const BookingPage = () => {
                   rightIcon={<ChevronDownIcon />}
                   iconSpacing="10"
                   cursor="pointer"
-                  _hover={{ bg: "none" }}
-                  _focus={{ bg: "none" }}
+                  _active="none"
                   color="gray.600"
                   bg="white"
                   border="1px solid"

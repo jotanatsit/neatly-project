@@ -19,6 +19,7 @@ import { Link } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
 import axios from "axios";
+import { PhoneIcon, ChevronDownIcon, WarningIcon } from "@chakra-ui/icons";
 
 const Nav_user = () => {
   const { logout } = useAuth();
@@ -79,28 +80,24 @@ const Nav_user = () => {
           </Link>
         </Box>
       </Flex>
-
-      <Flex
-        w="48px"
-        h="48px"
-        bg="gray.100"
-        justifyContent="center"
-        borderRadius="50%"
-        mr={2}
-      >
-        <Image
-          src="/HomePage/icon/icon_bell.svg"
-          w="18px"
-          borderRadius="50%"
-        ></Image>
+      <Flex h="48px" alignItems="center">
+        <Text textStyle="h5" color="green.700" fontWeight="700">
+          {" "}
+          Hello{" "}
+        </Text>
+        <Text textStyle="b1" fontWeight="600" color="orange.500" ml={2}>
+          {userData.fullname}
+        </Text>
       </Flex>
+
       <Popover>
         <PopoverTrigger>
           <Image
             cursor="pointer"
             boxSize="50px"
-            borderRadius={50}
+            borderRadius="50%"
             src={userData.profile_picture}
+            ml={4}
           />
         </PopoverTrigger>
         <PopoverContent
