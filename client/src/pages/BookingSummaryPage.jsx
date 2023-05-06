@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Flex, Text, Button } from "@chakra-ui/react";
+import { Flex, Text, Button, Box } from "@chakra-ui/react";
 import Nav_user from "../Components/Nav_user";
 import StepPayment from "../Components/StepPayment";
 import BasicInfoSummary from "../Components/BasicInfoSummary.jsx";
@@ -10,8 +10,6 @@ import Payment from "../Components/Payment";
 import { useBooking } from "../contexts/booking";
 
 function BookingSummary() {
-  /* const [status, setStatus] = useState(["current", "none", "none"]); */
-
   // useBooking() เป็น context ที่เกี่ยวกับการเก็บข้อมูลการ Booking
   const { step, setStepPayment, resetStepPayment } = useBooking();
 
@@ -33,9 +31,9 @@ function BookingSummary() {
     }
   }
 
-  /*   useEffect(() => {
+  useEffect(() => {
     window.scrollTo(0, 0);
-  }, [step]); */
+  }, [step]);
 
   return (
     <Flex direction="column" w="1440px" bgColor="bg" m="auto" h="100%">
@@ -60,11 +58,13 @@ function BookingSummary() {
             <StepPayment status={step[2]} step={3} title="Payment Method" />
           </Flex>
           <Flex direction="column" mt="40px">
-            <Flex gap="24px">
+            <Flex w="fit-content" gap="24px">
               {step[0] === "current" ? <BasicInfoSummary /> : null}
               {step[1] === "current" ? <SpecialRequest /> : null}
               {step[2] === "current" ? <Payment /> : null}
-              <PackageSummary />
+              <Box overflowX="hidden">
+                <PackageSummary />
+              </Box>
             </Flex>
             {step[2] === "current" ? null : (
               <Flex
