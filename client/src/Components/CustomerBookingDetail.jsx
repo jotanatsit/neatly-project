@@ -167,7 +167,7 @@ const CustomerBookingDetail = (props) => {
                 </Box>
               </Box>
 
-              {userBooking.booking_request?.map((arr) => {
+              {userBooking.booking_request?.map((arr,index) => {
                 if (typeof arr[1] === "number") {
                   return (
                     <Box
@@ -175,6 +175,7 @@ const CustomerBookingDetail = (props) => {
                       h="48px"
                       display="flex"
                       justifyContent="space-between"
+                      key={index}
                     >
                       <Text textStyle="b1" color="black">
                         {arr[0].split("_").join(" ")}
