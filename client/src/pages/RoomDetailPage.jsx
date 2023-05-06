@@ -71,7 +71,7 @@ const RoomDetailPage = () => {
       console.log(error);
     }
   };
-  console.log(room);
+
   const othersRoom = [];
   let id = Number(params.roomTypeId);
 

@@ -10,8 +10,6 @@ import Payment from "../Components/Payment";
 import { useBooking } from "../contexts/booking";
 
 function BookingSummary() {
-  /* const [status, setStatus] = useState(["current", "none", "none"]); */
-
   // useBooking() เป็น context ที่เกี่ยวกับการเก็บข้อมูลการ Booking
   const { step, setStepPayment, resetStepPayment } = useBooking();
 
