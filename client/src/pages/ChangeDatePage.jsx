@@ -32,7 +32,7 @@ import { Link } from "react-router-dom";
 const ChangeDatePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
+  
   const userId = useAuth();
   const [roomData, setRoomData] = useState(location.state.roomData);
   const [roomDetail, setRoomDetail] = useState({});

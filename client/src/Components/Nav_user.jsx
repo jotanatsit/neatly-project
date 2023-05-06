@@ -41,8 +41,6 @@ const Nav_user = () => {
     getUserData();
   }, []);
 
-  console.log([userData]);
-
   return (
     <Flex
       bg="white"
