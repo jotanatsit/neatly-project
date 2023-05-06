@@ -1,4 +1,4 @@
-import { Flex, Image, Box, Text, Button } from "@chakra-ui/react";
+import { Flex, Image, Box, Text, Link } from "@chakra-ui/react";
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
 import { BsFacebook, BsTwitter } from "react-icons/bs";
 import { RiInstagramFill } from "react-icons/ri";
@@ -74,9 +74,15 @@ function Footer() {
         borderColor="green.700"
       >
         <Flex justify="space-between" w="96px" h="24px">
-          <BsFacebook size="22px" color="white" />
-          <RiInstagramFill size="24px" color="white" />
-          <BsTwitter size="24px" color="white" />
+          <Link href="https://www.facebook.com/" isExternal>
+            <BsFacebook size="22px" color="white" />
+          </Link>
+          <Link href="https://www.instagram.com/" isExternal>
+            <RiInstagramFill size="24px" color="white" />
+          </Link>
+          <Link href="https://twitter.com/" isExternal>
+            <BsTwitter size="24px" color="white" />
+          </Link>
         </Flex>
         <Text textStyle="b2" fontWeight="500" color="green.300">
           Copyright ©2022 Neatly Hotel

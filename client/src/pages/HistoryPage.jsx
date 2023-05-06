@@ -25,6 +25,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  UnorderedList,
+  ListItem,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
@@ -620,19 +622,48 @@ const HistoryPage = () => {
                           Room Amenities
                         </Text>
                         <Flex w="640px" mt={3} ml={5}>
-                          <Box w="47%">
-                            <ul>
-                              {roomDetail &&
-                                roomDetail.room_amenity &&
-                                roomDetail.room_amenity.map((item, index) => {
+                          <Flex>
+                            <UnorderedList mt="24px" w="300px">
+                              {roomDetail.room_amenity
+                                ?.slice(0, 7)
+                                .map((amenity, index) => {
                                   return (
-                                    <li key={index}>
-                                      {item.split("_").join(" ")}
-                                    </li>
+                                    <ListItem
+                                      key={index}
+                                      color="gray.700"
+                                      textStyle="b1"
+                                    >
+                                      {amenity
+                                        .split("_")
+                                        .join(" ")
+                                        .charAt(0)
+                                        .toUpperCase() +
+                                        amenity.split("_").join(" ").slice(1)}
+                                    </ListItem>
                                   );
                                 })}
-                            </ul>
-                          </Box>
+                            </UnorderedList>
+                            <UnorderedList mt="24px" w="300px">
+                              {roomDetail.room_amenity
+                                ?.slice(7)
+                                .map((amenity, index) => {
+                                  return (
+                                    <ListItem
+                                      key={index}
+                                      color="gray.700"
+                                      textStyle="b1"
+                                    >
+                                      {amenity
+                                        .split("_")
+                                        .join(" ")
+                                        .charAt(0)
+                                        .toUpperCase() +
+                                        amenity.split("_").join(" ").slice(1)}
+                                    </ListItem>
+                                  );
+                                })}
+                            </UnorderedList>
+                          </Flex>
                         </Flex>
                       </Flex>
                     </Flex>
