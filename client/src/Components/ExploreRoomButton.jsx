@@ -6,15 +6,15 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 const ExploreRoomButton = (props) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/roomdetail/${props.roomTypeId}`);
+    navigate(`/roomdetail/${props?.roomTypeId}`);
   };
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [navigate]);
   return (
-    <Flex direction="column" pl={props.pl} pb={props.pb} gap="8px">
+    <Flex direction="column" pl={props?.pl} pb={props?.pb} gap="8px">
       <Text textStyle="h3" color="white">
-        {props.type}
+        {props?.type}
       </Text>
       <Button
         variant="ghost"

@@ -110,7 +110,7 @@ const Booking_box = () => {
                 as={Button}
                 iconSpacing="10"
                 cursor="pointer"
-                _active="none"
+                _active={{}}
                 color="gray.600"
                 bg="white"
                 border="1px solid"
@@ -139,7 +139,7 @@ const Booking_box = () => {
                 as={Button}
                 iconSpacing="10"
                 cursor="pointer"
-                _active="none"
+                _active={{}}
                 color="gray.600"
                 bg="white"
                 border="1px solid"
@@ -183,7 +183,7 @@ const Booking_box = () => {
                 rightIcon={<ChevronDownIcon />}
                 iconSpacing="10"
                 cursor="pointer"
-                _active="none"
+                _active={{}}
                 color="gray.600"
                 bg="white"
                 border="1px solid"

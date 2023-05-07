@@ -35,6 +35,8 @@ const BookingPage = () => {
   const [checkInDate, setCheckInDate] = useState(date[0].startDate);
   const [checkOutDate, setCheckOutDate] = useState(date[0].endDate);
   const [roomData, setRoomData] = useState([]);
+  // const [jo, setJo] = useState(0);
+  // const [ohm, setOhm] = useState(0);
 
   // default search 0 rooms , 0 guest that it shows that has always 1 rooms , 2 guest
   function defaultRoom() {
@@ -61,7 +63,11 @@ const BookingPage = () => {
 
   useEffect(() => {
     getRoomData();
-  }, [guests, rooms]);
+  }, [rooms, guests]);
+
+  // useEffect(() => {
+  //   getRoomData();
+  // }, [ohm, jo]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -108,6 +114,8 @@ const BookingPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     getRoomData();
+    // setJo(rooms)
+    // setOhm(guests)
   };
 
   return (

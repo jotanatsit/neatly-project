@@ -21,7 +21,7 @@ function RoomsAndSuites() {
             type="Superior Garden View"
             pl="60px"
             pb="80px"
-            roomTypeId={5}
+            roomTypeId="5"
           />
         </Flex>
         <Flex gap="24px" justifySelf="center">
@@ -30,7 +30,7 @@ function RoomsAndSuites() {
               type="Deluxe"
               pl="60px"
               pb="80px"
-              roomTypeId={1}
+              roomTypeId="1"
             />
           </Flex>
           <Flex
@@ -43,7 +43,7 @@ function RoomsAndSuites() {
               type="Superior"
               pl="60px"
               pb="80px"
-              roomTypeId={2}
+              roomTypeId="2"
             />
           </Flex>
         </Flex>
@@ -58,7 +58,7 @@ function RoomsAndSuites() {
               type="Premier Sea View"
               pl="60px"
               pb="80px"
-              roomTypeId={6}
+              roomTypeId="6"
             />
           </Flex>
           <Flex direction="column" gap="24px">
@@ -72,7 +72,7 @@ function RoomsAndSuites() {
                 type="Supreme"
                 pl="80px"
                 pb="80px"
-                roomTypeId={3}
+                roomTypeId="3"
               />
             </Flex>
             <Flex
@@ -85,7 +85,7 @@ function RoomsAndSuites() {
                 type="Suite"
                 pl="80px"
                 pb="80px"
-                roomTypeId={4}
+                roomTypeId="4"
               />
             </Flex>
           </Flex>

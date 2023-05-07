@@ -57,7 +57,6 @@ const HistoryPage = () => {
       const response = await axios.get(
         `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}`
       );
-
       setRoomData(response.data.data);
     } catch (error) {
       console.log(error);
@@ -373,9 +372,7 @@ const HistoryPage = () => {
                             >
                               THB{" "}
                               {(
-                                (room?.promotion_price
-                                  ? room?.promotion_price * room.amount_rooms
-                                  : room.price * room.amount_rooms) +
+                                room.total_price_per_room * room.amount_rooms +
                                 room.booking_request.reduce((sum, current) => {
                                   if (typeof current[1] === "number") {
                                     return sum + current[1] * room.amount_rooms;

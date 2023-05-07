@@ -17,34 +17,69 @@ bookingRouter.get("/", async (req, res) => {
     });
   }
   const results = await pool.query(
-    `SELECT 
-        b.*,
-        bd.*,
-        u.*,
-        r.*,
-        rt.*,
-        array_agg(rp.room_picture) as room_picture       
-      FROM rooms_type rt
-      LEFT JOIN rooms r ON r.room_type_id = rt.room_type_id
-      LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
-      LEFT JOIN booking b ON b.room_id = r.room_id
-      LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
-      LEFT JOIN users u ON u.user_id = b.user_id
-      WHERE rt.room_type_name ILIKE $1 
-      OR u.fullname ILIKE $2 
-      OR rt.bed_type ILIKE $3 
-      OR CAST(bd.amount_guests AS TEXT) ILIKE $4
-      OR CAST(bd.amount_rooms AS TEXT) ILIKE $5
-      OR CAST(bd.check_in_date AS TEXT) ILIKE $6
-      OR CAST(bd.check_out_date AS TEXT) ILIKE $7
+    `(SELECT 
+      b.*,
+      bd.*,
+      u.*,
+      r.*,
+      rt.*,
+      array_agg(rp.room_picture) as room_picture       
+    FROM rooms_type rt
+    LEFT JOIN rooms r ON r.room_type_id = rt.room_type_id
+    LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
+    LEFT JOIN booking b ON b.room_id = r.room_id
+    LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
+    LEFT JOIN users u ON u.user_id = b.user_id
+    
+    WHERE rt.room_type_name ILIKE $1 AND bd.check_in_date::date >= CURRENT_DATE
+    AND (u.fullname ILIKE $2 
+    OR rt.bed_type ILIKE $3 
+    OR CAST(bd.amount_guests AS TEXT) ILIKE $4
+    OR CAST(bd.amount_rooms AS TEXT) ILIKE $5
+    OR CAST(bd.check_in_date AS TEXT) ILIKE $6
+    OR CAST(bd.check_out_date AS TEXT) ILIKE $7)
 
-      GROUP BY 
-        b.booking_id,
-        bd.booking_detail_id,
-        u.user_id,
-        rt.room_type_id,
-        r.room_id
-      ORDER BY bd.check_in_date ASC;`,
+    GROUP BY 
+      b.booking_id,
+      bd.booking_detail_id,
+      u.user_id,
+      rt.room_type_id,
+      r.room_id
+    ORDER BY 
+      bd.check_in_date ASC)        
+      
+    UNION ALL
+
+    (SELECT 
+      b.*,
+      bd.*,
+      u.*,
+      r.*,
+      rt.*,
+      array_agg(rp.room_picture) as room_picture       
+    FROM rooms_type rt
+    LEFT JOIN rooms r ON r.room_type_id = rt.room_type_id
+    LEFT JOIN rooms_pictures rp ON rp.room_type_id = rt.room_type_id
+    LEFT JOIN booking b ON b.room_id = r.room_id
+    LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
+    LEFT JOIN users u ON u.user_id = b.user_id
+
+    WHERE rt.room_type_name ILIKE $1 AND bd.check_in_date::date < CURRENT_DATE
+    AND (u.fullname ILIKE $2 
+    OR rt.bed_type ILIKE $3 
+    OR CAST(bd.amount_guests AS TEXT) ILIKE $4
+    OR CAST(bd.amount_rooms AS TEXT) ILIKE $5
+    OR CAST(bd.check_in_date AS TEXT) ILIKE $6
+    OR CAST(bd.check_out_date AS TEXT) ILIKE $7)
+
+    GROUP BY 
+    b.booking_id,
+    bd.booking_detail_id,
+    u.user_id,
+    rt.room_type_id,
+    r.room_id
+    ORDER BY 
+    bd.check_in_date ASC)`,
     [
       `%${keywords}%`,
       `%${keywords}%`,
@@ -68,23 +103,17 @@ bookingRouter.get("/", async (req, res) => {
       newArr[i].booking_detail_id !== null
     ) {
       newResults.push({
-        user_id: results.rows[i].user_id,
         booking_detail_id: results.rows[i].booking_detail_id,
         room_type_id: results.rows[i].room_type_id,
+        user_id: results.rows[i].user_id,
+        username: results.rows[i].username,
+        amount_guests: results.rows[i].amount_guests,
         room_type_name: results.rows[i].room_type_name,
+        amount_rooms: results.rows[i].amount_rooms,
         bed_type: results.rows[i].bed_type,
-        booking_date: results.rows[i].booking_date,
-        cancellation_date: results.rows[i].cancellation_date,
         check_in_date: results.rows[i].check_in_date,
         check_out_date: results.rows[i].check_out_date,
-        amount_guests: results.rows[i].amount_guests,
-        amount_rooms: results.rows[i].amount_rooms,
-        price: results.rows[i].price,
-        promotion_price: results.rows[i].promotion_price,
-        payment_type: results.rows[i].payment_type,
         booking_status: results.rows[i].booking_status,
-        room_picture: results.rows[i].room_picture,
-        fullname: results.rows[i].fullname,
       });
       unique_booking_detail_id.push(newArr[i].booking_detail_id);
     }
@@ -174,8 +203,8 @@ bookingRouter.get("/:userId", async (req, res) => {
         check_out_date: newArr[i].check_out_date,
         amount_guests: newArr[i].amount_guests,
         amount_rooms: newArr[i].amount_rooms,
-        price: newArr[i].price,
-        promotion_price: newArr[i].promotion_price,
+        // price: newArr[i].price,
+        // promotion_price: newArr[i].promotion_price,
         booking_request: bookingRequest[i],
         payment_type: newArr[i].payment_type,
         booking_status: newArr[i].booking_status,
@@ -259,7 +288,6 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
       bookingRequestArr.push([key, bookingRequest[key]]);
     }
   }
-  console.log(bookingRequestArr);
 
   // Object data that return to client
   const newResults = {
@@ -291,8 +319,7 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
     ),
     amount_guests: newArr.amount_guests,
     amount_rooms: newArr.amount_rooms,
-    price: newArr.price,
-    promotion_price: newArr.promotion_price,
+    total_price_per_room: newArr.total_price_per_room,
     booking_request: bookingRequestArr,
     booking_request_price: totalRequestPrice,
     payment_type:

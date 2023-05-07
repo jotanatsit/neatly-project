@@ -8,7 +8,6 @@ import { useAuth } from "../contexts/authentication";
 
 const CancelPage = () => {
   const location = useLocation();
-  console.log(location);
   const userId = useAuth();
 
   const [roomData, setRoomData] = useState(location.state.roomData);
@@ -20,9 +19,6 @@ const CancelPage = () => {
       const response = await axios.get(
         `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[index].booking_detail_id}`
       );
-      {
-        console.log(response.data.data);
-      }
       setRoomDetail(response.data.data);
     } catch (error) {
       console.log(error);
@@ -34,7 +30,7 @@ const CancelPage = () => {
   }, []);
 
   return (
-    <Flex Flex flexDirection="column" w="1440px" h="1028px" m="auto" bg="bg">
+    <Flex flexDirection="column" w="1440px" h="1028px" m="auto" bg="bg">
       <Nav_user />
       <Flex flexDirection="column" w="1440px" h="1028px" mt={20}>
         <Flex

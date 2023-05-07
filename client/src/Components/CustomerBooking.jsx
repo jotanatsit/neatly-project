@@ -60,7 +60,6 @@ const CustomerBooking = () => {
       userBookingRoom(`%${input}%`);
     }
   }
- 
 
   return (
     <Flex flexDirection="column">
@@ -130,11 +129,17 @@ const CustomerBooking = () => {
           </Box>
           {userBooking.map((room, index) => {
             if (room.booking_status === "Complete") {
+              let bookingBg;
+              if (room.check_in_date >= new Date().toISOString().slice(0, 10)) {
+                bookingBg = "white";
+              } else {
+                bookingBg = "bg";
+              }
               return (
                 <Box
                   display="flex"
                   alignItems="center"
-                  bg="white"
+                  bg={bookingBg}
                   w="1080px"
                   h="72px"
                   py={45}
@@ -149,7 +154,7 @@ const CustomerBooking = () => {
                 >
                   <Box w="180px">
                     <Text textStyle="b1" color="black" textAlign="center">
-                      {room.fullname}
+                      {room.username}
                     </Text>
                   </Box>
                   <Box w="96px">

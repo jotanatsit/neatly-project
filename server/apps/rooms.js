@@ -303,8 +303,8 @@ roomRouter.get("/room-type/:id", async (req, res) => {
     bed_type: newArr.bed_type,
     amount_person: newArr.amount_person,
     description: newArr.description,
-    price: newArr.price,
-    promotion_price: newArr.promotion_price,
+    price: Number(newArr.price),
+    promotion_price: Number(newArr.promotion_price),
     room_amenity_id: newArr.room_amenity_id,
     room_amenity: amenityResult,
     room_picture: newArr.room_picture,
@@ -321,8 +321,6 @@ roomRouter.put("/room-type/:id", async (req, res) => {
   const roomTypeId = req.params.id;
   let price = req.body.price;
   let promotionPrice = req.body.promotion_price;
-
-  console.log(req.body);
 
   if (promotionPrice === 0) {
     promotionPrice = null;

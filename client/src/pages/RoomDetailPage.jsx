@@ -306,7 +306,7 @@ const RoomDetailPage = () => {
                     type={other.roomTypeName}
                     pl="60px"
                     pb="49px"
-                    roomTypeId={other.roomTypeId}
+                    roomTypeId={`${other.roomTypeId}`}
                   />
                 </Flex>
               );

@@ -80,10 +80,9 @@ const Nav_user = () => {
       </Flex>
       <Flex h="48px" alignItems="center">
         <Text textStyle="h5" color="green.700" fontWeight="700">
-          {" "}
-          Hello{" "}
+          Hello,
         </Text>
-        <Text textStyle="b1" fontWeight="600" color="orange.500" ml={2}>
+        <Text textStyle="h5" fontWeight="600" color="orange.500" ml={2}>
           {userData.fullname}
         </Text>
       </Flex>
