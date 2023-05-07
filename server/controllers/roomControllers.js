@@ -1,11 +1,8 @@
-import { Router } from "express";
 import { pool } from "../utils/db.js";
-
-const roomRouter = Router();
 
 // ----------------------------- get maximum guests for 1 room & maximum rooms in 1 room_type ---------------------------------
 
-roomRouter.get("/room-type/max-guests", async (req, res) => {
+export const maximumSearch = async (req, res) => {
   // count maximum guests for 1 room
   let result1;
   try {
@@ -40,11 +37,11 @@ roomRouter.get("/room-type/max-guests", async (req, res) => {
   return res.json({
     data: maximum,
   });
-});
+};
 
 // ------------------------- get room type by search (get guest more than amount search) ------------------------------
 
-roomRouter.get("/room-type/search", async (req, res) => {
+export const getRoomTypeBySearch = async (req, res) => {
   const check_in_date = new Date(req.query.check_in_date)
     .toISOString()
     .slice(0, 10);
@@ -136,11 +133,11 @@ roomRouter.get("/room-type/search", async (req, res) => {
   } catch (error) {
     return res.json({ message: error.message });
   }
-});
+};
 
 // ------------------------------------------- get all rooms type -------------------------------------------
 
-roomRouter.get("/room-type", async (req, res) => {
+export const getRoomType = async (req, res) => {
   let result;
   let newResult = [];
   let keywords = req.query.keywords;
@@ -231,11 +228,11 @@ roomRouter.get("/room-type", async (req, res) => {
   return res.json({
     data: newResult,
   });
-});
+};
 
 // ------------------------------------------- get room type by type id -------------------------------------------
 
-roomRouter.get("/room-type/:id", async (req, res) => {
+export const getRoomTypeById = async (req, res) => {
   const roomTypeId = req.params.id;
 
   if (!roomTypeId) {
@@ -313,11 +310,11 @@ roomRouter.get("/room-type/:id", async (req, res) => {
   return res.json({
     data: newResult,
   });
-});
+};
 
 // ------------------------------ edit price and promotion_price by room type id --------------------------------
 
-roomRouter.put("/room-type/:id", async (req, res) => {
+export const editRoomPrice = async (req, res) => {
   const roomTypeId = req.params.id;
   let price = req.body.price;
   let promotionPrice = req.body.promotion_price;
@@ -340,11 +337,11 @@ roomRouter.put("/room-type/:id", async (req, res) => {
   return res.json({
     message: "Room type has been successfully updated",
   });
-});
+};
 
 // ------------------------------------------- get all rooms -------------------------------------------
 
-roomRouter.get("/", async (req, res) => {
+export const getAllRoom = async (req, res) => {
   let result;
   let newResult = [];
   let keywords = req.query.keywords;
@@ -393,11 +390,11 @@ roomRouter.get("/", async (req, res) => {
   return res.json({
     data: newResult,
   });
-});
+};
 
 // ------------------------------------------- api for change room status -------------------------------------------
 
-roomRouter.put("/:roomId", async (req, res) => {
+export const editRoomStatus = async (req, res) => {
   const room_number = Number(req.params.roomId);
 
   const room = {
@@ -420,6 +417,4 @@ roomRouter.put("/:roomId", async (req, res) => {
       message: err.message,
     });
   }
-});
-
-export default roomRouter;
+};

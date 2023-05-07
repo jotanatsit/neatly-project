@@ -1,14 +1,8 @@
-import { Router } from "express";
 import { pool } from "../utils/db.js";
-import { protect } from "../middleware/protect.js";
-
-const bookingRouter = Router();
-
-// bookingRouter.use(protect);
 
 // ------------------------------------------- get all booking for admin -------------------------------------------
 
-bookingRouter.get("/", async (req, res) => {
+export const getAllbookingForAdmin = async (req, res) => {
   let keywords = req.query.keywords;
 
   if (keywords === undefined) {
@@ -122,11 +116,11 @@ bookingRouter.get("/", async (req, res) => {
   return res.json({
     data: newResults,
   });
-});
+};
 
 // ------------------------------------------- get all user's booking -------------------------------------------
 
-bookingRouter.get("/:userId", async (req, res) => {
+export const getAllUser = async (req, res) => {
   const user_id = Number(req.params.userId);
 
   const results = await pool.query(
@@ -218,11 +212,11 @@ bookingRouter.get("/:userId", async (req, res) => {
   return res.json({
     data: newResults,
   });
-});
+};
 
 // ------------------------------------------- get one user's booking by id -------------------------------------------
 
-bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
+export const getUserById = async (req, res) => {
   const user_id = Number(req.params.userId);
   const booking_detail_id = Number(req.params.bookingDetailId);
 
@@ -333,11 +327,11 @@ bookingRouter.get("/:userId/:bookingDetailId", async (req, res) => {
   return res.json({
     data: newResults,
   });
-});
+};
 
 // ------------------------------------------- update check_in & check_out date -------------------------------------------
 
-bookingRouter.put("/:userId/:bookingDetailId", async (req, res) => {
+export const updateCheckInOut = async (req, res) => {
   const user_id = Number(req.params.userId);
   const booking_detail_id = Number(req.params.bookingDetailId);
 
@@ -423,11 +417,11 @@ bookingRouter.put("/:userId/:bookingDetailId", async (req, res) => {
   return res.json({
     message: `Booking has been updated successfully`,
   });
-});
+};
 
 // ------------------------------------------- delete - update cancellation_date -------------------------------------------
 
-bookingRouter.delete("/:userId/:bookingDetailId", async (req, res) => {
+export const deleteBooking = async (req, res) => {
   const user_id = Number(req.params.userId);
   const booking_detail_id = Number(req.params.bookingDetailId);
   const booking_status = "Cancel";
@@ -460,5 +454,4 @@ bookingRouter.delete("/:userId/:bookingDetailId", async (req, res) => {
   return res.json({
     message: `Booking has been cancelled.`,
   });
-});
-export default bookingRouter;
+};

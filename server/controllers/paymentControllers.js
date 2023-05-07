@@ -1,15 +1,11 @@
-import { Router } from "express";
 import { pool } from "../utils/db.js";
 import Stripe from "stripe";
-import { protect } from "../middleware/protect.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-const paymentRouter = Router();
-
-paymentRouter.post("/create-payment-intent", protect, async (req, res) => {
+export const createPaymentIntent = async (req, res) => {
   const data = req.body;
   try {
     const paymentIntent = await stripe.paymentIntents.create({
@@ -25,13 +21,13 @@ paymentRouter.post("/create-payment-intent", protect, async (req, res) => {
   } catch (err) {
     res.status(400).json({ error: { message: err.message } });
   }
-});
+};
 
-paymentRouter.get("/config", async (req, res) => {
+export const stripeConfig = async (req, res) => {
   res.json({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY });
-});
+};
 
-paymentRouter.post("/webhook", async (req, res) => {
+export const stripeWebhook = async (req, res) => {
   let data, eventType, eventId;
   if (process.env.STRIPE_WEBHOOK_SECRET) {
     let event;
@@ -229,6 +225,4 @@ paymentRouter.post("/webhook", async (req, res) => {
   res.sendStatus(200);
   // Return a 200 response to acknowledge receipt of the event
   // res.send({ received: true });
-});
-
-export default paymentRouter;
+};

@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
-import authRouter from "./apps/auth.js";
-import profileRouter from "./apps/profile.js";
+import authRouter from "./routers/authRouters.js";
+import profileRouter from "./routers/profileRouters.js";
 import dotenv from "dotenv";
 import cloudinary from "cloudinary";
-import roomRouter from "./apps/rooms.js";
-import bookingRouter from "./apps/booking.js";
-import paymentRouter from "./apps/stripe.js";
+import roomRouter from "./routers/roomRouters.js";
+import bookingRouter from "./routers/bookingRouters.js";
+import paymentRouter from "./routers/paymentRouters.js";
 
 async function init() {
   dotenv.config();
