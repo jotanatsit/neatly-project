@@ -33,7 +33,7 @@ const Payment = (props) => {
   // Sum value of key in booking_requests - return total price of booking_requests - number
   let totalRequestPrice = 0;
   for (const key in bookingRequest) {
-    if (bookingRequest[key] !== null) {
+    if (bookingRequest[key] !== null && key !== "additional_request") {
       totalRequestPrice = totalRequestPrice + bookingRequest[key];
     }
   }
@@ -92,6 +92,7 @@ const Payment = (props) => {
       },
     },
   };
+  console.log(booking.bookingData);
 
   const options = { clientSecret, appearance };
 

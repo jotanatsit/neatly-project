@@ -56,6 +56,18 @@ function SearchRooms(props) {
         amount_rooms: rooms,
         amount_guests: guests,
         total_price_per_room: netPrice,
+        early_check_in: null,
+        late_check_out: null,
+        non_smoking_room: null,
+        a_room_on_the_high_floor: null,
+        a_quiet_room: null,
+        baby_cot: null,
+        airport_transfer: null,
+        extra_bed: null,
+        extra_pillows: null,
+        phone_chargers_and_adapters: null,
+        breakfast: null,
+        additional_request: "",
       };
       resetBookingData();
       addBookingData(bookingData);
@@ -201,7 +213,7 @@ function SearchRooms(props) {
                 Available {room.available_room} rooms
               </Text>
             </Flex>
-            <Flex justifyContent="flex-end" alignItems="center" >
+            <Flex justifyContent="flex-end" alignItems="center">
               <Box w="111px" h="24px">
                 <Text
                   onClick={() => {

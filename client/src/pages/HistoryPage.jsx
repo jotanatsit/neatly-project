@@ -299,12 +299,11 @@ const HistoryPage = () => {
                                 fontWeight="600"
                                 color="gray.900"
                               >
-                                {room.total_price_per_room.toLocaleString(
-                                  "th-TH",
-                                  {
-                                    minimumFractionDigits: 2,
-                                  }
-                                )}
+                                {Number(
+                                  room.total_price_per_room
+                                ).toLocaleString("th-TH", {
+                                  minimumFractionDigits: 2,
+                                })}
                               </Text>
                             </Flex>
                           </Box>

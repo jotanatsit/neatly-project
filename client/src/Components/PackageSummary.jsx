@@ -81,7 +81,11 @@ function PackageSummary() {
             </Text>
           </Flex>
           {bookingReq?.map((arr, index) => {
-            if (arr[0] === "additional_request" && arr[1] !== "") {
+            if (
+              arr[0] === "additional_request" &&
+              arr[1] !== "" &&
+              typeof arr[1] === "string"
+            ) {
               return (
                 <Flex key={index} direction="column" gap="10px">
                   <Text textStyle="b1" fontWeight="600">
@@ -95,7 +99,7 @@ function PackageSummary() {
                   </Text>
                 </Flex>
               );
-            } else if (arr[1] !== null && arr[1] !== "") {
+            } else if (typeof arr[1] === "number") {
               return (
                 <Flex key={index} w="100%" justify="space-between">
                   <Flex w="75%" justify="space-between">
