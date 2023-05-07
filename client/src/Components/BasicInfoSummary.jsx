@@ -26,7 +26,6 @@ function BasicInfoSummary() {
 
   useEffect(() => {
     getUserData();
-    resetBookingRequests();
   }, []);
 
   return (
