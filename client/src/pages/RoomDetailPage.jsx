@@ -95,7 +95,7 @@ const RoomDetailPage = () => {
 
   // Set ค่า State สำหรับกดปุ่ม Book Now ให้ navigate ไปหน้า booking default
   const [rooms] = useState(1);
-  const [guests] = useState(2);
+  const [guests] = useState(1);
   const [date] = useState([
     {
       startDate: new Date(),

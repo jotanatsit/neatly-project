@@ -1,9 +1,27 @@
-import React from "react";
+import { useState } from "react";
 import { Box, Flex, Spacer, Button, Text, Image } from "@chakra-ui/react";
 import { Link } from "react-scroll";
 import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { addDays } from "date-fns";
 
 function Nav_nonuser() {
+  // Set ค่า State สำหรับกดปุ่ม Book Now ให้ navigate ไปหน้า booking default
+  const [rooms] = useState(1);
+  const [guests] = useState(1);
+  const [date] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 1),
+      key: "selection",
+    },
+  ]);
+
+  const navigate = useNavigate();
+  function handleSubmit() {
+    navigate("/booking", { state: { date, rooms, guests } });
+  }
+
   return (
     <Flex
       bg="white"
@@ -79,11 +97,9 @@ function Nav_nonuser() {
           Login
         </Button>
       </RouterLink>
-      <RouterLink to="/booking">
-        <Button variant="primary" p="16px 32px">
-          Book Now
-        </Button>
-      </RouterLink>
+      <Button variant="primary" p="16px 32px" onClick={handleSubmit}>
+        Book Now
+      </Button>
     </Flex>
   );
 }

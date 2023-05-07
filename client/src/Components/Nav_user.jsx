@@ -55,29 +55,55 @@ const Nav_user = () => {
       <RouterLink to="/">
         <Image src="/HomePage/logo.svg" w="167px" h="45px" mr={10} />
       </RouterLink>
-      <Flex flexGrow={1} alignItems="center">
-        <Box ml={8}>
-          <Link to="content" smooth={true} duration={1000}>
-            <Text textStyle="b2" mr={5} cursor="pointer">
-              About Neatly
-            </Text>
-          </Link>
-        </Box>
-        <Box ml={8}>
-          <Link to="service" smooth={true} duration={1000}>
-            <Text textStyle="b2" mr={5} cursor="pointer">
-              Service & Facilities
-            </Text>
-          </Link>
-        </Box>
-        <Box ml={8}>
-          <Link to="room-type" smooth={true} duration={1000}>
-            <Text textStyle="b2" mr={5} cursor="pointer">
-              Rooms & Suits
-            </Text>
-          </Link>
-        </Box>
-      </Flex>
+      {window.location.pathname === "/" ? (
+        <Flex flexGrow={1} alignItems="center">
+          <Box ml={8}>
+            <Link to="content" smooth={true} duration={1000}>
+              <Text textStyle="b2" mr={5} cursor="pointer">
+                About Neatly
+              </Text>
+            </Link>
+          </Box>
+          <Box ml={8}>
+            <Link to="service" smooth={true} duration={1000}>
+              <Text textStyle="b2" mr={5} cursor="pointer">
+                Service & Facilities
+              </Text>
+            </Link>
+          </Box>
+          <Box ml={8}>
+            <Link to="room-type" smooth={true} duration={1000}>
+              <Text textStyle="b2" mr={5} cursor="pointer">
+                Rooms & Suits
+              </Text>
+            </Link>
+          </Box>
+        </Flex>
+      ) : (
+        <Flex flexGrow={1} alignItems="center">
+          <Box ml={8}>
+            <RouterLink to="/">
+              <Text textStyle="b2" mr={5} cursor="pointer">
+                About Neatly
+              </Text>
+            </RouterLink>
+          </Box>
+          <Box ml={8}>
+            <RouterLink to="/">
+              <Text textStyle="b2" mr={5} cursor="pointer">
+                Service & Facilities
+              </Text>
+            </RouterLink>
+          </Box>
+          <Box ml={8}>
+            <RouterLink to="/">
+              <Text textStyle="b2" mr={5} cursor="pointer">
+                Rooms & Suits
+              </Text>
+            </RouterLink>
+          </Box>
+        </Flex>
+      )}
       <Flex h="48px" alignItems="center">
         <Text textStyle="h5" color="green.700" fontWeight="700">
           Hello,
