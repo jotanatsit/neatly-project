@@ -12,6 +12,8 @@ function PackageSummary() {
   const checkInDate = changeFormatDate(bookingData?.check_in_date);
   const checkOutDate = changeFormatDate(bookingData?.check_out_date);
 
+  const night = bookingData?.night;
+
   return (
     <Flex direction="column" w="358px" h="568px" gap="16px">
       <Box>
@@ -63,7 +65,9 @@ function PackageSummary() {
             <Text textStyle="b1">
               {checkInDate} - {checkOutDate}
             </Text>
-            <Text textStyle="b1">{bookingData.amount_guests} Guests</Text>
+            <Text textStyle="b1">
+              {bookingData.amount_guests} Guests ({night} Nights)
+            </Text>
           </Flex>
           <Flex w="100%" justify="space-between">
             <Flex w="75%" justify="space-between">
@@ -143,14 +147,18 @@ function PackageSummary() {
             <Text textStyle="h5" fontWeight="600">
               THB{" "}
               {(bookingReq
-                ? bookingData.total_price_per_room * bookingData.amount_rooms +
-                  bookingReq?.reduce((sum, arr) => {
-                    if (typeof arr[1] === "number") {
-                      return sum + arr[1] * bookingData.amount_rooms;
-                    }
-                    return sum;
-                  }, 0)
-                : bookingData.total_price_per_room * bookingData.amount_rooms
+                ? night *
+                  bookingData.amount_rooms *
+                  (bookingData.total_price_per_room +
+                    bookingReq?.reduce((sum, arr) => {
+                      if (typeof arr[1] === "number") {
+                        return sum + arr[1];
+                      }
+                      return sum;
+                    }, 0))
+                : night *
+                  bookingData.amount_rooms *
+                  bookingData.total_price_per_room
               ).toLocaleString("th-TH", {
                 minimumFractionDigits: 2,
               })}

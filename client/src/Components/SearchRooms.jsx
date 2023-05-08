@@ -53,6 +53,8 @@ function SearchRooms(props) {
         room_type_name: room.room_type_name,
         check_in_date: new Date(startDate.getTime() + 43200000),
         check_out_date: new Date(endDate.getTime() + 43200000),
+        night:
+          (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
         amount_rooms: rooms,
         amount_guests: guests,
         total_price_per_room: netPrice,

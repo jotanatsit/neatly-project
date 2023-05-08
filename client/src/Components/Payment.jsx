@@ -40,7 +40,8 @@ const Payment = (props) => {
 
   const price_check_out =
     (Number(checkoutData.total_price_per_room) + Number(totalRequestPrice)) *
-    Number(checkoutData.amount_rooms);
+    Number(checkoutData.amount_rooms) *
+    checkoutData.night;
 
   checkoutData.price_check_out = price_check_out;
 
@@ -92,7 +93,6 @@ const Payment = (props) => {
       },
     },
   };
-  console.log(booking.bookingData);
 
   const options = { clientSecret, appearance };
 

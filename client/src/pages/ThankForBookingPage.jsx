@@ -28,6 +28,11 @@ function ThankForBooking() {
   const checkInDate = changeFormatDate(new Date(bookingData?.check_in_date));
   const checkOutDate = changeFormatDate(new Date(bookingData?.check_out_date));
 
+  const night =
+    (new Date(bookingData.check_out_date)?.getTime() -
+      new Date(bookingData.check_in_date)?.getTime()) /
+    (1000 * 60 * 60 * 24);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     getBookingData();
@@ -88,7 +93,7 @@ function ThankForBooking() {
                   {checkInDate} - {checkOutDate}
                 </Text>
                 <Text textStyle="b1" color="white">
-                  {bookingData.amount_guests} Guests
+                  {bookingData.amount_guests} Guests ({night} Nights)
                 </Text>
               </Flex>
               <Flex gap="24px">
@@ -216,15 +221,18 @@ function ThankForBooking() {
               <Text textStyle="h5" color="white" textAlign="end">
                 THB{" "}
                 {(bookingData.booking_request
-                  ? bookingData.total_price_per_room *
-                      bookingData.amount_rooms +
-                    bookingData.booking_request?.reduce((sum, arr) => {
-                      if (typeof arr[1] === "number") {
-                        return sum + arr[1] * bookingData.amount_rooms;
-                      }
-                      return sum;
-                    }, 0)
-                  : bookingData.total_price_per_room * bookingData.amount_rooms
+                  ? night *
+                    bookingData.amount_rooms *
+                    (bookingData.total_price_per_room +
+                      bookingData.booking_request?.reduce((sum, arr) => {
+                        if (typeof arr[1] === "number") {
+                          return sum + arr[1];
+                        }
+                        return sum;
+                      }, 0))
+                  : night *
+                    bookingData.amount_rooms *
+                    bookingData.total_price_per_room
                 ).toLocaleString("th-TH", {
                   minimumFractionDigits: 2,
                 })}

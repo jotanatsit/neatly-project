@@ -113,6 +113,11 @@ const HistoryPage = () => {
           Booking History
         </Text>
         {roomData?.map((room, index) => {
+          const night =
+            (new Date(room.check_out_date)?.getTime() -
+              new Date(room.check_in_date)?.getTime()) /
+            (1000 * 60 * 60 * 24);
+
           return (
             <Flex
               w="1120px"
@@ -245,13 +250,7 @@ const HistoryPage = () => {
                               fontWeight="400"
                               color="gray.700"
                             >
-                              {room.amount_guests} Guests (
-                              {Math.ceil(
-                                (new Date(room.check_out_date) -
-                                  new Date(room.check_in_date)) /
-                                  (1000 * 60 * 60 * 24)
-                              )}{" "}
-                              Night)
+                              {room.amount_guests} Guests ({night} Nights)
                             </Text>
                             <Box display="flex">
                               <Text
@@ -259,13 +258,7 @@ const HistoryPage = () => {
                                 fontWeight="400"
                                 color="gray.700"
                               >
-                                {room.amount_guests} Guests (
-                                {Math.ceil(
-                                  (new Date(room.check_out_date) -
-                                    new Date(room.check_in_date)) /
-                                    (1000 * 60 * 60 * 24)
-                                )}{" "}
-                                Night) Payment success via
+                                Payment success via
                               </Text>
                               <Text
                                 ml={2}
@@ -373,13 +366,18 @@ const HistoryPage = () => {
                             >
                               THB{" "}
                               {(
-                                room.total_price_per_room * room.amount_rooms +
-                                room.booking_request.reduce((sum, current) => {
-                                  if (typeof current[1] === "number") {
-                                    return sum + current[1] * room.amount_rooms;
-                                  }
-                                  return sum;
-                                }, 0)
+                                night *
+                                room.amount_rooms *
+                                (room.total_price_per_room +
+                                  room.booking_request.reduce(
+                                    (sum, current) => {
+                                      if (typeof current[1] === "number") {
+                                        return sum + current[1];
+                                      }
+                                      return sum;
+                                    },
+                                    0
+                                  ))
                               ).toLocaleString("th-TH", {
                                 minimumFractionDigits: 2,
                               })}

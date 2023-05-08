@@ -35,9 +35,15 @@ const CustomerBookingDetail = (props) => {
       console.log(error);
     }
   }
+
   useEffect(() => {
     customerDetail();
   }, []);
+
+  const night =
+    (new Date(userBooking.check_out_date)?.getTime() -
+      new Date(userBooking.check_in_date)?.getTime()) /
+    (1000 * 60 * 60 * 24);
 
   return (
     <Flex h="100vh" flexDirection="column">
@@ -134,12 +140,7 @@ const CustomerBookingDetail = (props) => {
               Stay (total)
             </Text>
             <Text textStyle="b1" color="black">
-              {Math.ceil(
-                (new Date(userBooking.check_out_date) -
-                  new Date(userBooking.check_in_date)) /
-                  (1000 * 60 * 60 * 24)
-              )}{" "}
-              night
+              {night} Nights
             </Text>
           </Box>
           <Box w="880px" h="58px" mt={10} ml={20}>
@@ -213,7 +214,9 @@ const CustomerBookingDetail = (props) => {
                       key={index}
                     >
                       <Text textStyle="b1" color="black">
-                        {arr[0].split("_").join(" ")}
+                        {(arr[0]?.charAt(0).toUpperCase() + arr[0]?.slice(1))
+                          .split("_")
+                          .join(" ")}
                       </Text>
                       <Box display="flex" w="200px" justifyContent="flex-end">
                         <Text w="25%" textStyle="b1" color="gray.600" mr={1}>
@@ -252,7 +255,8 @@ const CustomerBookingDetail = (props) => {
                 {(
                   (Number(userBooking.total_price_per_room) +
                     Number(userBooking.booking_request_price)) *
-                  Number(userBooking.amount_rooms)
+                  Number(userBooking.amount_rooms) *
+                  night
                 )?.toLocaleString("th-TH", {
                   minimumFractionDigits: 2,
                 })}
