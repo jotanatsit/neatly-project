@@ -368,7 +368,7 @@ const HistoryPage = () => {
                               {(
                                 night *
                                 room.amount_rooms *
-                                (room.total_price_per_room +
+                                (Number(room.total_price_per_room) +
                                   room.booking_request.reduce(
                                     (sum, current) => {
                                       if (typeof current[1] === "number") {

@@ -150,11 +150,12 @@ function ThankForBooking() {
                 color="white"
                 textAlign="end"
               >
-                {(
-                  bookingData.total_price_per_room * bookingData.amount_rooms
-                ).toLocaleString("th-TH", {
-                  minimumFractionDigits: 2,
-                })}
+                {Number(bookingData.total_price_per_room).toLocaleString(
+                  "th-TH",
+                  {
+                    minimumFractionDigits: 2,
+                  }
+                )}
               </Text>
             </Flex>
             {bookingData.booking_request?.map((arr, index) => {

@@ -79,12 +79,12 @@ const ChangeDatePage = () => {
   );
 
   async function changeDate() {
-    const newNignt = Math.ceil(
+    const newNight = Math.ceil(
       (new Date(date[0].endDate) - new Date(date[0].startDate)) /
         (1000 * 60 * 60 * 24)
     );
 
-    if (currentNight >= newNignt) {
+    if (currentNight === newNight) {
       try {
         axios
           .put(
@@ -103,8 +103,8 @@ const ChangeDatePage = () => {
         console.log(error);
       }
     } else {
-      alert(`Change date must less than ${currentNight + 1} days.`);
       onClose();
+      alert(`Change date must be ${currentNight + 1} days.`);
     }
   }
   return (
