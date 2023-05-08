@@ -151,7 +151,7 @@ const BookingPage = () => {
                     as={Button}
                     iconSpacing="10"
                     cursor="pointer"
-                    _active="none"
+                    _active={{}}
                     color="gray.600"
                     bg="white"
                     border="1px solid"
@@ -174,7 +174,7 @@ const BookingPage = () => {
                     as={Button}
                     iconSpacing="10"
                     cursor="pointer"
-                    _active="none"
+                    _active={{}}
                     color="gray.600"
                     bg="white"
                     border="1px solid"
@@ -214,7 +214,7 @@ const BookingPage = () => {
                     rightIcon={<ChevronDownIcon />}
                     iconSpacing="10"
                     cursor="pointer"
-                    _active="none"
+                    _active={{}}
                     color="gray.600"
                     bg="white"
                     border="1px solid"

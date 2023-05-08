@@ -404,7 +404,6 @@ function SpecialRequest() {
               Additional Request
             </Text>
             <Textarea
-              defaultValue=""
               border="1px solid"
               borderColor="gray.400"
               value={formik.values.additional_request}
