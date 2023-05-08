@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
   profilePictureUpload,
-  // handleError,
   validateProfileData,
 } from "../middleware/validateProfileData.js";
 import { protect } from "../middleware/protect.js";
@@ -21,7 +20,6 @@ profileRouter.get("/:id", getUserProfile);
 profileRouter.put(
   "/:id",
   profilePictureUpload,
-  // handleError,
   validateProfileData,
   updateUserProfile
 );
