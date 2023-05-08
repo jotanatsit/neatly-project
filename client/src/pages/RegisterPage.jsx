@@ -118,15 +118,19 @@ function RegisterPage() {
   };
 
   return (
-    <Box w="1440px" m="auto">
-      <Nav_nonuser />
+    <Flex w="1440px" m="auto" flexDirection="column" alignItems="center">
+      <Box position="fixed" zIndex="10">
+        <Nav_nonuser />
+      </Box>
       <form onSubmit={formik.handleSubmit}>
         <Flex
           height={1800}
+          w="1440px"
           bg="url('/RegisterPage/background.svg')"
           bgSize="cover"
           flexDirection="row"
           justifyContent="center"
+          mt="100px"
         >
           <Flex
             margin={20}
@@ -549,7 +553,7 @@ function RegisterPage() {
           </Flex>
         </Flex>
       </form>
-    </Box>
+    </Flex>
   );
 }
 

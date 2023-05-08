@@ -105,8 +105,10 @@ const HistoryPage = () => {
 
   return (
     <Flex flexDirection="column" w="1440px" m="auto" bg="bg">
-      <Nav_user />
-      <Flex flexDirection="column" w="1440px" h="auto">
+      <Box position="fixed" zIndex="10">
+        <Nav_user />
+      </Box>
+      <Flex flexDirection="column" w="1440px" h="auto" mt="100px">
         <Text textStyle="h2" color="black" ml="150px" my="50px">
           Booking History
         </Text>
@@ -142,10 +144,10 @@ const HistoryPage = () => {
                           {new Date(room.booking_date).toLocaleDateString(
                             "en-US",
                             {
-                              day: "numeric",
+                              day: "2-digit",
                               weekday: "short",
                               year: "numeric",
-                              month: "long",
+                              month: "short",
                             }
                           )}
                         </Text>
@@ -161,10 +163,10 @@ const HistoryPage = () => {
                           {new Date(room.booking_date).toLocaleDateString(
                             "en-US",
                             {
-                              day: "numeric",
+                              day: "2-digit",
                               weekday: "short",
                               year: "numeric",
-                              month: "long",
+                              month: "short",
                             }
                           )}
                         </Text>
@@ -173,10 +175,10 @@ const HistoryPage = () => {
                           {new Date(room.cancellation_date).toLocaleDateString(
                             "en-US",
                             {
-                              day: "numeric",
+                              day: "2-digit",
                               weekday: "short",
                               year: "numeric",
-                              month: "long",
+                              month: "short",
                             }
                           )}{" "}
                         </Text>
@@ -192,10 +194,10 @@ const HistoryPage = () => {
                         {new Date(room.check_in_date).toLocaleDateString(
                           "en-US",
                           {
-                            day: "numeric",
+                            day: "2-digit",
                             weekday: "short",
                             year: "numeric",
-                            month: "long",
+                            month: "short",
                           }
                         )}{" "}
                         |{" "}
@@ -212,10 +214,10 @@ const HistoryPage = () => {
                         {new Date(room.check_out_date).toLocaleDateString(
                           "en-US",
                           {
-                            day: "numeric",
+                            day: "2-digit",
                             weekday: "short",
                             year: "numeric",
-                            month: "long",
+                            month: "short",
                           }
                         )}{" "}
                         |{" "}

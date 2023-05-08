@@ -109,8 +109,10 @@ const RoomDetailPage = () => {
 
   return (
     <Flex flexDirection="column" w="1440px" bgColor="bg" m="auto">
-      {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
-      <Flex mt="80px" justify="center">
+      <Box position="fixed" zIndex="10">
+        {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
+      </Box>
+      <Flex mt="180px" justify="center">
         <Swiper
           spaceBetween={25}
           slidesPerView={1.5}

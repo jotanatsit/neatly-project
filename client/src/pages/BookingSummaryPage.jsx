@@ -37,8 +37,10 @@ function BookingSummary() {
 
   return (
     <Flex direction="column" w="1440px" bgColor="bg" m="auto" h="100%">
-      <Nav_user />
-      <Flex h="fit-content" justify="center" pb="106px">
+      <Box position="fixed" zIndex="10">
+        <Nav_user />
+      </Box>
+      <Flex h="fit-content" justify="center" pb="106px" mt="100px">
         <Flex direction="column" w="1122px" mt="80px">
           <Text textStyle="h2" color="black" ml="3px">
             Booking Room

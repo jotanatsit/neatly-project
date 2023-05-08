@@ -52,10 +52,20 @@ function LoginPage() {
 
   return (
     <Box w="1440px" m="auto">
-      <Nav_nonuser />
+      <Box position="fixed" zIndex="10">
+        <Nav_nonuser />
+      </Box>
       <Grid templateColumns="repeat(2, 1fr)">
-        <img src="/LoginPage/sidepic.svg"></img>
-        <Flex height="924px" flexDirection="column" align="center" pt="150px">
+        <Box mt="100px">
+          <img src="/LoginPage/sidepic.svg"></img>
+        </Box>
+        <Flex
+          height="924px"
+          flexDirection="column"
+          align="center"
+          pt="150px"
+          mt="100px"
+        >
           <Flex width="452px" justifyContent="flex-start">
             <Text textStyle="h1" color="green.800">
               Log In
