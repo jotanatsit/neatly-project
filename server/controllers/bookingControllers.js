@@ -27,12 +27,12 @@ export const getAllbookingForAdmin = async (req, res) => {
     
     WHERE bd.check_in_date::date >= CURRENT_DATE
     AND (rt.room_type_name ILIKE $1 
-    OR u.fullname ILIKE $2 
-    OR rt.bed_type ILIKE $3 
-    OR CAST(bd.amount_guests AS TEXT) ILIKE $4
-    OR CAST(bd.amount_rooms AS TEXT) ILIKE $5
-    OR CAST(bd.check_in_date AS TEXT) ILIKE $6
-    OR CAST(bd.check_out_date AS TEXT) ILIKE $7)
+    OR u.username ILIKE $1
+    OR rt.bed_type ILIKE $1
+    OR CAST(bd.amount_guests AS TEXT) ILIKE $1
+    OR CAST(bd.amount_rooms AS TEXT) ILIKE $1
+    OR CAST(bd.check_in_date AS TEXT) ILIKE $1
+    OR CAST(bd.check_out_date AS TEXT) ILIKE $1)
 
     GROUP BY 
       b.booking_id,
@@ -61,12 +61,12 @@ export const getAllbookingForAdmin = async (req, res) => {
 
     WHERE bd.check_in_date::date < CURRENT_DATE
     AND (rt.room_type_name ILIKE $1 
-    OR u.fullname ILIKE $2 
-    OR rt.bed_type ILIKE $3 
-    OR CAST(bd.amount_guests AS TEXT) ILIKE $4
-    OR CAST(bd.amount_rooms AS TEXT) ILIKE $5
-    OR CAST(bd.check_in_date AS TEXT) ILIKE $6
-    OR CAST(bd.check_out_date AS TEXT) ILIKE $7)
+    OR u.username ILIKE $1
+    OR rt.bed_type ILIKE $1
+    OR CAST(bd.amount_guests AS TEXT) ILIKE $1
+    OR CAST(bd.amount_rooms AS TEXT) ILIKE $1
+    OR CAST(bd.check_in_date AS TEXT) ILIKE $1
+    OR CAST(bd.check_out_date AS TEXT) ILIKE $1)
 
     GROUP BY 
     b.booking_id,
@@ -76,15 +76,7 @@ export const getAllbookingForAdmin = async (req, res) => {
     r.room_id
     ORDER BY 
     bd.check_in_date ASC)`,
-    [
-      `%${keywords}%`,
-      `%${keywords}%`,
-      `%${keywords}%`,
-      `%${keywords}%`,
-      `%${keywords}%`,
-      `%${keywords}%`,
-      `%${keywords}%`,
-    ]
+    [`%${keywords}%`]
   );
 
   const newArr = results.rows;
