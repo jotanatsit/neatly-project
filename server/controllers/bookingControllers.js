@@ -25,8 +25,9 @@ export const getAllbookingForAdmin = async (req, res) => {
     LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
     LEFT JOIN users u ON u.user_id = b.user_id
     
-    WHERE rt.room_type_name ILIKE $1 AND bd.check_in_date::date >= CURRENT_DATE
-    AND (u.fullname ILIKE $2 
+    WHERE bd.check_in_date::date >= CURRENT_DATE
+    AND (rt.room_type_name ILIKE $1 
+    OR u.fullname ILIKE $2 
     OR rt.bed_type ILIKE $3 
     OR CAST(bd.amount_guests AS TEXT) ILIKE $4
     OR CAST(bd.amount_rooms AS TEXT) ILIKE $5
@@ -58,8 +59,9 @@ export const getAllbookingForAdmin = async (req, res) => {
     LEFT JOIN booking_details bd ON bd.booking_detail_id = b.booking_detail_id
     LEFT JOIN users u ON u.user_id = b.user_id
 
-    WHERE rt.room_type_name ILIKE $1 AND bd.check_in_date::date < CURRENT_DATE
-    AND (u.fullname ILIKE $2 
+    WHERE bd.check_in_date::date < CURRENT_DATE
+    AND (rt.room_type_name ILIKE $1 
+    OR u.fullname ILIKE $2 
     OR rt.bed_type ILIKE $3 
     OR CAST(bd.amount_guests AS TEXT) ILIKE $4
     OR CAST(bd.amount_rooms AS TEXT) ILIKE $5
