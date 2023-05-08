@@ -37,7 +37,7 @@ export default function CheckoutForm() {
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/succeed`,
+        return_url: `${window.location.origin}/processing`,
       },
       // redirect: "if_required",
     });

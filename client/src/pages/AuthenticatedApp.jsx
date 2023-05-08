@@ -12,6 +12,7 @@ import Payment from "../Components/Payment";
 import ThankForBooking from "./ThankForBookingPage";
 import { useBooking } from "../contexts/booking";
 import AdminPage from "./AdminPage";
+import ProcessingPage from "./ProcessingPage";
 import { useAuth } from "../contexts/authentication";
 function AuthenticatedApp() {
   let { bookingData } = useBooking();
@@ -32,6 +33,7 @@ function AuthenticatedApp() {
             <Route path="/booking-summary" element={<BookingSummary />} />
           )}
           <Route path="/succeed" element={<ThankForBooking />} />
+          <Route path="/processing" element={<ProcessingPage />} />
           <Route path="/roomdetail/:roomTypeId" element={<RoomDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/payment-method" element={<PaymentMethodPage />} />
