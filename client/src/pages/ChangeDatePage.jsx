@@ -73,26 +73,40 @@ const ChangeDatePage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  async function changeDate() {
-    try {
-      axios
-        .put(
-          `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[index].booking_detail_id}`,
-          {
-            check_in_date: new Date(date[0].startDate.getTime() + 43200000),
-            check_out_date: new Date(date[0].endDate.getTime() + 43200000),
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
+  const currentNight = Math.ceil(
+    (new Date(roomDetail.check_out_date) - new Date(roomDetail.check_in_date)) /
+      (1000 * 60 * 60 * 24)
+  );
 
-          navigate("/history");
-        });
-    } catch (error) {
-      console.log(error);
+  async function changeDate() {
+    const newNignt = Math.ceil(
+      (new Date(date[0].endDate) - new Date(date[0].startDate)) /
+        (1000 * 60 * 60 * 24)
+    );
+
+    if (currentNight >= newNignt) {
+      try {
+        axios
+          .put(
+            `http://localhost:4000/booking/${userId.UserIdFromLocalStorage}/${roomData[index].booking_detail_id}`,
+            {
+              check_in_date: new Date(date[0].startDate.getTime() + 43200000),
+              check_out_date: new Date(date[0].endDate.getTime() + 43200000),
+            }
+          )
+          .then((response) => {
+            console.log(response.data);
+
+            navigate("/history");
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert(`Change date must less than ${currentNight + 1} days.`);
+      onClose();
     }
   }
-
   return (
     <Flex flexDirection="column" w="1440px" m="auto" bg="bg">
       <Box position="fixed" zIndex="10">
