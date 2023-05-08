@@ -32,7 +32,7 @@ import { Link } from "react-router-dom";
 const ChangeDatePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const userId = useAuth();
   const [roomData, setRoomData] = useState(location.state.roomData);
   const [roomDetail, setRoomDetail] = useState({});
@@ -95,8 +95,10 @@ const ChangeDatePage = () => {
 
   return (
     <Flex flexDirection="column" w="1440px" m="auto" bg="bg">
-      <Nav_user />
-      <Flex flexDirection="column" w="1440px" h="1500px">
+      <Box position="fixed" zIndex="10">
+        <Nav_user />
+      </Box>
+      <Flex flexDirection="column" w="1440px" h="900px" mt="100px">
         <Text textStyle="h2" color="black" ml="150px" mt="50px">
           Change Check-in <br /> and Check-out Date
         </Text>
@@ -131,10 +133,10 @@ const ChangeDatePage = () => {
                   {new Date(roomDetail.booking_date).toLocaleDateString(
                     "en-US",
                     {
-                      day: "numeric",
+                      day: "2-digit",
                       weekday: "short",
                       year: "numeric",
-                      month: "long",
+                      month: "short",
                     }
                   )}
                 </Text>
@@ -148,28 +150,28 @@ const ChangeDatePage = () => {
                     {new Date(roomDetail.check_in_date).toLocaleDateString(
                       "en-US",
                       {
-                        day: "numeric",
+                        day: "2-digit",
                         weekday: "short",
                         year: "numeric",
-                        month: "long",
+                        month: "short",
                       }
                     )}{" "}
                     -{" "}
                     {new Date(roomDetail.check_out_date).toLocaleDateString(
                       "en-US",
                       {
-                        day: "numeric",
+                        day: "2-digit",
                         weekday: "short",
                         year: "numeric",
-                        month: "long",
+                        month: "short",
                       }
-                    )}{" "}
+                    )}
                   </Text>
                 </Box>
               </Box>
               <Box
                 mt="40px"
-                w="715px"
+                w="770px"
                 h="125px"
                 bg="white"
                 display="flex"
@@ -194,10 +196,10 @@ const ChangeDatePage = () => {
                         bg="white"
                         border="1px solid"
                         borderColor="gray.400"
-                        style={{ width: "250px" }}
+                        style={{ width: "345px" }}
                       >
                         <Box
-                          w="210px"
+                          w="305px"
                           display="flex"
                           flexDirection="row"
                           justifyContent="space-between"
@@ -224,10 +226,10 @@ const ChangeDatePage = () => {
                         bg="white"
                         border="1px solid"
                         borderColor="gray.400"
-                        style={{ width: "250px" }}
+                        style={{ width: "345px" }}
                       >
                         <Box
-                          w="210px"
+                          w="305px"
                           display="flex"
                           flexDirection="row"
                           justifyContent="space-between"
@@ -265,12 +267,12 @@ const ChangeDatePage = () => {
           >
             <Link to="/history">
               <Button variant="ghost" color="orange.600">
-                Cancel 
+                Cancel
               </Button>
             </Link>
             <Box>
               <Button variant="primary" p="25px 25px" onClick={onOpen}>
-                Change Date
+                Confirm Change Date
               </Button>
             </Box>
           </Box>

@@ -17,13 +17,16 @@ function HomePage() {
 
   return (
     <Flex direction="column" w="1440px" m="auto">
-      {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
+      <Box position="fixed" zIndex="10">
+        {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
+      </Box>
       <Flex
         w="1440px"
         height={900}
         bg="url(/HomePage/bg-homepage.svg)"
         bgSize="cover"
         flexDirection="column"
+        mt="100px"
       >
         <Flex alignItems="center" justifyContent="center">
           <Box

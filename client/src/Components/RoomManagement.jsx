@@ -82,10 +82,10 @@ const RoomManagement = () => {
   }, [status]);
 
   return (
-    <Flex flexDirection="column">
+    <Flex h="100vh" flexDirection="column">
       <Flex
         w="1200px"
-        h="80px"
+        h="10%"
         alignItems="center"
         justifyContent="space-between"
       >
@@ -113,7 +113,15 @@ const RoomManagement = () => {
         </Box>
       </Flex>
 
-      <Flex bg="bg" h="889px" overflow="auto" justifyContent="center">
+      <Flex
+        bg="bg"
+        h="90%"
+        flexDirection="column"
+        justifyContent="flex-start"
+        alignItems="center"
+        pb={20}
+        overflow="auto"
+      >
         <Box w="1080px" display="flex" flexDirection="column" mt={55}>
           <Box
             display="flex"

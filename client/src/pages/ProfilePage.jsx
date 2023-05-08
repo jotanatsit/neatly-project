@@ -139,7 +139,9 @@ function ProfilePage() {
 
   return (
     <Box w="1440px" m="auto">
-      <Nav_user />
+      <Box position="fixed" zIndex="10">
+        <Nav_user />
+      </Box>
       <form onSubmit={formik.handleSubmit}>
         <Flex
           bg="#F7F7FB"
@@ -151,7 +153,7 @@ function ProfilePage() {
             bg="#F7F7FB"
             w="930px"
             h="840px"
-            mt="80px"
+            mt="180px"
             mb="80px"
             flexDirection="column"
           >

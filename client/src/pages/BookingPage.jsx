@@ -120,161 +120,165 @@ const BookingPage = () => {
 
   return (
     <Flex flexDirection="column" w="1440px" m="auto">
-      {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
-      <form onSubmit={handleSubmit}>
-        <Flex
-          bg="white"
-          height="156px"
-          width="1440px"
-          alignItems="center"
-          justifyContent="space-around"
-          borderBottomRadius={10}
-          boxShadow="2xl"
-          position="relative"
-        >
+      <Box position="fixed" zIndex="10">
+        {auth.isAuthenticated ? <Nav_user /> : <Nav_nonuser />}
+      </Box>
+      <Box mt="100">
+        <form onSubmit={handleSubmit}>
           <Flex
-            w="1030px"
-            h="76px"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="end"
+            bg="white"
+            height="156px"
+            width="1440px"
+            alignItems="center"
+            justifyContent="space-around"
+            borderBottomRadius={10}
+            boxShadow="2xl"
+            position="relative"
           >
-            <Menu>
-              <Flex flexDirection="column">
-                <Text textStyle="b1">
-                  <label>Check In</label>
-                </Text>
-                <MenuButton
-                  as={Button}
-                  iconSpacing="10"
-                  cursor="pointer"
-                  _active="none"
-                  color="gray.600"
-                  bg="white"
-                  border="1px solid"
-                  borderColor="gray.400"
-                  style={{ width: "240px" }}
-                >
+            <Flex
+              w="1030px"
+              h="76px"
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="end"
+            >
+              <Menu>
+                <Flex flexDirection="column">
                   <Text textStyle="b1">
-                    {format(checkInDate, "eee, dd MMM yyyy")}
+                    <label>Check In</label>
                   </Text>
-                </MenuButton>
-              </Flex>
-              <Text textStyle="b1" color="black" mb={5}>
-                -
-              </Text>
-              <Flex flexDirection="column">
-                <Text textStyle="b1">
-                  <label>Check Out</label>
-                </Text>
-                <MenuButton
-                  as={Button}
-                  iconSpacing="10"
-                  cursor="pointer"
-                  _active="none"
-                  color="gray.600"
-                  bg="white"
-                  border="1px solid"
-                  borderColor="gray.400"
-                  style={{ width: "240px" }}
-                >
-                  <Text textStyle="b1">
-                    {format(checkOutDate, "eee, dd MMM yyyy")}
-                  </Text>
-                </MenuButton>
-              </Flex>
-              <MenuList position="absolute" right="-210px" shadow="dark-lg">
-                <DateRange
-                  editableDateInputs={true}
-                  onChange={(item) => {
-                    setDate([item.selection]);
-                    setCheckInDate(item.selection.startDate);
-                    setCheckOutDate(item.selection.endDate);
-                  }}
-                  moveRangeOnFirstSelection={false}
-                  ranges={date}
-                  style={{ width: "500px" }}
-                  minDate={addDays(new Date(), 0)}
-                  dateDisplayFormat="eee, dd MMM yyyy"
-                  rangeColors={["#E76B39", "#E76B39", "#E76B39"]}
-                />
-              </MenuList>
-            </Menu>
-
-            <Menu>
-              <Flex flexDirection="column">
-                <Text textStyle="b1">
-                  <label>Rooms & Guests</label>
-                </Text>
-                <MenuButton
-                  as={Button}
-                  rightIcon={<ChevronDownIcon />}
-                  iconSpacing="10"
-                  cursor="pointer"
-                  _active="none"
-                  color="gray.600"
-                  bg="white"
-                  border="1px solid"
-                  borderColor="gray.400"
-                  style={{ width: "250px" }}
-                >
-                  <Text textStyle="b1">
-                    {rooms} room, {guests} guests
-                  </Text>
-                </MenuButton>
-              </Flex>
-              <MenuList w="250px" maxH="96px" shadow="dark-lg">
-                <Flex className="input-box">
-                  <Box ml={4}>Rooms</Box>
-                  <Flex
-                    position="absolute"
-                    w="78px"
-                    left="145px"
-                    justifyContent="space-between"
+                  <MenuButton
+                    as={Button}
+                    iconSpacing="10"
+                    cursor="pointer"
+                    _active="none"
+                    color="gray.600"
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.400"
+                    style={{ width: "240px" }}
                   >
-                    <Image
-                      src="/HomePage/icon/icon_decrement.svg"
-                      onClick={handleRoomsDecrement}
-                      cursor="pointer"
-                    />
-                    <Box>{rooms}</Box>
-                    <Image
-                      src="/HomePage/icon/icon_increment.svg"
-                      onClick={handleRoomsIncrement}
-                      cursor="pointer"
-                    />
-                  </Flex>
+                    <Text textStyle="b1">
+                      {format(checkInDate, "eee, dd MMM yyyy")}
+                    </Text>
+                  </MenuButton>
                 </Flex>
-                <Flex className="input-box">
-                  <Box ml={4}>Guests</Box>
-                  <Flex
-                    position="absolute"
-                    w="78px"
-                    left="145px"
-                    justifyContent="space-between"
+                <Text textStyle="b1" color="black" mb={5}>
+                  -
+                </Text>
+                <Flex flexDirection="column">
+                  <Text textStyle="b1">
+                    <label>Check Out</label>
+                  </Text>
+                  <MenuButton
+                    as={Button}
+                    iconSpacing="10"
+                    cursor="pointer"
+                    _active="none"
+                    color="gray.600"
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.400"
+                    style={{ width: "240px" }}
                   >
-                    <Image
-                      src="/HomePage/icon/icon_decrement.svg"
-                      onClick={handleGuestsDecrement}
-                      cursor="pointer"
-                    />
-                    <Box>{guests}</Box>
-                    <Image
-                      src="/HomePage/icon/icon_increment.svg"
-                      onClick={handleGuestsIncrement}
-                      cursor="pointer"
-                    />
-                  </Flex>
+                    <Text textStyle="b1">
+                      {format(checkOutDate, "eee, dd MMM yyyy")}
+                    </Text>
+                  </MenuButton>
                 </Flex>
-              </MenuList>
-            </Menu>
+                <MenuList position="absolute" right="-210px" shadow="dark-lg">
+                  <DateRange
+                    editableDateInputs={true}
+                    onChange={(item) => {
+                      setDate([item.selection]);
+                      setCheckInDate(item.selection.startDate);
+                      setCheckOutDate(item.selection.endDate);
+                    }}
+                    moveRangeOnFirstSelection={false}
+                    ranges={date}
+                    style={{ width: "500px" }}
+                    minDate={addDays(new Date(), 0)}
+                    dateDisplayFormat="eee, dd MMM yyyy"
+                    rangeColors={["#E76B39", "#E76B39", "#E76B39"]}
+                  />
+                </MenuList>
+              </Menu>
 
-            <Button type="submit" variant="secondary" w="144px">
-              Search
-            </Button>
+              <Menu>
+                <Flex flexDirection="column">
+                  <Text textStyle="b1">
+                    <label>Rooms & Guests</label>
+                  </Text>
+                  <MenuButton
+                    as={Button}
+                    rightIcon={<ChevronDownIcon />}
+                    iconSpacing="10"
+                    cursor="pointer"
+                    _active="none"
+                    color="gray.600"
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.400"
+                    style={{ width: "250px" }}
+                  >
+                    <Text textStyle="b1">
+                      {rooms} room, {guests} guests
+                    </Text>
+                  </MenuButton>
+                </Flex>
+                <MenuList w="250px" maxH="96px" shadow="dark-lg">
+                  <Flex className="input-box">
+                    <Box ml={4}>Rooms</Box>
+                    <Flex
+                      position="absolute"
+                      w="78px"
+                      left="145px"
+                      justifyContent="space-between"
+                    >
+                      <Image
+                        src="/HomePage/icon/icon_decrement.svg"
+                        onClick={handleRoomsDecrement}
+                        cursor="pointer"
+                      />
+                      <Box>{rooms}</Box>
+                      <Image
+                        src="/HomePage/icon/icon_increment.svg"
+                        onClick={handleRoomsIncrement}
+                        cursor="pointer"
+                      />
+                    </Flex>
+                  </Flex>
+                  <Flex className="input-box">
+                    <Box ml={4}>Guests</Box>
+                    <Flex
+                      position="absolute"
+                      w="78px"
+                      left="145px"
+                      justifyContent="space-between"
+                    >
+                      <Image
+                        src="/HomePage/icon/icon_decrement.svg"
+                        onClick={handleGuestsDecrement}
+                        cursor="pointer"
+                      />
+                      <Box>{guests}</Box>
+                      <Image
+                        src="/HomePage/icon/icon_increment.svg"
+                        onClick={handleGuestsIncrement}
+                        cursor="pointer"
+                      />
+                    </Flex>
+                  </Flex>
+                </MenuList>
+              </Menu>
+
+              <Button type="submit" variant="secondary" w="144px">
+                Search
+              </Button>
+            </Flex>
           </Flex>
-        </Flex>
-      </form>
+        </form>
+      </Box>
       {/* rooms */}
       <Flex
         w="1440px"

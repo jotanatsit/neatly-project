@@ -74,7 +74,9 @@ function PaymentMethodPage() {
 
   return (
     <Box w="1440px" m="auto">
-      <Nav_user />
+      <Box position="fixed" zIndex="10">
+        <Nav_user />
+      </Box>
       <Flex
         bg="#F7F7FB"
         bgSize="cover"
@@ -82,7 +84,7 @@ function PaymentMethodPage() {
         justifyContent="center"
         h="100vh"
       >
-        <Flex bg="#F7F7FB" mt="80px" flexDirection="column">
+        <Flex bg="#F7F7FB" mt="180px" flexDirection="column">
           <form onSubmit={formik.handleSubmit}>
             <Flex
               w="930px"

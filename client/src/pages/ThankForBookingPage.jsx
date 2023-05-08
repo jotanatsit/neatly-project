@@ -39,7 +39,9 @@ function ThankForBooking() {
 
   return (
     <Flex direction="column" w="1440px" bgColor="bg" m="auto" h="100%">
-      <Nav_user />
+      <Flex position="fixed" zIndex="10">
+        <Nav_user />
+      </Flex>
       {isLoading ? (
         <Flex m="40px" h="100vh" justify="center" align="center">
           <Spinner
@@ -57,7 +59,7 @@ function ThankForBooking() {
             align="center"
             w="738px"
             h="fit-content"
-            mt="80px"
+            mt="180px"
           >
             <Flex
               direction="column"

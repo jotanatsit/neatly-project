@@ -82,7 +82,7 @@ const Nav_user = () => {
         <Text textStyle="h5" color="green.700" fontWeight="700">
           Hello,
         </Text>
-        <Text textStyle="h5" fontWeight="600" color="orange.500" ml={2}>
+        <Text textStyle="h5" fontWeight="500" color="orange.500" ml={2}>
           {userData.fullname}
         </Text>
       </Flex>
