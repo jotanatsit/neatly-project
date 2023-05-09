@@ -211,7 +211,7 @@ const RoomAndProperty = () => {
                       borderColor="gray.300"
                       boxShadow="2xl"
                       position="absolute"
-                      right={700}
+                      right={570}
                       borderRadius="10px"
                       bg="green.800"
                     >
@@ -289,7 +289,7 @@ const RoomAndProperty = () => {
                       borderColor="gray.300"
                       boxShadow="2xl"
                       position="absolute"
-                      right={450}
+                      right={350}
                       borderRadius="10px"
                       bg="green.800"
                     >
