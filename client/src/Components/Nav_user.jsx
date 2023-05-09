@@ -74,7 +74,7 @@ const Nav_user = () => {
           <Box ml={8}>
             <Link to="room-type" smooth={true} duration={1000}>
               <Text textStyle="b2" mr={5} cursor="pointer">
-                Rooms & Suits
+                Rooms & Suite
               </Text>
             </Link>
           </Box>
@@ -98,7 +98,7 @@ const Nav_user = () => {
           <Box ml={8}>
             <RouterLink to="/">
               <Text textStyle="b2" mr={5} cursor="pointer">
-                Rooms & Suits
+                Rooms & Suite
               </Text>
             </RouterLink>
           </Box>
