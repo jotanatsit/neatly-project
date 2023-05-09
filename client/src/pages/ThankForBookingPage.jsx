@@ -224,7 +224,7 @@ function ThankForBooking() {
                 {(bookingData.booking_request
                   ? night *
                     bookingData.amount_rooms *
-                    (bookingData.total_price_per_room +
+                    (Number(bookingData.total_price_per_room) +
                       bookingData.booking_request?.reduce((sum, arr) => {
                         if (typeof arr[1] === "number") {
                           return sum + arr[1];
@@ -233,7 +233,7 @@ function ThankForBooking() {
                       }, 0))
                   : night *
                     bookingData.amount_rooms *
-                    bookingData.total_price_per_room
+                    Number(bookingData.total_price_per_room)
                 ).toLocaleString("th-TH", {
                   minimumFractionDigits: 2,
                 })}
